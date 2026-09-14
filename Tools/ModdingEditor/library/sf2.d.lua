@@ -312,7 +312,7 @@ local FormRequest = {}
 ---@field icon Eclipse.SpriteHandle
 ---@field model Eclipse.ModelHandle
 ---@field subtype? string Defaults to Katana. Match the model and move family.
----@field tactic_subtype? string API 0.51: optional AI table group, defaults to subtype. 1-128 ASCII letters, digits or underscores.
+---@field tactic_subtype? string Optional AI table group, defaults to subtype. 1-128 ASCII letters, digits or underscores.
 local WeaponDefinition = {}
 
 ---@class (exact) Eclipse.ArmorDefinition
@@ -1611,7 +1611,7 @@ function localization.key(key) end
 
 ---Requires: A localization handle created by this script context; no additional capability for reading. Creating the handle requires `content.register` and the usual dependency declaration when referencing another owner.
 ---When: Entrypoint or later callbacks. Obtain the handle with `key` during registration and retain it for later reads. Each call reads current content, including committed localization patches; it does not freeze a translation at registration time. A patch made in the current transaction is also readable before commit.
----Returns: A plain translated string. Resolution uses the requested language, then `eng`, then an empty string if neither exists. Invalid handles or language values raise an error. Available since API **0.17**.
+---Returns: A plain translated string. Resolution uses the requested language, then `eng`, then an empty string if neither exists. Invalid handles or language values raise an error.
 ---[Full reference](https://dawc17.github.io/ProjectEclipse/api/localization-patches/#sf2localizationtext)
 ---@param key Eclipse.LocalizationHandle
 ---@param language? string
@@ -1698,9 +1698,9 @@ function behaviors.register(definition) end
 ---@return Eclipse.PerkHandle
 function perks.get(reference) end
 
----Register a new perk backed by your own Lua behavior or an existing perk template.
+---Register a new perk backed by your own Lua behavior.
 ---Requires: `content.register`, plus the capabilities used by its behavior.
----When: Entrypoint, after the behavior or template is available.
+---When: Entrypoint, after the behavior it uses is available.
 ---Returns: A perk handle. Registration does not automatically teach it to the player.
 ---[Full reference](https://dawc17.github.io/ProjectEclipse/api/perks-and-enchantments/#sf2perksregister)
 ---@param definition Eclipse.PerkDefinition|Eclipse.TemplatePerk
@@ -1709,7 +1709,7 @@ function perks.register(definition) end
 
 ---Create a forgeable enchantment for selected equipment categories.
 ---Requires: `content.register`, plus the capabilities used by its behavior.
----When: Entrypoint, after registering its behavior or looking up its legacy perk.
+---When: Entrypoint, after registering its behavior.
 ---Returns: An enchantment handle. The player still needs to forge and equip it.
 ---[Full reference](https://dawc17.github.io/ProjectEclipse/api/perks-and-enchantments/#sf2enchantmentsregister)
 ---@param definition Eclipse.EnchantmentDefinition|Eclipse.LegacyEnchantment
@@ -1850,7 +1850,7 @@ function rules.no_button(definition) end
 ---@return Eclipse.RuleHandle
 function rules.perk(definition) end
 
----Attach executable Lua behavior directly to a fight, without creating a perk or requiring an equipped item. Available since API **0.8.0**.
+---Attach executable Lua behavior directly to a fight, without creating a perk or requiring an equipped item.
 ---Requires: `content.register`. Each fighter operation still requires its own combat capability, declared by the mod that owns the behavior.
 ---When: Register in the entrypoint. Attached handlers run only at the supported combat callback boundaries of the selected fight.
 ---Returns: A rule handle; put it in `sf2.fights.register { rules = { rule } }`.
@@ -1910,14 +1910,14 @@ function progression.replace_perk_branch(definition) end
 function forge.profile(reference) end
 
 ---Requires: `content.patch`; item/perk lookup or registration also requires `content.register`. Declare dependencies for referenced core or other-mod content.
----When: During mod loading, before fighters are built. Available since API `0.50`.
+---When: During mod loading, before fighters are built.
 ---Returns: Nothing (`nil`).
 ---[Full reference](https://dawc17.github.io/ProjectEclipse/api/items-progression-forge/#sf2itemsset_innate_perks)
 ---@param definition Eclipse.ItemInnatePerks
 function items.set_innate_perks(definition) end
 
----Replace the AI table group of a core or owned weapon without changing its animation subtype. Available since **API 0.52**.
----Requires: `content.patch`; item lookup also requires `content.register`. Declare dependencies for referenced namespaces and require `api = ">=0.52 <1.0"`.
+---Replace the AI table group of a core or owned weapon without changing its animation subtype.
+---Requires: `content.patch`; item lookup also requires `content.register`. Declare dependencies for referenced namespaces.
 ---When: During entrypoint registration. The override applies when content is loaded, before subsequent fights are constructed.
 ---Returns: Nothing (`nil`).
 ---[Full reference](https://dawc17.github.io/ProjectEclipse/api/items-progression-forge/#sf2itemsset_tactic_subtype)
@@ -1925,21 +1925,21 @@ function items.set_innate_perks(definition) end
 function items.set_tactic_subtype(definition) end
 
 ---Requires: `content.patch`; item/perk lookup or registration also requires `content.register`. Declare dependencies for referenced content from core or other mods.
----When: During mod loading. Available since API `0.49`.
+---When: During mod loading.
 ---Returns: Nothing (`nil`).
 ---[Full reference](https://dawc17.github.io/ProjectEclipse/api/items-progression-forge/#sf2itemsset_default_enchantments)
 ---@param definition Eclipse.ItemDefaultEnchantments
 function items.set_default_enchantments(definition) end
 
 ---Requires: `content.patch`, `content.register` for the profile lookup, and a declared `core` dependency.
----When: During mod loading. Available since API `0.48`.
+---When: During mod loading.
 ---Returns: Nothing (`nil`).
 ---[Full reference](https://dawc17.github.io/ProjectEclipse/api/items-progression-forge/#sf2forgeoverride_deviation)
 ---@param definition Eclipse.ForgeDeviation
 function forge.override_deviation(definition) end
 
 ---Requires: `content.patch`, `content.register` for handle lookups, and a declared `core` dependency.
----When: During mod loading. Available since API `0.47`.
+---When: During mod loading.
 ---Returns: Nothing (`nil`).
 ---[Full reference](https://dawc17.github.io/ProjectEclipse/api/items-progression-forge/#sf2forgeexclude_candidate)
 ---@param definition Eclipse.ForgeCandidateExclusion
@@ -1961,8 +1961,8 @@ function forge.register_recipe(definition) end
 ---@return string
 function locales.register(definition) end
 
----Available since API **0.34**. Read whether the active profile has learned a perk and its stored upgrade number. This queries the learned-perk list, not temporary combat effects, equipment enchantments or whether a trigger is currently active.
----Requires: `profile.read`. Pass a perk handle acquired in the same script context, or, since API 0.38, a qualified perk ID string. Other namespaces, including `core`, require a declared dependency. Strings need no `content.register` capability. Malformed IDs, wrong categories, unavailable definitions, forged handles and queries without an active profile raise errors.
+---Read whether the active profile has learned a perk and its stored upgrade number. This queries the learned-perk list, not temporary combat effects, equipment enchantments or whether a trigger is currently active.
+---Requires: `profile.read`. Pass a perk handle acquired in the same script context, or a qualified perk ID string. Other namespaces, including `core`, require a declared dependency. Strings need no `content.register` capability. Malformed IDs, wrong categories, unavailable definitions, forged handles and queries without an active profile raise errors.
 ---When: After the active game profile has loaded, for example in a UI or story callback. A profile switch or perk upgrade is reflected on the next query.
 ---Returns: A fresh table with `learned` (boolean) and `upgrade` (integer when learned; `nil` otherwise). Upgrade zero is a valid stored value; it does not mean unlearned. The number is the native `UpgradeLevel`, not a count of purchases.
 ---[Full reference](https://dawc17.github.io/ProjectEclipse/api/profile/#sf2profileperk)
@@ -1977,7 +1977,7 @@ function profile.perk(perk) end
 ---@return integer
 function profile.level() end
 
----Requires: `profile.read` and either an item handle obtained by this mod context or, since API 0.38, a qualified item ID string. Other namespaces, including `core`, require a declared dependency. String queries do not require `content.register`.
+---Requires: `profile.read` and either an item handle obtained by this mod context or a qualified item ID string. Other namespaces, including `core`, require a declared dependency. String queries do not require `content.register`.
 ---When: After a game profile has loaded.
 ---Returns: A new snapshot table with these fields:
 ---[Full reference](https://dawc17.github.io/ProjectEclipse/api/profile/#sf2profileitem)
@@ -2117,7 +2117,7 @@ function events.register(definition) end
 ---@param definition Eclipse.RaidDefinition
 function raids.register(definition) end
 
----Requires: API 0.22 and the pending request supplied to this script's `on_prepare`. Forged or foreign request tables are rejected. No extra capability.
+---Requires: The pending request supplied to this script's `on_prepare`. Forged or foreign request tables are rejected. No extra capability.
 ---When: Complete a pending preparation, including from a UI callback. Reusing a resolved/canceled request or supplying an invalid plan is an error. It marks the request ready; native validation/save/entry occur after Lua returns.
 ---Returns: Nothing.
 ---[Full reference](https://dawc17.github.io/ProjectEclipse/api/events-and-modes/#sf2modesresolve)
@@ -2125,14 +2125,14 @@ function raids.register(definition) end
 ---@param plan Eclipse.EncounterPlan
 function modes.resolve(request, plan) end
 
----Requires: API 0.22 and an owned request. No extra capability.
+---Requires: An owned request. No extra capability.
 ---When: Cancel an unfinished setup, for example in the view's `on_close`. No ticket is charged and no fight starts. Repeated cancellation is harmless. Cancellation after resolution is a no-op, so closing a successful choice view cannot undo the selected plan. Scene/script teardown can still prevent launch.
 ---Returns: Nothing.
 ---[Full reference](https://dawc17.github.io/ProjectEclipse/api/events-and-modes/#sf2modescancel)
 ---@param request Eclipse.ModeRequest
 function modes.cancel(request) end
 
----Requires: API 0.22 and an owned request. No extra capability.
+---Requires: An owned request. No extra capability.
 ---When: Guard buttons or late callbacks against stale requests.
 ---Returns: `true` while awaiting a result, otherwise `false`.
 ---[Full reference](https://dawc17.github.io/ProjectEclipse/api/events-and-modes/#sf2modesis_pending)
@@ -2257,7 +2257,7 @@ function ui.is_open(view) end
 function ui.set_text(view, widget_id, text) end
 
 ---Requires: An open UI handle and a sprite handle created by the same script context. The widget must be an `image`. Its size, aspect-preserving rendering, visibility and place in the layout stay unchanged. `ui.create` is required to create the surface; the setter grants no additional asset access.
----When: After opening a surface, including from its click/change callbacks. Use this to switch a character portrait, equipment icon or reward preview without rebuilding the panel. Requires API **0.42**.
+---When: After opening a surface, including from its click/change callbacks. Use this to switch a character portrait, equipment icon or reward preview without rebuilding the panel.
 ---Returns: `nil`.
 ---[Full reference](https://dawc17.github.io/ProjectEclipse/api/ui/#sf2uiset_sprite)
 ---@param view Eclipse.UiHandle
@@ -2265,7 +2265,7 @@ function ui.set_text(view, widget_id, text) end
 ---@param sprite Eclipse.SpriteHandle
 function ui.set_sprite(view, widget_id, sprite) end
 
----Requires: An open owned view and a progress/slider ID; no additional capability. Sliders require API 0.22. Setters do not invoke `on_change`.
+---Requires: An open owned view and a progress/slider ID; no additional capability. Setters do not invoke `on_change`.
 ---When: Change a progress widget's fill or a slider's position to a finite fraction from 0 to 1. Invalid values are rejected before mutation.
 ---Returns: Nothing.
 ---[Full reference](https://dawc17.github.io/ProjectEclipse/api/ui/#sf2uiset_value)
@@ -2275,7 +2275,7 @@ function ui.set_sprite(view, widget_id, sprite) end
 function ui.set_value(view, widget_id, value) end
 
 ---The checkmark reflects the authored `checked` value from the initial mount, including unchecked toggles. Programmatic changes update the checkmark immediately.
----Requires: API 0.22, an open owned view and a toggle ID. No additional capability.
+---Requires: An open owned view and a toggle ID. No additional capability.
 ---When: Set a toggle's boolean state without triggering `on_change`.
 ---Returns: Nothing.
 ---[Full reference](https://dawc17.github.io/ProjectEclipse/api/ui/#sf2uiset_checked)
@@ -2303,47 +2303,19 @@ function ui.set_visible(view, widget_id, visible) end
 function ui.set_enabled(view, widget_id, enabled) end
 
 ---Requires: `content.patch`. The target must already be registered in your mod or an explicitly declared dependency. Declare `core` when targeting base quests.
----When: During registration, before the mod entrypoint returns. Requires API 0.23 or newer. Changes take effect through Apply & Restart, before saved quests resume.
+---When: During registration, before the mod entrypoint returns. Changes take effect through Apply & Restart, before saved quests resume.
 ---Returns: Nothing.
 ---[Full reference](https://dawc17.github.io/ProjectEclipse/api/quests/#sf2questssuppress)
 ---@param definition Eclipse.QuestSuppression
 function quests.suppress(definition) end
 
----Available since API **0.39**. Inspect the active profile's equipped records without knowing their item IDs in advance.
+---Inspect the active profile's equipped records without knowing their item IDs in advance.
 ---Requires: `profile.read`. No item handles or `content.register` capability. An unavailable profile raises an error. Enumeration includes all native equipped records, including records from other mods. Passing a returned ID to a separate `profile.item` query still requires that namespace's declared dependency.
 ---When: After an active game profile has loaded, including UI and story callbacks.
 ---Returns: A fresh contiguous array of snapshot tables. An empty array means no records are marked equipped. Each record contains:
 ---[Full reference](https://dawc17.github.io/ProjectEclipse/api/profile/#sf2profileequipment)
 ---@return Eclipse.ProfileEquipmentSnapshot[]
 function profile.equipment() end
-
----Legacy alias for `sf2.shop.addItem`. Use `addItem` in new scripts.
----Requires: `content.register`.
----When: Entrypoint after item registration.
----Returns: The listing ID string, with the same validation as `addItem`.
----[Full reference](https://dawc17.github.io/ProjectEclipse/api/shop/#sf2shopadd)
-shop.add = shop.addItem
-
----Legacy alias for `sf2.log.info`. Prefer the latter in new code.
----Requires: No capability.
----When: Entrypoint or a callback.
----Returns: `nil`; accepts one string.
----[Full reference](https://dawc17.github.io/ProjectEclipse/api/logging/#sf2modlog)
-mod.log = log.info
-
----Legacy alias for `sf2.log.warn`.
----Requires: No capability.
----When: Entrypoint or a callback.
----Returns: `nil`; accepts one string.
----[Full reference](https://dawc17.github.io/ProjectEclipse/api/logging/#sf2modwarn)
-mod.warn = log.warn
-
----Legacy alias for `sf2.log.error`. It also logs without throwing.
----Requires: No capability.
----When: Entrypoint or a callback.
----Returns: `nil`; accepts one string.
----[Full reference](https://dawc17.github.io/ProjectEclipse/api/logging/#sf2moderror)
-mod.error = log.error
 
 ---@type "number"
 state.NUMBER = "number"
@@ -2574,14 +2546,14 @@ tactics.LINEAR = "linear"
 tactics.EXPONENTIAL = "exponential"
 
 ---Requires: `combat.transform` and a handle returned by this mod's `sf2.warriors.register`. This changes the callback's fighter. It is not exposed on `fighter.opponent`; use an opponent-targeted rule to transform an opponent. Only one request can be pending per fighter.
----When: Inside an active combat behavior callback, from API **0.53**. The change applies after the current simulation step. Pause delays application. Round end, death or unloading fails a pending request. Fighter handles still expire at the end of their callback; retaining this result does not extend their lifetime.
+---When: Inside an active combat behavior callback. The change applies after the current simulation step. Pause delays application. Round end, death or unloading fails a pending request. Fighter handles still expire at the end of their callback; retaining this result does not extend their lifetime.
 ---Returns: A live result table with `status = "queued"`. At the simulation boundary, status becomes `"applied"` or `"failed"`; failures include an `error` string. Preparation errors or duplicate requests return an already failed result. Invalid handles or missing capabilities raise a Lua error. Treat result fields as game-owned observations. Keep this table in temporary Lua memory, not a saved state schema.
 ---[Full reference](https://dawc17.github.io/ProjectEclipse/api/combat-callbacks/#fighterchange_form)
 ---@param character Eclipse.WarriorHandle
 ---@return Eclipse.FormRequest
 function Fighter:change_form(character) end
 
----Read fresh combat observations, including both fighters and the engine's elapsed fight clock. Available since API 0.9. Use this when making a health or distance decision; the older `fighter.health` field is captured at callback entry.
+---Read fresh combat observations, including both fighters and the engine's elapsed fight clock. Use this when making a health or distance decision; the older `fighter.health` field is captured at callback entry.
 ---Requires: No additional capability. Observing the opponent does not require `combat.target`; changing the opponent still requires the normal capabilities.
 ---When: Inside any supported combat behavior callback, including battle rules, perks, enchantments, and warrior behaviors. Each call samples the current state. The callable reference expires when that callback returns; the returned data may be retained as an observation, but will not update itself.
 ---Returns: A `CombatSnapshot` table, or `nil` if the fighter cannot be observed.
@@ -2621,7 +2593,7 @@ function Fighter:add_magic_charge(amount) end
 ---@param amount number
 function Opponent:add_magic_charge(amount) end
 
----Scale the current attacker's pending hit. Available since API 0.12.
+---Scale the current attacker's pending hit.
 ---Requires: `combat.modify_outgoing_hit`.
 ---When: Only inside `on_damage_dealing`. It is absent from other callbacks.
 ---Returns: `nil` on success; invalid values, missing capability, unavailable hit or expired references raise a Lua error.

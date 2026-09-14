@@ -15,7 +15,7 @@ Mutation methods return `nil` on success. Observation methods return detached da
 ## fighter:snapshot
 
 Read fresh combat observations, including both fighters and the engine's elapsed
-fight clock. Available since API 0.9. Use this when making a health or distance
+fight clock. Use this when making a health or distance
 decision; the older `fighter.health` field is captured at callback entry.
 
 **Signature:** `fighter:snapshot()`
@@ -46,7 +46,7 @@ multi-bar opponents, incoming damage operations use single-bar units; do not
 equate the normalized pool with damage points. Divide health by max health for
 a fraction, guarding against a zero maximum.
 
-Since API **0.46**, each fighter snapshot also has an optional `animation` table.
+Each fighter snapshot also has an optional `animation` table.
 It is `nil` when the native controller is absent, stopped, or cannot provide a
 valid bounded observation. The rest of the fighter snapshot remains available.
 
@@ -79,7 +79,7 @@ end
 -- Use attacking in your own Lua rule logic.
 ```
 
-This requires `api = ">=0.46 <1.0"`. Animation and interval tables are detached
+Animation and interval tables are detached
 values: editing them cannot start/stop an animation, turn a fighter, or add/remove
 an interval. They can be retained as historical observations, but never used as
 an AI candidate or an engine operation handle.
@@ -108,7 +108,7 @@ does not fabricate zero health or a default position.
 
 ## fighter:scale_outgoing_damage
 
-Scale the current attacker's pending hit. Available since API 0.12.
+Scale the current attacker's pending hit.
 
 **Signature:** `fighter:scale_outgoing_damage(multiplier)`
 

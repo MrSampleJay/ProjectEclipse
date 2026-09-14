@@ -1,6 +1,6 @@
 # Phase 2 integrated showcase
 
-API 0.6 implementation is ready for manual testing; gameplay acceptance is pending.
+Implementation is ready for manual testing; gameplay acceptance is pending.
 Restart Play Mode with `Mods/example.phase2` enabled. Phase 1 is not a dependency.
 
 ## What to test
@@ -22,7 +22,7 @@ Many external-service surfaces were already absent in the reconstruction, so the
 
 ## API design
 
-See [the API 0.6 contract](../P2_API.md) for supported hooks, state lifetimes,
+See [the Phase 2 contract](../P2_API.md) for supported hooks, state lifetimes,
 migrations, temporary shields, timers, feature gates, schedules, and mode progress.
 Stateful callbacks use `self.params` and `self.state` with automatic typed persistence.
 Reusable Lua functions/modules provide composition; procedural behavior stays in Lua.

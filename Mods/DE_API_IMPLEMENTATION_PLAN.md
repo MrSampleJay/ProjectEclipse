@@ -35,7 +35,7 @@ rules, modes, characters, animations, and UI. Phase 4 is deferred pending assets
 [The engine review and E1–E8 roadmap](MOD_ENGINE_EXTENSIBILITY.md) defines this
 broader work without claiming those capabilities are implemented.
 
-API 0.8 delivers a bounded P1A.5 + P2A.1/P2A.3 slice: fight-attached Lua behavior
+A bounded P1A.5 + P2A.1/P2A.3 slice is delivered: fight-attached Lua behavior
 rules with parameter validation, per-rule/per-side transient state, existing
 combat callbacks, and target/mode/round filters. This does not close G06/G08,
 custom outcomes, programmable AI, or general UI. It uses a core-art trial fixture;
@@ -113,7 +113,7 @@ Lua handlers and typed capabilities as specified in section 3.7.
 Do not expose `Model`, `Roster`, `ListSF`, `FightList`, arbitrary `GameObject`s,
 or other recovered implementation objects directly to scripts.
 
-Use narrow, capability-gated interfaces and typed handles. API 0.3's
+Use narrow, capability-gated interfaces and typed handles. The
 `IModFighterOperations` direction is the model to extend.
 
 ### 3.4 Determinism over load-order magic
@@ -181,7 +181,7 @@ Evaluate the actual supported behavior, not whether Lua syntax is used.
 
 ## 4. Audited baseline
 
-The current API 0.3 foundation already provides useful pieces and should not be
+The current foundation already provides useful pieces and should not be
 discarded:
 
 - namespaced `ModId`, `AssetId`, and `DefinitionId` contracts;
@@ -260,7 +260,7 @@ one-off registries.
 
 ## P0 implementation status, 2026-09-08
 
-API 0.5.0 now contains the common ownership, patch/conflict, policy, fingerprint,
+The API now contains the common ownership, patch/conflict, policy, fingerprint,
 and durable state foundation. Generic collection child adapters are still proven
 per-domain as those domains land rather than through raw XML mutation:
 
@@ -301,7 +301,7 @@ Authoritative implementation evidence for this slice:
 - `Tools/TestPackagedArt.ps1` / `ValidatePackagedArt.cs` exercise the public Lua
   patch path, a real two-mod overlap, state-backed behavior, successful Lua
   migration, and failed-migration rollback in isolated Unity. The editor fixture
-  passes 160 checks before the API 0.5 version gate rerun;
+  passes 160 checks;
 - `dotnet build Assembly-CSharp.csproj --no-restore` builds the project with
   zero errors after this slice.
 
@@ -1018,7 +1018,7 @@ DE fixtures include `HermitStorm` and `WallRunUp` reactions.
 
 # PHASE P2A: EXPANDED COMBAT BEHAVIORS
 
-**Implemented and user runtime-tested, 2026-09-09.** API 0.6 adds fight/round lifecycle,
+**Implemented and user runtime-tested, 2026-09-09.** It adds fight/round lifecycle,
 resolved damage, block, critical and incoming-damage hooks; player and opponent
 contexts; scoped target capabilities; temporary damage shields; and typed
 round/fight/saved behavior state with migrations. Composition uses Lua functions
@@ -1026,7 +1026,7 @@ and modules. See [the supported contract](P2_API.md) and
 [integrated sample](example.phase2/README.md). Gameplay acceptance was confirmed by the project owner;
 the candidate event families below are not a claim that every hook is exposed.
 
-API 0.3 proves the reusable behavior + typed instance parameter architecture. Do
+The reusable behavior + typed instance parameter architecture is proven. Do
 not replace it with template copying. Expand it carefully at authoritative combat
 boundaries.
 
@@ -1088,13 +1088,13 @@ engine internals still need it.
   round state can be implemented without copying recovered XML templates;
 - callback ordering is tested;
 - no raw engine object is script-visible;
-- existing API 0.3 sample behavior remains compatible.
+- existing sample behavior remains compatible.
 
 ---
 
 # PHASE P2B: TIMERS, SERVICES, UI POLICY, EVENTS
 
-**Implemented and user runtime-tested, 2026-09-09.** API 0.6 implements forge duration/skip policy, named service/feature gates, and repeatable scheduled fight events with level/time eligibility. Arbitrary UI extensions and settings are not exposed; see [the bounded contract](P2_API.md). Gameplay acceptance was confirmed by the project owner.
+**Implemented and user runtime-tested, 2026-09-09.** It implements forge duration/skip policy, named service/feature gates, and repeatable scheduled fight events with level/time eligibility. Arbitrary UI extensions and settings are not exposed; see [the bounded contract](P2_API.md). Gameplay acceptance was confirmed by the project owner.
 
 ## P2B.1 Semantic timer policy
 
@@ -1160,7 +1160,7 @@ This is the core mechanism for DE's no-FOMO permanent events.
 
 # PHASE P2C: ASCENSION
 
-**Implemented and user runtime-tested, 2026-09-09.** API 0.6 implements typed multi-fight mode sequences, loss reset, persistent progress, entry items and native rewards. The sample exercises a three-fight Ascension sequence and Monk equipment rewards through this reusable mode host. Gameplay acceptance was confirmed by the project owner.
+**Implemented and user runtime-tested, 2026-09-09.** It implements typed multi-fight mode sequences, loss reset, persistent progress, entry items and native rewards. The sample exercises a three-fight Ascension sequence and Monk equipment rewards through this reusable mode host. Gameplay acceptance was confirmed by the project owner.
 
 Ascension must be composed from generic mode/fight/reward/state primitives, not a
 DE-specific toggle.
@@ -1255,7 +1255,7 @@ definition metadata before declaring third-party raid support.
 
 # PHASE P3A: ACHIEVEMENTS, COUNTERS, REMAINING PROGRESSION DOMAINS
 
-**Implemented; core showcase user runtime-tested, API 0.7.** Owned achievement counters
+**Implemented; core showcase user runtime-tested.** Owned achievement counters
 integrate with the native profile/save model and advance from Lua callbacks.
 The remaining configuration differences are classified in a reproducible ledger;
 no arbitrary settings passthrough was added. See [P3_API.md](P3_API.md) and the
@@ -1293,7 +1293,7 @@ Do not create Mod API surface merely because a file differs.
 
 # PHASE P3B: CONTROLLED CORE ASSET REPLACEMENT
 
-**Implemented, API 0.7; showcase sprite replacement user-confirmed.** Explicit typed sprite/texture/audio/model
+**Implemented; showcase sprite replacement user-confirmed.** Explicit typed sprite/texture/audio/model
 redirects now enforce dependency ownership, atomic conflicts and provenance.
 Native atlas-member identity and core model text loading are covered. Arbitrary
 config, boot-time resources, opaque animation replacement and deletion remain
@@ -1712,7 +1712,7 @@ If only the DTO/registry exists, the task is **not complete**.
 
 # 10. Immediate next milestone
 
-API 0.7 and the Phase 1–3 showcase flows are implemented and have the recorded
+The API and the Phase 1–3 showcase flows are implemented and have the recorded
 user acceptance above. The current work is **P4.2 coverage/intent classification**
 before a complete downstream DE conversion and wiki. Updated DE source is awaited.
 
@@ -1729,12 +1729,12 @@ record-level intent decisions and P5 gameplay verification.
 
 The owner requested continued implementation across the engine roadmap and DE
 port blockers while production assets are pending. Track cumulative delivery and
-open requirements in [PRE_DE_WORK_LOG.md](PRE_DE_WORK_LOG.md). API 0.10 adds
+open requirements in [PRE_DE_WORK_LOG.md](PRE_DE_WORK_LOG.md). The API adds
 existing-fight rule append/replacement and presentation patches. This is partial
 G01/E1 coverage; phase 4 and the full acceptance matrix remain incomplete.
 
 
-## API 0.22 implementation evidence
+## Current implementation evidence
 
 The requested engine extensions now include generated encounter plans and deferred
 mode preparation, programmable tabular AI, body/skin bindings with Blender/native
@@ -1743,4 +1743,4 @@ slider widgets. See `PRE_DE_WORK_LOG.md` for exact contracts and verification an
 `MOD_ENGINE_EXTENSIBILITY.md` for remaining boundaries. These are reusable Eclipse
 capabilities, not a DE port or evidence that all legacy parity requirements closed.
 Public usage is documented in the wiki's modes, moves, UI, content-graph and
-character-authoring pages. API/editor metadata is 0.22.0.
+character-authoring pages.

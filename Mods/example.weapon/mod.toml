@@ -2,7 +2,6 @@ schema = 1
 id = "example.weapon"
 name = "Example Weapon"
 version = "1.0.0"
-api = ">=0.1 <1.0"
 authors = ["Eclipse"]
 entrypoint = "scripts/main.lua"
 capabilities = ["content.register"]

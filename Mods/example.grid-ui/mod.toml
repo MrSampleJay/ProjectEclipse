@@ -2,7 +2,6 @@ schema = 1
 id = "example.grid-ui"
 name = "Grid UI Showcase"
 version = "1.0.0"
-api = ">=0.43 <1.0"
 entrypoint = "scripts/main.lua"
 authors = ["Eclipse"]
 capabilities = ["story.events", "ui.create"]

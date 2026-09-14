@@ -148,9 +148,9 @@ Test with a save from the previous version, including owned and equipped items a
 
 The save records mod versions and content metadata for diagnostics. Changes to that metadata do not invalidate the player's save.
 
-Owned weapon `tactic_subtype` (API 0.51) participates in the content fingerprint when specified. Changing the AI group is a content change; omitting the field preserves the previous weapon fingerprint format and subtype fallback.
+Owned weapon `tactic_subtype` participates in the content fingerprint when specified. Changing the AI group is a content change; omitting the field preserves the previous weapon fingerprint format and subtype fallback.
 
-Weapon AI group overrides through `items.set_tactic_subtype` (API 0.52) record the target, owner and group in the fingerprint. An empty group is an explicit subtype fallback and differs from no override.
+Weapon AI group overrides through `items.set_tactic_subtype` record the target, owner and group in the fingerprint. An empty group is an explicit subtype fallback and differs from no override.
 
 ### Recorded shop purchase history
 

@@ -367,8 +367,8 @@ namespace Eclipse.Modding
                 string name = RequireLegacyName(node, "perk");
                 ModPerkKind kind = string.Equals(node.Attributes?["PerkType"]?.Value, "Combo",
                     StringComparison.OrdinalIgnoreCase) ? ModPerkKind.Combo : ModPerkKind.Single;
-                perks.Add(new PerkDefinition(PerkId(name), default(DefinitionId), false,
-                    default(DefinitionId), default(DefinitionId), default(AssetId), kind,
+                perks.Add(new PerkDefinition(PerkId(name), default(DefinitionId),
+                    default(DefinitionId), default(AssetId), kind,
                     legacyName: name, legacyPerkXml: node.OuterXml));
             }
             catalog.ImportCorePerks(perks.ToArray());

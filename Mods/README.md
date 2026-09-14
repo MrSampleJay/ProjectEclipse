@@ -10,26 +10,26 @@ The dependency-ordered engineering roadmap is
 [DE_API_IMPLEMENTATION_PLAN.md](DE_API_IMPLEMENTATION_PLAN.md). Agents working on
 DE parity or Mod API expansion must read both parity documents before editing.
 
-Current public Mod API version: **0.19.0**.
+## Recent additions
 
-API 0.19 adds result-driven mode branching through `on_result`, preserving native settlement. See [Branching Trial](example.branching-trial/README.md).
+Adds result-driven mode branching through `on_result`, preserving native settlement. See [Branching Trial](example.branching-trial/README.md).
 
-API 0.21 adds bounded UI `on_close` notification after input/renderer teardown. Charged Strike now cancels its armed bonus when its HUD closes.
+Adds bounded UI `on_close` notification after input/renderer teardown. Charged Strike now cancels its armed bonus when its HUD closes.
 
-API 0.20 adds saved random streams through `sf2.random.integer` and `sf2.random.number`. See [Seeded Trial](example.seeded-trial/README.md); draws use owned integer state fields and require both state capabilities.
+Adds saved random streams through `sf2.random.integer` and `sf2.random.number`. See [Seeded Trial](example.seeded-trial/README.md); draws use owned integer state fields and require both state capabilities.
 
-API 0.18 adds bounded widget styles and native game skin defaults for custom UI.
+Adds bounded widget styles and native game skin defaults for custom UI.
 
-API 0.17 adds `sf2.localization.text` for current-language strings in Lua and custom UI.
+Adds `sf2.localization.text` for current-language strings in Lua and custom UI.
 
-API 0.16 adds safe-area anchors and bounded offsets to custom UI views.
+Adds safe-area anchors and bounded offsets to custom UI views.
 
-API 0.15 exposes owned custom UI through `sf2.ui`: layout creation, click handlers,
+Exposes owned custom UI through `sf2.ui`: layout creation, click handlers,
 targeted updates and closure. `example.charge-ui` demonstrates a charged attack
 with a live HUD. See the public Custom UI reference for supported widgets,
 mount/input behavior, lifecycle and verification limits.
 
-API 0.8 adds `sf2.rules.behavior`: directly attach reusable Lua combat behavior
+Adds `sf2.rules.behavior`: directly attach reusable Lua combat behavior
 to a fight, with isolated rule/fighter state and target/mode/round filtering.
 See [Third Strike Trial](example.battle-rules/README.md), the
 [rule reference](../Docs/Modding/src/content/docs/api/rules.md), and the
@@ -44,9 +44,7 @@ The [Phase 2 API](P2_API.md) and [showcase](example.phase2/README.md) remain sup
 
 Place each mod in `Mods/<folder>/` with a `mod.toml` manifest. See `example.weapon`
 for the minimal weapon slice, `example.loadout` for armor, helm, ranged, and magic,
-and `example.enchantment` for the API 0.3 reusable behavior + typed perk/enchantment slice.
-That sample also keeps its older template-derived Lifesteal definitions as an explicit API 0.2
-compatibility example.
+and `example.enchantment` for the reusable behavior + typed perk/enchantment slice.
 
 ## Enabling and disabling mods
 
@@ -224,10 +222,9 @@ sf2.log.error("operation failed")
 Every log entry retains the originating mod ID and its severity. Logging an
 error does not throw or roll back registration; use Lua `error(...)` for that.
 
-## Targeted content patches (0.4)
+## Targeted content patches
 
-API 0.4 adds the first typed proof of the shared content ownership/patch/conflict
-framework. It is deliberately **not** a raw XML replacement API. The currently
+Adds the first typed proof of the shared content ownership/patch/conflict framework. It is deliberately **not** a raw XML replacement API. The currently
 shipped patch adapter is localization-only:
 
 ```lua
@@ -274,9 +271,9 @@ definitions. It does not yet expose arbitrary core strings, generic item/stage/
 quest patching, collection child operations, or public content removal. Those
 remain roadmap work rather than hidden XML escape hatches.
 
-## Mod-owned state and migrations (0.5)
+## Mod-owned state and migrations
 
-API 0.5 adds durable typed state owned by one mod namespace. State schemas are
+Adds durable typed state owned by one mod namespace. State schemas are
 registered during the normal Lua entrypoint, then bound to the current player
 only when the recovered roster save is loaded. Lua never receives the raw
 `Warrior`, `Roster`, or save XML object.
@@ -335,16 +332,16 @@ Unknown XML children remain opaque through normal binding/migration. Renames and
 intentional removals should use explicit `aliases` and `tombstones`, not rely on
 incidental table omission.
 
-The deterministic `contentHash` is now `fingerprint-v6` and includes registered
+The deterministic `contentHash` is now `fingerprint-v8` and includes registered
 state schema version, typed fields/defaults, aliases, and tombstones in addition
 to the committed content/patch set. Phase 1 stage, quest, item/set/progression/
 forge, locale/location/move/tactic definitions are also part of the fingerprint.
 Runtime state values themselves are save progress and are not part of the content
 fingerprint.
 
-## Phase 1 content graph API (0.5)
+## Phase 1 content graph API
 
-API 0.5 now includes the first complete downstream content-authoring layer used by
+The content graph includes the first complete downstream content-authoring layer used by
 `Mods/example.phase1`. The public surface is typed and validated. Lua never receives
 raw `XmlNode`, stage XML, `Model`, `Roster`, `ListSF`, or arbitrary Unity objects.
 
@@ -590,15 +587,15 @@ runtime name, which the recovered map uses for its title.
 state, localization, P1C content, P1D location/move/tactic content, a P1A stage
 graph, and P1B quest flow using only the public Lua API on an unchanged base install.
 
-## Perks, enchantments, and reusable behaviors (0.3)
+## Perks, enchantments, and reusable behaviors
 
 This is the executable side of the API: definitions bind typed parameters to
 reusable Lua code, and that code calls supported runtime capabilities. The current
 event surface includes fight/round lifecycle, resolved damage, block, critical,
-and incoming-damage hooks. API 0.6 adds typed instance state and scoped target/effect
-capabilities; see [the current contract](P2_API.md).
+and incoming-damage hooks. Typed instance state and scoped target/effect
+capabilities are also supported; see [the current contract](P2_API.md).
 
-API 0.3 separates three concepts that the recovered engine historically represented with
+The API separates three concepts that the recovered engine historically represented with
 the same `PerkInfoItem` machinery:
 
 - a **behavior** is reusable executable Lua logic plus its typed instance schema;
@@ -638,7 +635,7 @@ bounded. `INTEGER` is limited to the exact Lua integer range
 precision loss. The schema is part of the saved-content ABI, so an incompatible type/name
 change should use a new published definition ID unless an explicit migration is added later.
 
-The same behavior can back a perk without a template:
+The same behavior can back a perk:
 
 ```lua
 local head_absorption = sf2.perks.register {
@@ -750,7 +747,7 @@ rules have finalized the player's equipment, recovered perk state has been rebui
 controllable combat begins. Enchantments must still be active in the player's post-rule runtime
 perk set. Scripted perks must both be present in the learned/profile perk set and survive the same
 post-rule/`NoPerks` filtering. Registration does not automatically grant or learn a perk.
-Rule-created item clones, missing mods, API 0.2 template enchantments, and inactive definitions are
+Rule-created item clones, missing mods, and inactive definitions are
 skipped.
 
 The second argument is a sanitized capability table rather than a recovered fighter object. All
@@ -761,7 +758,7 @@ callbacks expose the validated public `perk_id`. Enchantment callbacks expose `i
 instance is snapshotted and dispatched independently; a failing or malformed active handler is
 logged and isolated so the recovered fight state machine and later mod effects continue.
 
-Two explicit fighter operations are available in API 0.3:
+Two explicit fighter operations are available:
 
 ```lua
 on_fight_begin = function(parameters, fighter)
@@ -792,42 +789,12 @@ The save-specific dispatcher is deliberately player-only: recovered AI loadouts 
 authoritative `UserItem` instance after fight-rule equipment replacement. `FightNone`/punchbag
 also does not use the normal `NextRound` lifecycle and has no `on_fight_begin` policy yet.
 
-API 0.6 expands these hooks to player equipment and registered opponent perks,
+These hooks also cover player equipment and registered opponent perks,
 with round/fight/saved instance state, bounded migrations, damage shields and
 incoming-hit scaling. Capability tables expire after each invocation. The
 [integrated Phase 2 sample](example.phase2/README.md) also exercises timer policy,
 feature gates, repeatable events, Ascension progression and offline raids.
 See [P2_API.md](P2_API.md) for the exact supported surface and verification limits.
-
-### API 0.2 template compatibility
-
-The template form remains accepted as a compatibility lane for existing 0.2-style source,
-provided the mod's manifest API range also accepts the current 0.3 runtime:
-
-```lua
-local lifesteal = sf2.perks.register {
-    id = "lifesteal_legacy",
-    template = sf2.perks.get("core:perks/PERK_ITEM_SPECIAL_LIFESTEAL_WEAPON"),
-    display_name = sf2.localization.key("perk.lifesteal"),
-    description = sf2.localization.key("perk.lifesteal.description"),
-    parameters = { Chance = 0.55 },
-}
-
-sf2.enchantments.register {
-    id = "lifesteal_weapon_legacy",
-    perk = lifesteal,
-    recipe = sf2.enchantments.MEDIUM,
-    item_types = { sf2.enchantments.WEAPON },
-}
-```
-
-In this compatibility form, perk `parameters` are still definition-time overrides for the
-recovered template `<Set>`. New behavior-backed content should use typed instance parameters
-instead. A `perk = ...` enchantment must reference a template-backed compatibility perk;
-behavior-backed perks cannot be routed back through that legacy enchantment form. Direct
-behavior enchantments use `behavior = ...` and own their typed parameters themselves.
-Registration remains transactional and behavior schemas, behavior references, typed initial
-values, perks, and enchantments are all included in the deterministic `contentHash`.
 
 ### Renaming and retiring item IDs
 
@@ -873,20 +840,13 @@ deleted or accidentally rebound to a future definition that reuses the same ID. 
 content-set fingerprint includes aliases and tombstones. Automatic record merging, arbitrary
 save transformations, and versioned migration scripts remain future work.
 
-## Compatibility
-
-Early `sf2.shop.add` and `sf2.mod.log/warn/error` calls remain aliases for
-`sf2.shop.addItem` and `sf2.log.info/warn/error`. New mods should use the new names.
-Legacy `sprites/*.png` assets and optional sibling `*.sprite.toml` descriptors
-still load. To migrate, move the PNG to `textures/` and replace its optional
-sidecar with a `.asset` descriptor containing `type` and `texture`; the sprite's
-logical ID can stay unchanged. Do not leave both the PNG and `.asset` at that
-same logical ID.
-
 Core TAR bundles retain their existing `.meta` descriptors and legacy addresses.
 This loose-mod format does not modify Unity `.meta` files or core asset identity.
 
 ## Core ownership and storage
+
+Core TAR bundles retain their existing `.meta` descriptors and legacy addresses.
+This loose-mod format does not modify Unity `.meta` files or core asset identity.
 
 `core` is a semantic content owner, not a requirement to create a physical
 `Mods/core/assets` tree. Vanilla runtime art is resolved through the same namespace
@@ -914,7 +874,7 @@ addresses. Those members are valid first-class core sprite IDs when the exact at
 named member both exist, for example
 `core:ui/items/armor12.img_armor_mantle_of_night`. A nonexistent member does not resolve.
 
-API 0.7 adds [explicit typed asset replacement](P3_API.md#asset-replacement).
+The API also supports [explicit typed asset replacement](P3_API.md#asset-replacement).
 External mods still cannot claim the reserved `core` namespace. Replacement requires
 `assets.replace`, a declared dependency, matching types and a unique target claim;
 conflicts fail rather than using filesystem or last-mod-wins ordering.
@@ -934,14 +894,14 @@ explicitly equips another item while the mod is absent, restoring the mod
 restores ownership without overriding that newer equipment choice.
 
 `UserItems.MissingModItemIds` exposes unavailable item IDs for diagnostics. The
-warrior's additive `EclipseMods` node records schema/API/core versions and each
+warrior's additive `EclipseMods` node records schema and core versions and each
 successfully initialized mod's version and active status. Last-seen records for
 absent mods are retained; unsupported future metadata schemas are left unchanged.
 It also records a deterministic `contentHash` over active mod IDs/versions, the
 actual committed definitions, committed patch provenance, and registered state
 schemas. The hash therefore changes when registered semantic content changes
 even if a mod author forgets to bump their version. This metadata is diagnostic,
-not a reason to reject or reset a save. Item aliases/tombstones and API 0.5 state
+not a reason to reject or reset a save. Item aliases/tombstones and state
 aliases/tombstones provide non-destructive ID/state evolution; state migrations
 are transactional and preserve the previous XML when a migration fails.
 
@@ -993,20 +953,20 @@ and an intentional two-mod same-field conflict. A real player build has also bee
 modded equipment without breaking save load/startup. These checks still do not replace a
 complete purchase/upgrade/equip/fight/removal/reinstall playtest for every category.
 
-API 0.9 adds `fighter:snapshot()` for fresh, detached health, position, and fight-clock observations. See the fighter reference and the updated Third Strike Trial.
+Adds `fighter:snapshot()` for fresh, detached health, position, and fight-clock observations. See the fighter reference and the updated Third Strike Trial.
 
-API 0.10 extends fight patches with location/music and rule replacement or append. [Campaign Guard Rule](example.core-fight/README.md) changes an existing encounter without duplicating it.
+Fight patches also support location/music and rule replacement or append. [Campaign Guard Rule](example.core-fight/README.md) changes an existing encounter without duplicating it.
 
-API 0.12 adds `on_damage_dealing` and capability-gated `fighter:scale_outgoing_damage`, before defensive modifiers. See `example.outgoing-rule`.
+Adds `on_damage_dealing` and capability-gated `fighter:scale_outgoing_damage`, before defensive modifiers. See `example.outgoing-rule`.
 
-API 0.13 adds native `on_combo_changed` and `on_style_changed` snapshots. `example.combo-reserve` shows a timed bonus using the existing fight clock.
+Adds native `on_combo_changed` and `on_style_changed` snapshots. `example.combo-reserve` shows a timed bonus using the existing fight clock.
 
-API 0.14 adds `on_tick` on active combat simulation frames. The combo-reserve
+Adds `on_tick` on active combat simulation frames. The combo-reserve
 example uses it to clear timed state even without another hit; pause time is
 excluded. See the public combat callback reference for ordering and lifetime.
 
 
-### Source-aware quest suppression (API 0.23)
+### Source-aware quest suppression
 
 `sf2.quests.suppress { target = "namespace:quests/id" }` requires `content.patch`.
 Core targets include the original XML file and quest name; owned targets use
@@ -1015,19 +975,19 @@ and content fingerprints. Suppressed definitions and saved progress are retained
 Apply & Restart installs policies before resume. Individual action editing remains
 unsupported. See `example.quest-suppression` and the public quests reference.
 
-### Animated scenery (API 0.24)
+### Animated scenery
 
 Location images support motion_x, motion_y, rotation and opacity curves. See
 example.animated-arena and the public locations reference for required point data,
 limits and phase offsets. This is decorative native scenery; it provides no hazard
 or combat timing authority. Full-game visual/pause acceptance remains pending.
 
-API 0.25 also supports location music_choices: up to 16 distinct audio handles,
+Location music_choices are also supported: up to 16 distinct audio handles,
 choosing one at fight entry and looping it. See the public location guide for
 priority, dependency, fingerprint and restart behavior. This is random selection,
 not sequential playlist playback.
 
-### Saved dojo selection (API 0.26)
+### Saved dojo selection
 
 Register a location with dojo=true, then use locations.select_dojo from a UI
 callback with presentation.dojo. selected_dojo reads the saved ID; reset_dojo
@@ -1035,19 +995,19 @@ clears only your mod's preference. Missing mods preserve the saved choice and us
 the native dojo temporarily. Changes apply on next dojo entry; normal game saving
 persists them. See example.dojo-selector and the public locations reference.
 
-### Player profile queries (API 0.27)
+### Player profile queries
 
 With profile.read, sf2.profile.level() reads progression and sf2.profile.item(handle)
 returns current presence, ownership, count, equipped flag and upgrade index.
 Obtain item handles during loading; query after profile loading. Snapshots are
 copies and do not mutate inventory. See the public Player profile queries page.
 
-API 0.33 runnable reward example: [Eclipse Item Reward](example.eclipse-reward/README.md)
+The runnable reward example [Eclipse Item Reward](example.eclipse-reward/README.md)
 patches the first Lynx Eclipse replay's one-win item scope using core equipment.
 Use an unowned-item test profile; the normal battle is a separate definition.
 
-API 0.38: `sf2.profile.item` and `sf2.profile.perk` accept qualified definition IDs as well as context-owned handles. String queries require `profile.read` and declared foreign dependencies, but no registration capability or live registration transaction. See the public profile reference.
+`sf2.profile.item` and `sf2.profile.perk` accept qualified definition IDs as well as context-owned handles. String queries require `profile.read` and declared foreign dependencies, but no registration capability or live registration transaction. See the public profile reference.
 
-API 0.39: `sf2.profile.equipment()` returns detached equipped-record snapshots for story/UI conditions, including IDs and native type/subtype. Requires `profile.read`; this is profile equipment rather than temporary combat loadouts.
+`sf2.profile.equipment()` returns detached equipped-record snapshots for story/UI conditions, including IDs and native type/subtype. Requires `profile.read`; this is profile equipment rather than temporary combat loadouts.
 
-API 0.40 adds `story.on("battle_result", callback)` for tracked native encounter outcomes, with captured fight ID, Eclipse state and available player model equipment. This is not a lottery-settlement guarantee. Story Observer logs the event.
+Adds `story.on("battle_result", callback)` for tracked native encounter outcomes, with captured fight ID, Eclipse state and available player model equipment. This is not a lottery-settlement guarantee. Story Observer logs the event.

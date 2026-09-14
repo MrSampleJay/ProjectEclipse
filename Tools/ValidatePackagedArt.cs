@@ -212,13 +212,13 @@ public static class ValidatePackagedArt
                         "example.enchantment:localization/perk.battle_focus.description") &&
                     scripts.Content.TryGetEnchantment(
                         DefinitionId.Parse("example.enchantment:enchantments/battle_charge_weapon"),
-                        out enchantment) && enchantment.HasBehavior && !enchantment.HasPerk &&
+                        out enchantment) && enchantment.HasBehavior &&
                     enchantment.Behavior == behavior.Id && enchantment.HasIcon &&
                     enchantment.Description == DefinitionId.Parse(
                         "example.enchantment:localization/enchantment.battle_charge.description") &&
                     Math.Abs(enchantment.InitialParameters["magic_charge"].Number - 0.35d) < 0.000001d &&
                     Math.Abs(enchantment.InitialParameters["health_bonus"].Number - 0.05d) < 0.000001d,
-                    "Tracked example.enchantment did not register its API 0.3 reusable behavior/perk/enchantment");
+                    "Tracked example.enchantment did not register its reusable behavior/perk/enchantment");
 
                 var operations = new TestFighterOperations();
                 string error;
@@ -257,7 +257,6 @@ public static class ValidatePackagedArt
                 "id = \"patch.localization\"\n" +
                 "name = \"Localization Patch Fixture\"\n" +
                 "version = \"1.0.0\"\n" +
-                "api = \">=0.4 <1.0\"\n" +
                 "authors = [\"Test\"]\n" +
                 "entrypoint = \"scripts/main.lua\"\n" +
                 "capabilities = [\"content.patch\"]\n\n" +
@@ -308,7 +307,6 @@ public static class ValidatePackagedArt
                 "id = \"patch.localization.conflict\"\n" +
                 "name = \"Localization Conflict Fixture\"\n" +
                 "version = \"1.0.0\"\n" +
-                "api = \">=0.4 <1.0\"\n" +
                 "authors = [\"Test\"]\n" +
                 "entrypoint = \"scripts/main.lua\"\n" +
                 "capabilities = [\"content.patch\"]\n\n" +
@@ -478,7 +476,6 @@ public static class ValidatePackagedArt
             "id = \"state.fixture\"\n" +
             "name = \"State Fixture\"\n" +
             "version = \"" + version + "\"\n" +
-            "api = \">=0.5 <1.0\"\n" +
             "authors = [\"Test\"]\n" +
             "entrypoint = \"scripts/main.lua\"\n" +
             "capabilities = [\"content.register\", \"state.read\", \"state.write\"]\n\n" +
@@ -512,9 +509,6 @@ public static class ValidatePackagedArt
                 "\uFEFFtype=sprite\ntexture=textures/weapon.png\n");
             File.WriteAllText(Path.Combine(example, "assets", "sprites", "repeat.asset"),
                 "type=sprite\ntexture=textures/weapon.png\nwrap=\"repeat\"\nmipmaps=true\n");
-            File.WriteAllBytes(Path.Combine(example, "assets", "sprites", "legacy.png"), CreateTestPng());
-            File.WriteAllText(Path.Combine(example, "assets", "sprites", "legacy.sprite.toml"),
-                "pivot=[0.25, 0.75]\npixels_per_unit=50\nfilter=\"point\"\n");
             string[] invalidSprites = {
                 "type=sprite\n", // Missing texture.
                 "type=sprite\ntexture=../weapon.png\n",
@@ -525,7 +519,7 @@ public static class ValidatePackagedArt
                 "type=sprite\ntexture=textures/weapon.jpg\n",
                 "type=sprite\ntexture=.png\n",
                 "type=sprite\ntexture=textures/.png\n",
-                "type=sprite\ntexture=sprites/legacy.png\n", // A sprite ID is not a texture ID.
+                "type=sprite\ntexture=sprites/weapon\n", // A sprite ID is not a texture ID.
                 "type=sprite\ntexture=textures/weapon.png\nrect=[0,0,3,2]\n",
                 "type=sprite\ntexture=textures/weapon.png\nborder=[2,0,2,0]\n",
                 "type=sprite\ntexture=textures/weapon.png\npixels_per_unit=0\n",
@@ -564,8 +558,6 @@ public static class ValidatePackagedArt
                 "}\n" +
                 "sf2.items.alias { from = \"weapon/example_blade_legacy\", to = weapon }\n" +
                 "sf2.items.tombstone { id = \"weapon/example_blade_retired\" }\n" +
-                "assert(sf2.shop.add == sf2.shop.addItem)\n" +
-                "assert(sf2.mod.log == sf2.log.info and sf2.mod.warn == sf2.log.warn and sf2.mod.error == sf2.log.error)\n" +
                 "sf2.shop.addItem {\n" +
                 "  section = sf2.shop.WEAPONS,\n" +
                 "  item = weapon,\n" +
@@ -575,14 +567,12 @@ public static class ValidatePackagedArt
                 "sf2.log.info(\"lua-entry-ok\")\n" +
                 "sf2.log.debug(\"lua-debug-ok\")\n" +
                 "sf2.log.warn(\"lua-warn-ok\")\n" +
-                "sf2.log.error(\"lua-error-ok\")\n" +
-                "sf2.mod.log(\"lua-legacy-ok\")\n");
+                "sf2.log.error(\"lua-error-ok\")\n");
             File.WriteAllText(Path.Combine(example, "mod.toml"),
                 "schema = 1\n" +
                 "id = \"example.weapon\"\n" +
                 "name = \"Example Weapon\"\n" +
                 "version = \"1.0.0\"\n" +
-                "api = \">=0.1 <1.0\"\n" +
                 "authors = [\"Test\"]\n" +
                 "entrypoint = \"scripts/main.lua\"\n" +
                 "capabilities = [\"content.register\"]\n\n" +
@@ -614,7 +604,6 @@ public static class ValidatePackagedArt
                 "id = \"example.loadout\"\n" +
                 "name = \"Example Loadout\"\n" +
                 "version = \"1.0.0\"\n" +
-                "api = \">=0.1 <1.0\"\n" +
                 "authors = [\"Test\"]\n" +
                 "entrypoint = \"scripts/main.lua\"\n" +
                 "capabilities = [\"content.register\"]\n\n" +
@@ -629,9 +618,7 @@ public static class ValidatePackagedArt
                 "perk.eclipse_lifesteal = \"Eclipse Behavior Perk\"\n" +
                 "perk.eclipse_lifesteal.description = \"Behavior-backed perk with independent typed defaults.\"\n" +
                 "enchantment.eclipse_lifesteal = \"Eclipse Behavior Enchantment\"\n" +
-                "enchantment.eclipse_lifesteal.description = \"Direct behavior-backed enchantment with independent state.\"\n" +
-                "perk.legacy_lifesteal = \"Legacy Lifesteal Perk\"\n" +
-                "perk.legacy_lifesteal.description = \"API 0.2 template compatibility test.\"\n");
+                "enchantment.eclipse_lifesteal.description = \"Direct behavior-backed enchantment with independent state.\"\n");
             File.WriteAllText(Path.Combine(enchantment, "scripts", "main.lua"),
                 "local sf2 = require(\"sf2\")\n" +
                 "local behavior = sf2.behaviors.register {\n" +
@@ -674,26 +661,12 @@ public static class ValidatePackagedArt
                 "  item_types = { sf2.enchantments.WEAPON },\n" +
                 "  parameters = { chance = 0.65 },\n" +
                 "}\n" +
-                "local legacy_perk = sf2.perks.register {\n" +
-                "  id = \"legacy_lifesteal\",\n" +
-                "  template = sf2.perks.get(\"core:perks/PERK_ITEM_SPECIAL_LIFESTEAL_WEAPON\"),\n" +
-                "  display_name = sf2.localization.key(\"perk.legacy_lifesteal\"),\n" +
-                "  description = sf2.localization.key(\"perk.legacy_lifesteal.description\"),\n" +
-                "  parameters = { Chance = 0.2 },\n" +
-                "}\n" +
-                "sf2.enchantments.register {\n" +
-                "  id = \"legacy_lifesteal_weapon\",\n" +
-                "  perk = legacy_perk,\n" +
-                "  recipe = sf2.enchantments.MEDIUM,\n" +
-                "  item_types = { sf2.enchantments.WEAPON },\n" +
-                "}\n" +
                 "sf2.log.info(\"enchantment-entry-ok\")\n");
             File.WriteAllText(Path.Combine(enchantment, "mod.toml"),
                 "schema = 1\n" +
                 "id = \"example.enchantment\"\n" +
                 "name = \"Example Enchantment\"\n" +
                 "version = \"1.0.0\"\n" +
-                "api = \">=0.3 <1.0\"\n" +
                 "authors = [\"Test\"]\n" +
                 "entrypoint = \"scripts/main.lua\"\n" +
                 "capabilities = [\"content.register\", \"combat.change_life\", \"combat.magic_charge\"]\n\n" +
@@ -708,7 +681,6 @@ public static class ValidatePackagedArt
                 "id = \"broken.mod\"\n" +
                 "name = \"Broken\"\n" +
                 "version = \"1.0.0\"\n" +
-                "api = \">=0.1 <1.0\"\n" +
                 "authors = [\"Test\"]\n" +
                 "entrypoint = \"scripts/main.lua\"\n" +
                 "capabilities = [\"content.register\"]\n\n" +
@@ -725,7 +697,6 @@ public static class ValidatePackagedArt
                 "id = \"script.failure\"\n" +
                 "name = \"Script Failure\"\n" +
                 "version = \"1.0.0\"\n" +
-                "api = \">=0.1 <1.0\"\n" +
                 "authors = [\"Test\"]\n" +
                 "entrypoint = \"scripts/main.lua\"\n" +
                 "capabilities = [\"content.register\"]\n\n" +
@@ -742,7 +713,6 @@ public static class ValidatePackagedArt
                 "id = \"script.runaway\"\n" +
                 "name = \"Script Runaway\"\n" +
                 "version = \"1.0.0\"\n" +
-                "api = \">=0.1 <1.0\"\n" +
                 "authors = [\"Test\"]\n" +
                 "entrypoint = \"scripts/main.lua\"\n" +
                 "capabilities = [\"content.register\"]\n\n" +
@@ -774,7 +744,6 @@ public static class ValidatePackagedArt
                 "id = \"registration.failure\"\n" +
                 "name = \"Registration Failure\"\n" +
                 "version = \"1.0.0\"\n" +
-                "api = \">=0.1 <1.0\"\n" +
                 "authors = [\"Test\"]\n" +
                 "entrypoint = \"scripts/main.lua\"\n" +
                 "capabilities = [\"content.register\"]\n\n" +
@@ -855,10 +824,6 @@ public static class ValidatePackagedArt
             Require(repeating.texture != directTexture && repeating.texture.wrapMode == TextureWrapMode.Repeat &&
                 repeating.texture.mipmapCount > 1 && directTexture.wrapMode == TextureWrapMode.Clamp &&
                 directTexture.mipmapCount == 1, "Wrap/mipmap cache variants changed an existing texture");
-            Sprite legacy = host.TypedAssets.LoadSprite(AssetId.Parse("example.weapon:sprites/legacy"));
-            Require(legacy != null && legacy.pixelsPerUnit == 50 && legacy.texture.filterMode == FilterMode.Point &&
-                host.TypedAssets.LoadTexture(AssetId.Parse("example.weapon:sprites/legacy")) == legacy.texture,
-                "Legacy PNG/sidecar or sprite-to-texture compatibility regressed");
             for (int i = 0; i < invalidSprites.Length; i++)
             {
                 AssetId invalidId = AssetId.Parse("example.weapon:sprites/invalid_" + i);
@@ -935,15 +900,13 @@ public static class ValidatePackagedArt
                     scriptLogs.Any(x => x.ModId.Value == "example.weapon" && x.Level == ModLogLevel.Warning &&
                     x.Message == "lua-warn-ok") &&
                     scriptLogs.Any(x => x.ModId.Value == "example.weapon" && x.Level == ModLogLevel.Error &&
-                    x.Message == "lua-error-ok") &&
-                    scriptLogs.Any(x => x.ModId.Value == "example.weapon" && x.Level == ModLogLevel.Info &&
-                    x.Message == "lua-legacy-ok"), "Lua log levels/compatibility alias lost severity or mod attribution");
-                Require(scripts.Content.IsFrozen && scripts.Content.Localizations.Count == 11 &&
+                    x.Message == "lua-error-ok"), "Lua log levels lost severity or mod attribution");
+                Require(scripts.Content.IsFrozen && scripts.Content.Localizations.Count == 9 &&
                     scripts.Content.Weapons.Count == 1 && scripts.Content.Armors.Count == 1 &&
                     scripts.Content.Helms.Count == 1 && scripts.Content.Ranged.Count == 1 &&
                     scripts.Content.Magic.Count == 1 && scripts.Content.ItemRedirects.Count == 2 &&
-                    scripts.Content.ShopListings.Count == 5 && scripts.Content.Perks.Count == 212 &&
-                    scripts.Content.Enchantments.Count == 2 && scripts.Content.Behaviors.Count == 1,
+                    scripts.Content.ShopListings.Count == 5 && scripts.Content.Perks.Count == 211 &&
+                    scripts.Content.Enchantments.Count == 1 && scripts.Content.Behaviors.Count == 1,
                     "Successful Lua registration did not commit the complete equipment transactions");
                 LocalizationDefinition title;
                 Require(scripts.Content.TryGetLocalization(
@@ -987,13 +950,11 @@ public static class ValidatePackagedArt
                 PerkDefinition externalPerk = null;
                 EnchantmentDefinition externalEnchantment = null;
                 ModBehaviorDefinition externalBehavior = null;
-                PerkDefinition legacyCompatibilityPerk = null;
-                EnchantmentDefinition legacyCompatibilityEnchantment = null;
                 Require(scripts.Content.TryGetPerk(
                         DefinitionId.Parse("example.enchantment:perks/eclipse_lifesteal"), out externalPerk) &&
                     scripts.Content.TryGetBehavior(
                         DefinitionId.Parse("example.enchantment:behaviors/lifesteal"), out externalBehavior) &&
-                    externalPerk.HasBehavior && !externalPerk.HasTemplate &&
+                    externalPerk.HasBehavior &&
                     externalPerk.Behavior == externalBehavior.Id &&
                     externalPerk.DisplayName == DefinitionId.Parse("example.enchantment:localization/perk.eclipse_lifesteal") &&
                     !externalPerk.HasIcon &&
@@ -1001,7 +962,7 @@ public static class ValidatePackagedArt
                     externalPerk.InitialParameters["stacks"].Integer == 1 &&
                     scripts.Content.TryGetEnchantment(
                         DefinitionId.Parse("example.enchantment:enchantments/eclipse_lifesteal_weapon"),
-                        out externalEnchantment) && externalEnchantment.HasBehavior && !externalEnchantment.HasPerk &&
+                        out externalEnchantment) && externalEnchantment.HasBehavior &&
                     externalEnchantment.Behavior == externalBehavior.Id &&
                     externalEnchantment.DisplayName == DefinitionId.Parse("example.enchantment:localization/enchantment.eclipse_lifesteal") &&
                     externalEnchantment.DisplayName != externalPerk.DisplayName &&
@@ -1010,14 +971,6 @@ public static class ValidatePackagedArt
                     externalEnchantment.Recipe == ModEnchantmentRecipe.Medium &&
                     externalEnchantment.Equipment.Count == 1 &&
                     externalEnchantment.Equipment[0] == ModEquipmentKind.Weapon &&
-                    scripts.Content.TryGetPerk(
-                        DefinitionId.Parse("example.enchantment:perks/legacy_lifesteal"), out legacyCompatibilityPerk) &&
-                    legacyCompatibilityPerk.HasTemplate && !legacyCompatibilityPerk.HasBehavior &&
-                    scripts.Content.TryGetEnchantment(
-                        DefinitionId.Parse("example.enchantment:enchantments/legacy_lifesteal_weapon"),
-                        out legacyCompatibilityEnchantment) && legacyCompatibilityEnchantment.HasPerk &&
-                    !legacyCompatibilityEnchantment.HasBehavior &&
-                    legacyCompatibilityEnchantment.Perk == legacyCompatibilityPerk.Id,
                     "Lua behavior/perk/enchantment definitions did not preserve typed values or decoupling");
                 string behaviorError;
                 Require(scripts.TryInvokeBehavior(externalBehavior.Id, ModEffectEvent.FightBegin,
@@ -1054,7 +1007,7 @@ public static class ValidatePackagedArt
             host.Dispose(); // Shared textures must have a single owner and disposal must be repeatable.
 #if UNITY_EDITOR
             if (!Application.isPlaying)
-                Require(looseSprite == null && cropped == null && smooth == null && directTexture == null && legacy == null,
+                Require(looseSprite == null && cropped == null && smooth == null && directTexture == null,
                     "Disposing the mod host leaked sprite or texture instances");
 #endif
 
@@ -1080,27 +1033,24 @@ public static class ValidatePackagedArt
                 runtimeScripts.Content.Weapons.Count == 211 && runtimeScripts.Content.Armors.Count == 180 &&
                 runtimeScripts.Content.Helms.Count == 194 &&
                 runtimeScripts.Content.Ranged.Count == 86 && runtimeScripts.Content.Magic.Count == 74 &&
-                runtimeScripts.Content.ShopListings.Count == 5 && runtimeScripts.Content.Perks.Count == 212 &&
-                runtimeScripts.Content.Enchantments.Count == 2 && runtimeScripts.Content.Behaviors.Count == 1 &&
+                runtimeScripts.Content.ShopListings.Count == 5 && runtimeScripts.Content.Perks.Count == 211 &&
+                runtimeScripts.Content.Enchantments.Count == 1 && runtimeScripts.Content.Behaviors.Count == 1 &&
                 runtimeScripts.Diagnostics.Any(x => x.Code == "SCRIPT001" && x.Source == "script.failure") &&
                 runtimeScripts.Diagnostics.Any(x => x.Code == "SCRIPT001" && x.Source == "registration.failure") &&
                 runtimeScripts.Diagnostics.Any(x => x.Code == "SCRIPT001" && x.Source == "script.runaway"),
                 "ModRuntime did not isolate the failing Lua mod during startup");
             const string externalPerkId = "example.enchantment:perks/eclipse_lifesteal";
             const string externalEnchantmentId = "example.enchantment:enchantments/eclipse_lifesteal_weapon";
-            const string legacyPerkId = "example.enchantment:perks/legacy_lifesteal";
-            const string legacyEnchantmentId = "example.enchantment:enchantments/legacy_lifesteal_weapon";
-            PerkInfoItem legacyPerk = GameUtils.FDEJIIDIPBI.ABAGJKMKCBA(externalPerkId);
-            PerkInfoItem legacyEnchantment = GameUtils.FDEJIIDIPBI.ABAGJKMKCBA(externalEnchantmentId);
-            PerkInfoItem compatibilityPerk = GameUtils.FDEJIIDIPBI.ABAGJKMKCBA(legacyPerkId);
+            PerkInfoItem runtimePerk = GameUtils.FDEJIIDIPBI.ABAGJKMKCBA(externalPerkId);
+            PerkInfoItem runtimeEnchantment = GameUtils.FDEJIIDIPBI.ABAGJKMKCBA(externalEnchantmentId);
             string externalPresentationTitle = string.Empty;
             string externalPresentationDescription = string.Empty;
-            Require(legacyPerk != null && legacyPerk.HAAKMBKCMCO.Attributes["Alias"]?.Value ==
+            Require(runtimePerk != null && runtimePerk.HAAKMBKCMCO.Attributes["Alias"]?.Value ==
                     "example.enchantment:localization/perk.eclipse_lifesteal" &&
-                legacyPerk.HAAKMBKCMCO["Set"] == null && legacyEnchantment != null &&
-                legacyEnchantment.HAAKMBKCMCO.Attributes["Alias"]?.Value ==
+                runtimePerk.HAAKMBKCMCO["Set"] == null && runtimeEnchantment != null &&
+                runtimeEnchantment.HAAKMBKCMCO.Attributes["Alias"]?.Value ==
                     "example.enchantment:localization/enchantment.eclipse_lifesteal" &&
-                legacyEnchantment.HAAKMBKCMCO.Attributes["Description"]?.Value ==
+                runtimeEnchantment.HAAKMBKCMCO.Attributes["Description"]?.Value ==
                     "example.enchantment:localization/enchantment.eclipse_lifesteal.description" &&
                 ModRuntime.TryGetExternalEffectPresentation(externalEnchantmentId,
                     out externalPresentationTitle, out externalPresentationDescription) &&
@@ -1113,10 +1063,7 @@ public static class ValidatePackagedArt
                 ForgeManager.ELEBLBJKDBI().HasExternalEnchantmentParameter("Medium", "Weapon", externalEnchantmentId,
                     "chance", "0.65") &&
                 ForgeManager.ELEBLBJKDBI().HasExternalEnchantmentParameter("Medium", "Weapon", externalEnchantmentId,
-                    "stacks", "1") && compatibilityPerk != null &&
-                ForgeManager.ELEBLBJKDBI().HasExternalEnchantmentCandidate("Medium", "Weapon", legacyPerkId) &&
-                ForgeManager.ELEBLBJKDBI().HasExternalEnchantmentMetadata("Medium", "Weapon", legacyPerkId,
-                    legacyEnchantmentId, "Single"),
+                    "stacks", "1"),
                 "Behavior-backed perk/enchantment was not adapted into the recovered runtime");
 
             var savedBehaviorEffect = new XmlDocument();
@@ -1270,9 +1217,8 @@ public static class ValidatePackagedArt
                 "ModRuntime shutdown did not remove injected localization aliases");
             Require(GameUtils.FDEJIIDIPBI.ABAGJKMKCBA(externalPerkId) == null &&
                 GameUtils.FDEJIIDIPBI.ABAGJKMKCBA(externalEnchantmentId) == null &&
-                GameUtils.FDEJIIDIPBI.ABAGJKMKCBA(legacyPerkId) == null &&
                 !ForgeManager.ELEBLBJKDBI().HasExternalEnchantmentCandidate("Medium", "Weapon", externalEnchantmentId) &&
-                !ForgeManager.ELEBLBJKDBI().HasExternalEnchantmentCandidate("Medium", "Weapon", legacyPerkId),
+                !ForgeManager.ELEBLBJKDBI().HasExternalEnchantmentCandidate("Medium", "Weapon", externalEnchantmentId),
                 "ModRuntime shutdown did not remove injected perk/enchantment runtime state");
         }
         finally

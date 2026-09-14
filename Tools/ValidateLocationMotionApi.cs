@@ -15,7 +15,7 @@ static class Program
  static ModContentCatalog Load(string curve,out ModDescriptor mod,bool mask=false)
  {
   string dir=Path.Combine(root,"test.motion");Directory.CreateDirectory(Path.Combine(dir,"scripts"));
-  File.WriteAllText(Path.Combine(dir,"mod.toml"),"schema=1\nid=\"test.motion\"\nname=\"Motion\"\nversion=\"1.0.0\"\napi=\">=0.24 <1.0\"\nauthors=[\"Eclipse\"]\nentrypoint=\"scripts/main.lua\"\ncapabilities=[\"content.register\"]\n[[dependencies]]\nid=\"core\"\nversion=\">=1.0 <2.0\"\n");
+  File.WriteAllText(Path.Combine(dir,"mod.toml"),"schema=1\nid=\"test.motion\"\nname=\"Motion\"\nversion=\"1.0.0\"\nauthors=[\"Eclipse\"]\nentrypoint=\"scripts/main.lua\"\ncapabilities=[\"content.register\"]\n[[dependencies]]\nid=\"core\"\nversion=\">=1.0 <2.0\"\n");
   File.WriteAllText(Path.Combine(dir,"scripts/main.lua"),"local sf2=require('sf2')\nlocal curve="+curve+"\nsf2.locations.register{id='arena',"+musicFields+"layers={{images={{sprite=sf2.assets.sprite('core:Textures/test'),width=64,height=32,flip_x=true,mask="+(mask?"true":"false")+",motion_x=curve,motion_y=curve,rotation=curve,opacity=curve}}}}}");
   mod=ModDiscovery.DiscoverLoose(root).Mods.Single();var catalog=new ModContentCatalog();
   var templates=new XmlDocument();templates.LoadXml("<Templates><Warrior Name='Default'/></Templates>");

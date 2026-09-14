@@ -2,7 +2,6 @@ schema = 1
 id = "example.seeded-trial"
 name = "Seeded Trial"
 version = "1.0.0"
-api = ">=0.20 <1.0"
 entrypoint = "scripts/main.lua"
 authors = ["Eclipse"]
 capabilities = ["content.register", "state.read", "state.write"]

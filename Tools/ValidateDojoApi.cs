@@ -14,7 +14,7 @@ static class Program {
   string dir=Path.Combine(args[0],"example.dojo");Directory.CreateDirectory(Path.Combine(dir,"scripts"));
   foreach(string scenario in new[]{"success","denied","foreign","unbound"}){
    bool allowed=scenario!="denied";
-   File.WriteAllText(Path.Combine(dir,"mod.toml"),("schema=1\nid='example.dojo'\nname='Dojo'\nversion='1.0.0'\napi='>=0.26 <1.0'\nauthors=['Eclipse']\nentrypoint='scripts/main.lua'\ncapabilities=['content.register','ui.create'"+(allowed?",'presentation.dojo'":"")+"]\n[[dependencies]]\nid='core'\nversion='>=1.0 <2.0'\n").Replace("'", "\""));
+   File.WriteAllText(Path.Combine(dir,"mod.toml"),("schema=1\nid='example.dojo'\nname='Dojo'\nversion='1.0.0'\nauthors=['Eclipse']\nentrypoint='scripts/main.lua'\ncapabilities=['content.register','ui.create'"+(allowed?",'presentation.dojo'":"")+"]\n[[dependencies]]\nid='core'\nversion='>=1.0 <2.0'\n").Replace("'", "\""));
    File.WriteAllText(Path.Combine(dir,"scripts/main.lua"),@"
 local sf2=require('sf2')
 local place=sf2.locations.register{id='garden',dojo=true,layers={{images={{sprite=sf2.assets.sprite('core:Textures/test')}}}}}

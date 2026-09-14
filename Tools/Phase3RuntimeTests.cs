@@ -32,7 +32,7 @@ internal static class Phase3RuntimeTests
         var discovery = ModDiscovery.DiscoverLoose(args[0]);
         Check(!discovery.HasErrors && discovery.Mods.Count == 1, "Discovery failed.");
         var mod = discovery.Mods.Single();
-        var dependencies = DependencyResolver.Resolve(discovery.Mods, ModPlatformVersions.Api, ModPlatformVersions.Core);
+        var dependencies = DependencyResolver.Resolve(discovery.Mods, ModPlatformVersions.Core);
         Check(!dependencies.HasErrors, "API/dependency resolution failed.");
         var assets = new AssetResolver(new IAssetProvider[] { new Core(), new LooseModProvider(mod) });
         var catalog = new ModContentCatalog();

@@ -1,6 +1,6 @@
 # Eclipse as a general Shadow Fight 2 mod engine
 
-Review date: 2026-09-11. Baseline: API 0.7.0; this change adds API 0.8.0 battle
+Review date: 2026-09-11. This change adds battle
 behaviors. Phase 4 (the downstream DE port) remains deferred pending its assets.
 This is an engine-wide extension of the parity roadmap, not a claim that DE or
 all engine domains are complete. Missing DE art does not block the work below:
@@ -153,7 +153,7 @@ not implied by accepting a new character or binary asset ID.
 
 ## First delivered slice and limits
 
-API 0.8 exposes `sf2.rules.behavior`. Its state is isolated by rule and fighter;
+Exposes `sf2.rules.behavior`. Its state is isolated by rule and fighter;
 mode/round/target filters apply at dispatch; rule parameters enter content
 fingerprints; saved-lifetime behavior is rejected. Static projection omits these
 rules from native XML rule execution. `Fight.DispatchEclipseCombatEvent` and
@@ -165,7 +165,7 @@ applied. Shield keys include the rule/fighter instance identity through `ModInst
 `Mods/example.battle-rules` provides an equipment-independent third-hit guardian
 using core art. It is a generic engine fixture, not the DE port. This addresses
 part of E1; it does not satisfy custom outcome, tick, AI, UI, or full rule-editing
-exit criteria. At this API 0.8 baseline, core fight patching could not change rule lists; API 0.10 now adds append/replacement. Phase 4 remains
+exit criteria. At this baseline, core fight patching could not change rule lists; append/replacement is now supported. Phase 4 remains
 unstarted, and no absent collaborator assets have been replaced or invented.
 
 Validation results belong in the task handoff; managed/native fixtures are not a
@@ -193,7 +193,7 @@ current wiki pages and an end-to-end creator fixture.
   Native animation/rig, controller input and custom UI acceptance are future
   work; managed tests do not prove them.
 
-## Follow-up: combat observations (API 0.9)
+## Follow-up: combat observations
 
 `fighter:snapshot()` now captures fresh health/max-health/bar count, arena model
 position, the opposing fighter, and active-fight frames/seconds. The runtime
@@ -213,7 +213,7 @@ This is an E2 observation slice, not completion of combat control. No tick
 subscription, animation state, action request, custom result authority or UI
 binding is added. Those still require their own lifecycle and engine integration.
 
-Verification for API 0.9: all four managed builds pass; the battle-rule fixture
+Verification: all four managed builds pass; the battle-rule fixture
 passes 104 checks, including fresh snapshots, detached nested values, expired
 queries, missing opponents/sources, clock conversion and the low-health rule
 transition. The existing combat suite and 1,282 Underworld assertions pass.
@@ -224,19 +224,19 @@ links/assets. The asset audit still reports missing loose raid images. No full
 Unity encounter or pause/playtest was performed; the native observation adapter
 is compile-checked and based on the engine sources cited above.
 
-## Existing encounter editing (API 0.10)
+## Existing encounter editing
 
 Fight patches now append or replace rules and replace location/music. This closes
 the direct-rule host gap for existing campaign content and part of G01. See
 [the cumulative work log](PRE_DE_WORK_LOG.md) for verification and remaining work.
 
-## Outgoing hit control (API 0.12)
+## Outgoing hit control
 
 Attacker-side callbacks and bounded scaling are now implemented before defensive
 stages. Pending hit flags are observable. See PRE_DE_WORK_LOG.md for source-order,
 Lua and example checks; native gameplay and the remaining E2 controls stay open.
 
-## Native combo and style observations (API 0.13)
+## Native combo and style observations
 
 Behavior handlers can observe native combo changes/expiry and style rank
 transitions. The combo-reserve example combines these observations with round
@@ -247,7 +247,7 @@ limits. An eventual tick host needs explicit ordering around model updates and
 round settlement, plus cached subscriptions rather than full profile scans on
 each simulation frame.
 
-## Active combat ticks (API 0.14)
+## Active combat ticks
 
 `on_tick` runs before model/collision updates on each active combat frame, with
 an explicit frame/seconds/delta payload. Native pause gates the simulation and
@@ -273,7 +273,7 @@ The internal scene coordinator now implements modal/menu/HUD ordering, bounded
 mounts, safe-area fitting, foreground input, Back, navigation ownership and scene
 cleanup. Its isolated Unity fixture includes overlapping mod canvases. Game
 entrypoints, native dialog/input routing and Lua lifetimes remain to be wired;
-the public API version remains 0.14.
+
 
 The game bridge now routes native dialog/Back/combat input ownership, preserves
 closing-frame consumption, and supplies on-demand mounting. Script contexts own
@@ -281,20 +281,20 @@ UI scopes. Lua creation and handle methods remain the next integration boundary;
 full-game physical input acceptance is still pending despite passing isolated
 Unity bridge checks.
 
-API 0.15 now publishes the initial owned UI creation/update/close contract and
+Now publishes the initial owned UI creation/update/close contract and
 a Charged Strike HUD with bounded click logic and fresh combat authority. The
 public Custom UI reference and editor definitions describe the exact limits.
 Full E4 remains open for native end-to-end acceptance, richer layout/assets/
 localization/widgets, HUD controller focus and the broader creator workflows.
 
-API 0.16 adds safe-area anchors/offsets to owned UI and connects the actual Charged Strike Lua example to the production Unity renderer in an isolated play-mode fixture. See [the UI implementation evidence](UI_RUNTIME_IMPLEMENTATION.md). Full-game acceptance and broader widget/mode workflows remain open.
+Adds safe-area anchors/offsets to owned UI and connects the actual Charged Strike Lua example to the production Unity renderer in an isolated play-mode fixture. See [the UI implementation evidence](UI_RUNTIME_IMPLEMENTATION.md). Full-game acceptance and broader widget/mode workflows remain open.
 
-API 0.17 adds dynamic localization reads for Lua/custom UI, with current-language selection, English fallback and pending/committed patch support. Charged Strike exercises English/Polish refreshes in the isolated Unity fixture.
+Adds dynamic localization reads for Lua/custom UI, with current-language selection, English fallback and pending/committed patch support. Charged Strike exercises English/Polish refreshes in the isolated Unity fixture.
 
-API 0.18 establishes native game skin defaults for custom UI, per the user requirement, and adds bounded text/color styling. Future widget types must use the same original-game visual language by default. See the UI implementation evidence for native asset and preview coverage.
+Establishes native game skin defaults for custom UI, per the user requirement, and adds bounded text/color styling. Future widget types must use the same original-game visual language by default. See the UI implementation evidence for native asset and preview coverage.
 
 
-API 0.19 adds bounded Lua mode-result routing over registered fight rosters and
+Adds bounded Lua mode-result routing over registered fight rosters and
 persists the selected step using existing mode storage. A standalone Branching
 Trial demonstrates alternating short/full routes and loss routing. Native outcome,
 reward and entry paths remain authoritative; malformed callbacks fall back.
@@ -303,7 +303,7 @@ but does not deliver generated fights, seeded run services, asynchronous choices
 full custom lobbies/results or complete interruption acceptance. See the cumulative
 work log for exact runtime/editor evidence and the remaining requirements.
 
-API 0.20 adds deterministic random draws backed by ordinary declared integer
+Adds deterministic random draws backed by ordinary declared integer
 state fields. Integer ranges use bounded rejection sampling; both draw functions
 require owned state read/write capabilities and resume from serialized state.
 Seeded Trial connects this to actual Lua result routing over registered fights.
@@ -311,14 +311,14 @@ This supplies persistent seeded choices for E3; generated encounters, async
 player choices, lobbies/results and transactional run settlement remain open.
 
 
-API 0.21 adds bounded UI close notification after input/view teardown, with
+Adds bounded UI close notification after input/view teardown, with
 explicit reasons and prevention of reopening UI during cancellation. Charged
 Strike demonstrates canceling pending gameplay state on native HUD destruction.
 This advances the E3/E4 lifetime foundation. Async mode entry, lobbies/results,
 subscriptions and general cancellation services remain open.
 
 
-## Implemented extension update: API 0.22
+## Implemented extension update
 
 Procedural generation now produces saved typed encounter plans over registered
 fight blueprints. Modes/events/raids can defer entry with an owned `on_prepare`
@@ -350,13 +350,13 @@ rig/skin/contact acceptance still prevent closing E5. See PRE_DE_WORK_LOG.md and
 the public Gymnast guide for reproducible commands and exact boundaries.
 
 
-API 0.23 publishes source-aware whole-quest suppression, with ownership/conflict
+Publishes source-aware whole-quest suppression, with ownership/conflict
 validation, patch fingerprints and startup application before saved resume.
 The source file remains distinct from the saved loading container. This advances
 E3/E7 and G01/G14; it does not implement individual action editing or programmable
 story subscriptions. Native full-game resume remains an acceptance requirement.
 
-## Animated location pictures (API 0.24)
+## Animated location pictures
 
 Typed image curves now project to native picture effects: horizontal/vertical
 motion, rotation and opacity, with phase offsets and bounded points. The shipped
@@ -364,7 +364,7 @@ Animated Arena demonstrates drift/fade using core art. Lua and native interpolat
 fixtures pass; full-game rendering/lifetime acceptance remains. E6 is still open
 for hazards, atlas effects, audio instances/playlists and camera control.
 
-API 0.25 adds typed location music_choices and native random track selection at
+Adds typed location music_choices and native random track selection at
 fight entry. Audio choices are validated and fingerprinted; Animated Arena uses two
 core tracks. This advances G10/E6 without claiming sequential playlists or audio
 instance control. Native selection checks pass; audible playback remains unverified.
@@ -378,15 +378,15 @@ state, menu integration and full scene acceptance.
 The dojo preference store now passes 37 save/lifetime checks, including preserved
 selection while its provider mod is absent. It is not connected to catalog/Lua/menu
 or the game profile lifecycle yet. Public selector capability remains pending;
-API stays 0.25 and G03 remains open.
+G03 remains open.
 
-API 0.26 connects dojo opt-in registration, profile binding, select/query/reset Lua
+Connects dojo opt-in registration, profile binding, select/query/reset Lua
 operations and next-entry native resolution. The Dojo Selector example uses the
 existing game-styled UI through a map preparation callback. G03 is advanced, not
 closed: native menu extension/scene navigation and full-game persistence/render
 acceptance remain. See PRE_DE_WORK_LOG.md for test scope.
 
-API 0.27 adds permission-gated profile level and per-item inventory snapshots.
+Adds permission-gated profile level and per-item inventory snapshots.
 These are fresh read-only queries, usable from UI/combat callbacks, advancing G02
 and G13. Full story/query/event coverage remains open, and live profile/inventory
 acceptance is pending. See the work log and public profile reference.
@@ -402,7 +402,7 @@ cover cancellation, profile boundaries, capacity and error handling. It is not
 connected to Lua or native purchase/enchantment sources yet; no public story
 subscription API is available at that foundation checkpoint. See the work log.
 
-API 0.28 connects the transport to native purchases and enchantments, active profile
+Connects the transport to native purchases and enchantments, active profile
 lifetime, and Lua story.on/off/is_active subscriptions. Capture happens before
 native quest evaluation and delivery afterward, preserving native results. Owned
 callbacks are bounded and cleaned up on script disposal; stale profile captures
@@ -410,7 +410,7 @@ are rejected. Story Observer is a runnable logging example. Native method/Lua,
 editor and documentation checks pass; full-game acceptance and broader event/query/
 operation coverage keep G02/E3 open.
 
-API 0.29 adds experience-driven level_up subscriptions with original/final level
+Adds experience-driven level_up subscriptions with original/final level
 snapshots. The native legacy level-up quest event has no dispatch source, so the
 new notification is attached to completed roster experience processing instead.
 Only the active roster can publish, with profile-generation protection. Multi-level
@@ -418,7 +418,7 @@ and capped gains are tested; direct level assignments and profile loading stay
 silent. The legacy scene-loaded event was found to precede asynchronous loading,
 so a usable scene/UI-ready notification still needs a later lifecycle boundary.
 
-API 0.30 adds scene_enter at that later boundary: a scene-owned coroutine is
+Adds scene_enter at that later boundary: a scene-owned coroutine is
 scheduled after native Init, module registration and widescreen setup, then yields
 a frame and verifies the active/requested scene and profile generation. Map, shop,
 profile, dojo and fight are supported. This is initialization, not dialog dismissal
@@ -433,7 +433,7 @@ This found and fixed a pending entry that could revive on reactivation: OnDisabl
 now invalidates and removes the helper. Full-game native scenes and custom menu
 rendering/input remain acceptance work; the broader gaps remain open.
 
-API 0.31 adds scenes.open for map/shop/profile/dojo menu transitions. It preserves
+Adds scenes.open for map/shop/profile/dojo menu transitions. It preserves
 native quest/tab gates, rejects active combat/loading/dialog/lock/preparation states,
 and guards reentry. The result acknowledges acceptance, not completed loading;
 scene_enter observes arrival. Scene Menu demonstrates game-styled navigation UI.
@@ -446,45 +446,45 @@ native blocking, directional submit, scene coordinator teardown and remounting.
 The complete fixture passes 99 checks. Navigation responses remain controlled;
 native game scene transitions and physical-input acceptance are still open.
 
-API 0.32 adds ordered opponent-list replacement to existing fight patches, with
+Adds ordered opponent-list replacement to existing fight patches, with
 registered warrior handles, conflict detection and preservation of other encounter
 fields. Lua and projection fixtures pass; full-game opponent/progress acceptance
 remains pending. G01/E7 remain open for rewards, other core domains and broader
 composition. See PRE_DE_WORK_LOG.md for verification limits and remaining per-call
 patch rollback hardening.
 
-API 0.33 exposes scoped reward_drops patches for existing fights. Registered item
+Exposes scoped reward_drops patches for existing fights. Registered item
 rewards replace direct drops in one result/mode/level scope while preserving native
 economy and other scopes. Registration, conflicts, fingerprints, Lua and adapter
 connections are implemented; native settlement/full-game acceptance remain open.
 This advances G01/E7 without closing broad reward acquisition or lottery coverage.
 
-API 0.34 adds learned-perk queries through profile.perk, allowing story and custom
+Adds learned-perk queries through profile.perk, allowing story and custom
 UI logic to inspect native learned status and upgrade without mutation. Active
 combat effects remain a separate gap. Host/Lua/editor checks pass; full-game perk
 learning/reset/save acceptance remains pending. See PRE_DE_WORK_LOG.md.
 
-API 0.35 adds runtime type/subtype to profile.item snapshots, including unowned
+Adds runtime type/subtype to profile.item snapshots, including unowned
 items. This supports classification in custom story/UI callbacks with known item
 handles. Host/Lua/editor checks pass; full-game item metadata acceptance and broader
 story queries/core metadata editing remain open.
 
-API 0.36 connects item_acquired notifications to native grant count increases.
+Connects item_acquired notifications to native grant count increases.
 This advances G02/G13 for procedural acquisition logic; purchase and acquisition
 notifications are separate observations and may both occur for one purchase.
 Universal inventory events and full-game acceptance remain open.
 
-API 0.38 makes profile item/perk queries accept qualified IDs at runtime, preserving
+Makes profile item/perk queries accept qualified IDs at runtime, preserving
 capability/dependency checks. This removes the need to preregister handles for
 items discovered by story callbacks. Automated host/Lua/editor checks pass; broader
 query/operation coverage and full-game acceptance keep G02/E3 open.
 
-API 0.39 adds profile.equipment for equipment-sensitive story/UI conditions,
+Adds profile.equipment for equipment-sensitive story/UI conditions,
 including unknown native records and their available metadata. It reads profile
 inventory rather than temporary fight equipment. Native-method/Lua checks pass;
 full-game acceptance and broader operations keep G02/G13 open.
 
-API 0.40 adds battle_result story observations with captured encounter identity,
+Adds battle_result story observations with captured encounter identity,
 outcome, Eclipse state and available player model equipment. Tracked encounter
 and profile lifetime guard delivery. It advances G02/G13 without claiming deferred
 lottery settlement, arbitrary result authority or full-game acceptance.
@@ -531,7 +531,7 @@ reload. Native/lifecycle and payload fixtures pass with stated controlled servic
 No live UI/quest consumer exists yet; full-game settlement and recovery remain
 unverified, so G04 remains open.
 
-API 0.42 follow-up: custom UI images now change in place through the public
+Follow-up: custom UI images now change in place through the public
 sf2.ui.set_sprite function, retaining the original-style container and layout.
 Runtime/Lua/isolated Unity and editor checks pass; full-game acceptance remains
 pending. The earlier lottery notes above are historical: the current saved claim,
@@ -539,12 +539,12 @@ quest and battle presentation implementation is documented in PRE_DE_WORK_LOG.md
 and the public save compatibility page. Paid spins, multiple pending claims and
 full-game crash acceptance still keep that domain open.
 
-API 0.43 adds fixed-column grid UI containers, consuming the shared game-styled
+Adds fixed-column grid UI containers, consuming the shared game-styled
 widgets and supporting ordered focus with automatic vertical scroll reveal.
 Runtime/Lua/isolated Unity/editor checks pass. This does not implement virtualized
 collections or spatial four-direction navigation; full-game acceptance remains.
 
-API 0.43 navigation follow-up: grids now use directional geometry for arrows and
+Navigation follow-up: grids now use directional geometry for arrows and
 D-pad/stick, alongside Tab/Shift+Tab traversal. Sliders retain horizontal input
 at their endpoints. Isolated Unity and bridge routing checks pass; device/game
 acceptance and virtualized collections remain pending.

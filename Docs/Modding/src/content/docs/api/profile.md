@@ -3,7 +3,7 @@ title: Player profile queries
 description: Read the active player's level, inventory and learned perks without changing game state.
 ---
 
-Available since API **0.27**. These queries read the active player's profile.
+These queries read the active player's profile.
 They do not describe an opponent, temporary fight equipment, or an item preview.
 Declare `profile.read` and call after profile loading, such as inside a UI or
 combat callback. Calling during mod loading or without an active profile raises
@@ -46,7 +46,7 @@ reports a mode's generated opponent level.
 **When:** After a game profile has loaded.
 
 **Requires:** `profile.read` and either an item handle obtained by this mod context
-or, since API 0.38, a qualified item ID string. Other namespaces, including `core`,
+or a qualified item ID string. Other namespaces, including `core`,
 require a declared dependency. String queries do not require `content.register`.
 
 ```lua
@@ -89,7 +89,7 @@ profile becomes readable after native activation and inventory preparation.
 
 ## sf2.profile.perk
 
-Available since API **0.34**. Read whether the active profile has learned a perk
+Read whether the active profile has learned a perk
 and its stored upgrade number. This queries the learned-perk list, not temporary
 combat effects, equipment enchantments or whether a trigger is currently active.
 
@@ -103,7 +103,7 @@ unlearned. The number is the native `UpgradeLevel`, not a count of purchases.
 callback. A profile switch or perk upgrade is reflected on the next query.
 
 **Requires:** `profile.read`. Pass a perk handle acquired in the same script
-context, or, since API 0.38, a qualified perk ID string. Other namespaces, including
+context, or a qualified perk ID string. Other namespaces, including
 `core`, require a declared dependency. Strings need no `content.register` capability.
 Malformed IDs, wrong categories, unavailable definitions, forged handles and queries
 without an active profile raise errors.
@@ -132,7 +132,7 @@ upgrading, reset and save/reload acceptance remain pending.
 
 ### Querying an acquisition event
 
-With API 0.38, `story.events`, `profile.read`, and a `core` dependency, an observer
+With `story.events`, `profile.read`, and a `core` dependency, an observer
 can inspect core items discovered at runtime without obtaining handles at load time:
 
 ```lua
@@ -152,7 +152,7 @@ definition raises an error instead of reporting an unowned item.
 
 ## sf2.profile.equipment
 
-Available since API **0.39**. Inspect the active profile's equipped records without
+Inspect the active profile's equipped records without
 knowing their item IDs in advance.
 
 **Signature:** `sf2.profile.equipment()`

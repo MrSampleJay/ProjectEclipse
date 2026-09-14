@@ -1,7 +1,7 @@
 # Katana Achievement
 
 A small example of a procedural achievement condition using captured battle
-equipment. Requires Eclipse API 0.40. Enable the mod and defeat Butcher with a
+equipment. Enable the mod and defeat Butcher with a
 Weapon whose native subtype is Katana. Normal, Eclipse replay and intermission
 gauntlet completions count; ordinary bodyguard fights do not.
 

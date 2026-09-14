@@ -86,7 +86,7 @@ Round-lifetime behavior state is available for the new round. Use round state fo
 
 ## on_tick
 
-Update timed behavior even when neither fighter lands a hit. Available since API 0.14.
+Update timed behavior even when neither fighter lands a hit.
 
 **Signature:** `on_tick = function(parameters, fighter, event)`; stateful behaviors
 receive `self` instead of `parameters`.
@@ -137,7 +137,7 @@ behaviors receive `self` instead of `parameters`.
 
 **Returns:** Nothing; the return value is ignored.
 
-**When:** After native combo bookkeeping and perk notification, from API 0.13.
+**When:** After native combo bookkeeping and perk notification.
 `event.combo` is the current reported count; `event.last_combo` is the native
 last-reported count. On native combo expiry, `combo` is zero and `last_combo`
 retains the completed combo count. Counts below the native display threshold do
@@ -167,7 +167,7 @@ behaviors receive `self` instead of `parameters`.
 **Returns:** Nothing; the return value is ignored.
 
 **When:** After the model receives a new style rank, before the native style-rule
-check, from API 0.13. Fields are `style_rank` (native zero-based index),
+check. Fields are `style_rank` (native zero-based index),
 `style_name` (native name), `style_gain` (native progress value within that rank),
 and `is_hit` (the native event's hit-origin flag). Same-rank progress updates do
 not trigger this hook. Initial setup before fight callbacks begin is omitted.
@@ -189,7 +189,7 @@ or expose a general animation/contact event API.
 
 Modify an attacker's pending hit after native damage, block and critical
 calculation, before defender invulnerability, shields, incoming modifiers and
-health application. Available since API 0.12 on the existing behavior hosts.
+health application on the existing behavior hosts.
 
 **Signature:** `on_damage_dealing = function(parameters, fighter, event)`; with
 state, `on_damage_dealing = function(self, fighter, event)`.
@@ -241,7 +241,7 @@ end,
 
 `event.damage` is pending incoming damage. This is the only callback where `scale_incoming_damage` is available. It reduces this hit; later damage notifications report the resulting observed decrease.
 
-Since API 0.12, the pending event also includes `blocked` and `critical`, captured
+The pending event also includes `blocked` and `critical`, captured
 from the native hit flags before health application.
 
 ## on_damage_received
@@ -382,7 +382,7 @@ string. Preparation errors or duplicate requests return an already failed result
 Invalid handles or missing capabilities raise a Lua error. Treat result fields as game-owned
 observations. Keep this table in temporary Lua memory, not a saved state schema.
 
-**When:** Inside an active combat behavior callback, from API **0.53**. The change
+**When:** Inside an active combat behavior callback. The change
 applies after the current simulation step. Pause delays application. Round end,
 death or unloading fails a pending request. Fighter handles still expire at the
 end of their callback; retaining this result does not extend their lifetime.

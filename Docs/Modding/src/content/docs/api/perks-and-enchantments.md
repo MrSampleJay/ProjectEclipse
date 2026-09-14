@@ -33,17 +33,17 @@ local lifesteal = sf2.perks.get("core:perks/PERK_ITEM_SPECIAL_LIFESTEAL_WEAPON")
 ```
 
 Use the complete perk definition ID. The returned handle is useful in opponent
-loadouts, fight rules, forge candidates, and the template compatibility form.
+loadouts, fight rules, and forge candidates.
 
 ## sf2.perks.register
 
-Register a new perk backed by your own Lua behavior or an existing perk template.
+Register a new perk backed by your own Lua behavior.
 
 **Signature:** `sf2.perks.register(definition)`
 
 **Requires:** `content.register`, plus the capabilities used by its behavior.
 
-**When:** Entrypoint, after the behavior or template is available.
+**When:** Entrypoint, after the behavior it uses is available.
 
 **Returns:** A perk handle. Registration does not automatically teach it to the player.
 
@@ -53,10 +53,9 @@ Register a new perk backed by your own Lua behavior or an existing perk template
 | `display_name` | Localization handle | Required. |
 | `description` | Localization handle | Required. |
 | `icon` | Sprite handle | Optional. |
-| `behavior` | Behavior handle | Required for a new Lua-backed perk; mutually exclusive with `template`. |
-| `kind` | Perk constant | Required with `behavior`: `sf2.perks.SINGLE` or `sf2.perks.COMBO`. |
+| `behavior` | Behavior handle | Required. |
+| `kind` | Perk constant | Required: `sf2.perks.SINGLE` or `sf2.perks.COMBO`. |
 | `parameters` | Typed value table | Optional; must satisfy the behavior schema. |
-| `template` | Perk handle | Legacy alternative to `behavior`; omit `kind` in this form. |
 
 ```lua
 local focus = sf2.perks.register {
@@ -73,19 +72,14 @@ To make it active, add it to an opponent's `perks`, a supported fight rule, or a
 [perk-tree choice](../items-progression-forge/#sf2progressionreplace_perk_branch).
 Player callbacks run only for learned, active perks after normal rule filtering.
 
-In the legacy form, `template` copies an existing template and `parameters`
-contains scalar template overrides. It is a compatibility mechanism, not a way
-to expose an arbitrary C# object. For custom logic, use `behavior`.
-
 ### Upgrade entries
 
-Since API 0.11, both perk registration forms accept `upgrades`, a dense array of
+Perk registration accepts `upgrades`, a dense array of
 1–100 tables: `{ level, description?, parameters? }`. Levels must be ordered and
 contiguous starting at 1. Level 0 uses the base perk. Omitted descriptions use the
 base description; supplied descriptions must be localization handles owned by
 this mod. An upgrade's parameters override the base independently, not the
-previous upgrade. Lua parameters use the behavior schema; template parameters
-use the existing native parameter validation.
+previous upgrade. Parameters use the behavior schema.
 
 ```lua
 -- Fields to include in sf2.perks.register; Drain must be in the behavior schema.
@@ -122,7 +116,7 @@ Create a forgeable enchantment for selected equipment categories.
 
 **Requires:** `content.register`, plus the capabilities used by its behavior.
 
-**When:** Entrypoint, after registering its behavior or looking up its legacy perk.
+**When:** Entrypoint, after registering its behavior.
 
 **Returns:** An enchantment handle. The player still needs to forge and equip it.
 
@@ -131,11 +125,10 @@ Create a forgeable enchantment for selected equipment categories.
 | `id` | String | Required local ID. |
 | `recipe` | Recipe constant | Required: `SIMPLE`, `MEDIUM`, or `COMPLEX` from `sf2.enchantments`. |
 | `item_types` | Equipment constant array | Required nonempty list; no duplicates. |
-| `behavior` | Behavior handle | New Lua-backed form; mutually exclusive with `perk`. |
-| `display_name`, `description` | Localization handles | Required with `behavior`. |
-| `icon` | Sprite handle | Optional with `behavior`. |
-| `parameters` | Typed value table | Optional with `behavior`; must satisfy its schema. |
-| `perk` | Template-backed perk handle | Legacy alternative; direct presentation/parameter fields are forbidden. |
+| `behavior` | Behavior handle | Required. |
+| `display_name`, `description` | Localization handles | Required. |
+| `icon` | Sprite handle | Optional. |
+| `parameters` | Typed value table | Optional; must satisfy its schema. |
 
 ```lua
 local enchantment = sf2.enchantments.register {
@@ -150,9 +143,7 @@ local enchantment = sf2.enchantments.register {
 ```
 
 Other equipment constants are `ARMOR`, `HELM`, `RANGED`, and `MAGIC` in the same
-namespace. The legacy `perk` form requires a template-backed perk; a Lua-backed
-perk cannot be converted into that legacy enchantment form. Use `behavior`
-directly to share programmable logic.
+namespace.
 
 Recipe selection uses the host's forge economy. These fields do not customize
 shared prices, currencies, or upgrade formulas.

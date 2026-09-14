@@ -24,7 +24,7 @@ static class Program
         string parent = Path.Combine(root, id), folder = Path.Combine(parent, id);
         Directory.CreateDirectory(Path.Combine(folder,"scripts"));
         File.WriteAllText(Path.Combine(folder,"mod.toml"),
-            "schema = 1\nid = \""+id+"\"\nname = \"Forge test\"\nversion = \"1.0.0\"\napi = \">=0.52 <1.0\"\nauthors = [\"Eclipse\"]\nentrypoint = \"scripts/main.lua\"\ncapabilities = [\"content.register\""+(patch?", \"content.patch\"":"")+"]\n[[dependencies]]\nid = \"core\"\nversion = \">=1.0 <2.0\"\n");
+            "schema = 1\nid = \""+id+"\"\nname = \"Forge test\"\nversion = \"1.0.0\"\nauthors = [\"Eclipse\"]\nentrypoint = \"scripts/main.lua\"\ncapabilities = [\"content.register\""+(patch?", \"content.patch\"":"")+"]\n[[dependencies]]\nid = \"core\"\nversion = \">=1.0 <2.0\"\n");
         File.WriteAllText(Path.Combine(folder,"scripts/main.lua"), "local sf2=require('sf2')\n"+script);
         Directory.CreateDirectory(Path.Combine(folder,"assets/sprites"));
         Directory.CreateDirectory(Path.Combine(folder,"assets/models"));

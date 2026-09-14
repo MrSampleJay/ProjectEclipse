@@ -2,7 +2,6 @@ schema = 1
 id = "example.eclipse-reward"
 name = "Eclipse Item Reward"
 version = "1.0.0"
-api = ">=0.33 <1.0"
 entrypoint = "scripts/main.lua"
 authors = ["Eclipse"]
 capabilities = ["content.register", "content.patch"]

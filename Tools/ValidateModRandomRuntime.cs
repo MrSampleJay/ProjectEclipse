@@ -29,7 +29,7 @@ static class Program
             string folder = Path.Combine(directory, id);
             Directory.CreateDirectory(Path.Combine(folder,"scripts"));
             File.WriteAllText(Path.Combine(folder,"mod.toml"),
-                "schema=1\nid=\""+id+"\"\nname=\"Random fixture\"\nversion=\"1.0.0\"\napi=\">=0.20 <1.0\"\nauthors=[\"Fixture\"]\nentrypoint=\"scripts/main.lua\"\ncapabilities=[\"ui.create\"" +
+                "schema=1\nid=\""+id+"\"\nname=\"Random fixture\"\nversion=\"1.0.0\"\nauthors=[\"Fixture\"]\nentrypoint=\"scripts/main.lua\"\ncapabilities=[\"ui.create\"" +
                 (capabilities.Length == 0 ? "" : "," + capabilities) + "]\n");
             bool canRegister=capabilities.Contains("state.write");
             File.WriteAllText(Path.Combine(folder,"scripts/main.lua"), "local sf2=require('sf2')\n" +

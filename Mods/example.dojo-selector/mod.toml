@@ -2,7 +2,6 @@ schema = 1
 id = "example.dojo-selector"
 name = "Dojo Selector"
 version = "1.0.0"
-api = ">=0.26 <1.0"
 entrypoint = "scripts/main.lua"
 authors = ["Eclipse"]
 capabilities = ["content.register", "ui.create", "presentation.dojo"]

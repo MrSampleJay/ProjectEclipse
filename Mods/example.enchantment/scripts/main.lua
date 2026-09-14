@@ -1,6 +1,6 @@
 local sf2 = require("sf2")
 
--- API 0.3: one reusable Lua behavior can power both a learned perk and an item enchantment
+-- One reusable Lua behavior can power both a learned perk and an item enchantment
 -- with different typed values. The fighter object is a sanitized capability table, not a
 -- recovered C# Model.
 local battle_charge = sf2.behaviors.register {
@@ -51,22 +51,4 @@ sf2.enchantments.register {
     },
 }
 
--- API 0.2 compatibility example. This deliberately keeps its existing public IDs/backend.
-local lifesteal = sf2.perks.register {
-    id = "eclipse_lifesteal",
-    template = sf2.perks.get("core:perks/PERK_ITEM_SPECIAL_LIFESTEAL_WEAPON"),
-    display_name = sf2.localization.key("perk.eclipse_lifesteal"),
-    description = sf2.localization.key("perk.eclipse_lifesteal.description"),
-    parameters = {
-        Chance = 1,
-    },
-}
-
-sf2.enchantments.register {
-    id = "eclipse_lifesteal_weapon",
-    perk = lifesteal,
-    recipe = sf2.enchantments.MEDIUM,
-    item_types = { sf2.enchantments.WEAPON },
-}
-
-sf2.log.info("registered API 0.3 Battle Charge plus API 0.2 Lifesteal compatibility enchantment")
+sf2.log.info("registered the Battle Charge perk and weapon enchantment")

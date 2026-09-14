@@ -1,23 +1,15 @@
 ---
 title: Compatibility and supported scope
-description: Choose supported APIs and keep your mod compatible across releases.
+description: Know what the documented contract covers and how to keep your mod working across releases.
 ---
 
 import { pageUrl } from '../../../../site.config.mjs';
-
-## Check the API version
-
-Your manifest's `api` range must accept the installed Eclipse API version. A wider range does not provide functions missing from older builds. Choose a minimum version that supports everything your mod uses, and test updates against existing saves.
 
 ## Use the documented contract
 
 Each <a href={pageUrl('reference')}>function section</a> lists its arguments, return value, capabilities, and timing. A field that appears in recovered game XML is not automatically available in Lua. Unknown definition fields and unsupported callback names can fail mod loading.
 
 The current API supports typed content definitions, combat behavior callbacks, saved mod state, local modes and raids, achievement counters, and explicit asset replacement. Quest tables and tactics configure supported native systems. They do not provide arbitrary Lua quest callbacks or programmable opponent AI.
-
-## Older mods
-
-Documented aliases and template-backed perk/enchantment forms remain available. New custom combat logic belongs in reusable Lua behavior handlers. See <a href={pageUrl('api/legacy-compatibility')}>legacy compatibility</a> and <a href={pageUrl('api/perks-and-enchantments')}>perks and enchantments</a> before updating older source.
 
 ## Test what players use
 

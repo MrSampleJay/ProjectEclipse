@@ -1,5 +1,4 @@
 {
-  "apiVersion": "0.53.0",
   "functions": {
     "sf2.items.register_weapon": {
       "params": {
@@ -276,7 +275,7 @@
         "key": "Eclipse.LocalizationHandle",
         "language?": "string"
       },
-      "returns": "A plain translated string. Resolution uses the requested language, then `eng`, then an empty string if neither exists. Invalid handles or language values raise an error. Available since API **0.17**.",
+      "returns": "A plain translated string. Resolution uses the requested language, then `eng`, then an empty string if neither exists. Invalid handles or language values raise an error.",
       "capability": null,
       "url": "https://dawc17.github.io/ProjectEclipse/api/localization-patches/#sf2localizationtext",
       "summary": "",
@@ -398,9 +397,9 @@
       "returns": "A perk handle. Registration does not automatically teach it to the player.",
       "capability": "content.register",
       "url": "https://dawc17.github.io/ProjectEclipse/api/perks-and-enchantments/#sf2perksregister",
-      "summary": "Register a new perk backed by your own Lua behavior or an existing perk template.",
+      "summary": "Register a new perk backed by your own Lua behavior.",
       "requires": "`content.register`, plus the capabilities used by its behavior.",
-      "when": "Entrypoint, after the behavior or template is available."
+      "when": "Entrypoint, after the behavior it uses is available."
     },
     "sf2.enchantments.register": {
       "params": {
@@ -411,7 +410,7 @@
       "url": "https://dawc17.github.io/ProjectEclipse/api/perks-and-enchantments/#sf2enchantmentsregister",
       "summary": "Create a forgeable enchantment for selected equipment categories.",
       "requires": "`content.register`, plus the capabilities used by its behavior.",
-      "when": "Entrypoint, after registering its behavior or looking up its legacy perk."
+      "when": "Entrypoint, after registering its behavior."
     },
     "sf2.zones.register": {
       "params": {
@@ -585,7 +584,7 @@
       "returns": "A rule handle; put it in `sf2.fights.register { rules = { rule } }`.",
       "capability": "content.register",
       "url": "https://dawc17.github.io/ProjectEclipse/api/rules/#sf2rulesbehavior",
-      "summary": "Attach executable Lua behavior directly to a fight, without creating a perk or requiring an equipped item. Available since API **0.8.0**.",
+      "summary": "Attach executable Lua behavior directly to a fight, without creating a perk or requiring an equipped item.",
       "requires": "`content.register`. Each fighter operation still requires its own combat capability, declared by the mod that owns the behavior.",
       "when": "Register in the entrypoint. Attached handlers run only at the supported combat callback boundaries of the selected fight."
     },
@@ -664,7 +663,7 @@
       "url": "https://dawc17.github.io/ProjectEclipse/api/items-progression-forge/#sf2itemsset_innate_perks",
       "summary": "",
       "requires": "`content.patch`; item/perk lookup or registration also requires `content.register`. Declare dependencies for referenced core or other-mod content.",
-      "when": "During mod loading, before fighters are built. Available since API `0.50`."
+      "when": "During mod loading, before fighters are built."
     },
     "sf2.items.set_tactic_subtype": {
       "params": {
@@ -673,8 +672,8 @@
       "returns": "Nothing (`nil`).",
       "capability": "content.patch",
       "url": "https://dawc17.github.io/ProjectEclipse/api/items-progression-forge/#sf2itemsset_tactic_subtype",
-      "summary": "Replace the AI table group of a core or owned weapon without changing its animation subtype. Available since **API 0.52**.",
-      "requires": "`content.patch`; item lookup also requires `content.register`. Declare dependencies for referenced namespaces and require `api = \">=0.52 <1.0\"`.",
+      "summary": "Replace the AI table group of a core or owned weapon without changing its animation subtype.",
+      "requires": "`content.patch`; item lookup also requires `content.register`. Declare dependencies for referenced namespaces.",
       "when": "During entrypoint registration. The override applies when content is loaded, before subsequent fights are constructed."
     },
     "sf2.items.set_default_enchantments": {
@@ -686,7 +685,7 @@
       "url": "https://dawc17.github.io/ProjectEclipse/api/items-progression-forge/#sf2itemsset_default_enchantments",
       "summary": "",
       "requires": "`content.patch`; item/perk lookup or registration also requires `content.register`. Declare dependencies for referenced content from core or other mods.",
-      "when": "During mod loading. Available since API `0.49`."
+      "when": "During mod loading."
     },
     "sf2.forge.override_deviation": {
       "params": {
@@ -697,7 +696,7 @@
       "url": "https://dawc17.github.io/ProjectEclipse/api/items-progression-forge/#sf2forgeoverride_deviation",
       "summary": "",
       "requires": "`content.patch`, `content.register` for the profile lookup, and a declared `core` dependency.",
-      "when": "During mod loading. Available since API `0.48`."
+      "when": "During mod loading."
     },
     "sf2.forge.exclude_candidate": {
       "params": {
@@ -708,7 +707,7 @@
       "url": "https://dawc17.github.io/ProjectEclipse/api/items-progression-forge/#sf2forgeexclude_candidate",
       "summary": "",
       "requires": "`content.patch`, `content.register` for handle lookups, and a declared `core` dependency.",
-      "when": "During mod loading. Available since API `0.47`."
+      "when": "During mod loading."
     },
     "sf2.forge.register_recipe": {
       "params": {
@@ -739,8 +738,8 @@
       "returns": "A fresh table with `learned` (boolean) and `upgrade` (integer when learned; `nil` otherwise). Upgrade zero is a valid stored value; it does not mean unlearned. The number is the native `UpgradeLevel`, not a count of purchases.",
       "capability": "profile.read",
       "url": "https://dawc17.github.io/ProjectEclipse/api/profile/#sf2profileperk",
-      "summary": "Available since API **0.34**. Read whether the active profile has learned a perk and its stored upgrade number. This queries the learned-perk list, not temporary combat effects, equipment enchantments or whether a trigger is currently active.",
-      "requires": "`profile.read`. Pass a perk handle acquired in the same script context, or, since API 0.38, a qualified perk ID string. Other namespaces, including `core`, require a declared dependency. Strings need no `content.register` capability. Malformed IDs, wrong categories, unavailable definitions, forged handles and queries without an active profile raise errors.",
+      "summary": "Read whether the active profile has learned a perk and its stored upgrade number. This queries the learned-perk list, not temporary combat effects, equipment enchantments or whether a trigger is currently active.",
+      "requires": "`profile.read`. Pass a perk handle acquired in the same script context, or a qualified perk ID string. Other namespaces, including `core`, require a declared dependency. Strings need no `content.register` capability. Malformed IDs, wrong categories, unavailable definitions, forged handles and queries without an active profile raise errors.",
       "when": "After the active game profile has loaded, for example in a UI or story callback. A profile switch or perk upgrade is reflected on the next query."
     },
     "sf2.profile.level": {
@@ -760,7 +759,7 @@
       "capability": "profile.read",
       "url": "https://dawc17.github.io/ProjectEclipse/api/profile/#sf2profileitem",
       "summary": "",
-      "requires": "`profile.read` and either an item handle obtained by this mod context or, since API 0.38, a qualified item ID string. Other namespaces, including `core`, require a declared dependency. String queries do not require `content.register`.",
+      "requires": "`profile.read` and either an item handle obtained by this mod context or a qualified item ID string. Other namespaces, including `core`, require a declared dependency. String queries do not require `content.register`.",
       "when": "After a game profile has loaded."
     },
     "sf2.story.on": {
@@ -956,7 +955,7 @@
       "capability": null,
       "url": "https://dawc17.github.io/ProjectEclipse/api/events-and-modes/#sf2modesresolve",
       "summary": "",
-      "requires": "API 0.22 and the pending request supplied to this script's `on_prepare`. Forged or foreign request tables are rejected. No extra capability.",
+      "requires": "The pending request supplied to this script's `on_prepare`. Forged or foreign request tables are rejected. No extra capability.",
       "when": "Complete a pending preparation, including from a UI callback. Reusing a resolved/canceled request or supplying an invalid plan is an error. It marks the request ready; native validation/save/entry occur after Lua returns."
     },
     "sf2.modes.cancel": {
@@ -967,7 +966,7 @@
       "capability": null,
       "url": "https://dawc17.github.io/ProjectEclipse/api/events-and-modes/#sf2modescancel",
       "summary": "",
-      "requires": "API 0.22 and an owned request. No extra capability.",
+      "requires": "An owned request. No extra capability.",
       "when": "Cancel an unfinished setup, for example in the view's `on_close`. No ticket is charged and no fight starts. Repeated cancellation is harmless. Cancellation after resolution is a no-op, so closing a successful choice view cannot undo the selected plan. Scene/script teardown can still prevent launch."
     },
     "sf2.modes.is_pending": {
@@ -978,7 +977,7 @@
       "capability": null,
       "url": "https://dawc17.github.io/ProjectEclipse/api/events-and-modes/#sf2modesis_pending",
       "summary": "",
-      "requires": "API 0.22 and an owned request. No extra capability.",
+      "requires": "An owned request. No extra capability.",
       "when": "Guard buttons or late callbacks against stale requests."
     },
     "sf2.timers.set": {
@@ -1149,7 +1148,7 @@
       "url": "https://dawc17.github.io/ProjectEclipse/api/ui/#sf2uiset_sprite",
       "summary": "",
       "requires": "An open UI handle and a sprite handle created by the same script context. The widget must be an `image`. Its size, aspect-preserving rendering, visibility and place in the layout stay unchanged. `ui.create` is required to create the surface; the setter grants no additional asset access.",
-      "when": "After opening a surface, including from its click/change callbacks. Use this to switch a character portrait, equipment icon or reward preview without rebuilding the panel. Requires API **0.42**."
+      "when": "After opening a surface, including from its click/change callbacks. Use this to switch a character portrait, equipment icon or reward preview without rebuilding the panel."
     },
     "sf2.ui.set_value": {
       "params": {
@@ -1167,7 +1166,7 @@
       },
       "url": "https://dawc17.github.io/ProjectEclipse/api/ui/#sf2uiset_value",
       "summary": "",
-      "requires": "An open owned view and a progress/slider ID; no additional capability. Sliders require API 0.22. Setters do not invoke `on_change`.",
+      "requires": "An open owned view and a progress/slider ID; no additional capability. Setters do not invoke `on_change`.",
       "when": "Change a progress widget's fill or a slider's position to a finite fraction from 0 to 1. Invalid values are rejected before mutation."
     },
     "sf2.ui.set_checked": {
@@ -1180,7 +1179,7 @@
       "capability": null,
       "url": "https://dawc17.github.io/ProjectEclipse/api/ui/#sf2uiset_checked",
       "summary": "The checkmark reflects the authored `checked` value from the initial mount, including unchecked toggles. Programmatic changes update the checkmark immediately.",
-      "requires": "API 0.22, an open owned view and a toggle ID. No additional capability.",
+      "requires": "An open owned view and a toggle ID. No additional capability.",
       "when": "Set a toggle's boolean state without triggering `on_change`."
     },
     "sf2.ui.set_visible": {
@@ -1218,24 +1217,19 @@
       "url": "https://dawc17.github.io/ProjectEclipse/api/quests/#sf2questssuppress",
       "summary": "",
       "requires": "`content.patch`. The target must already be registered in your mod or an explicitly declared dependency. Declare `core` when targeting base quests.",
-      "when": "During registration, before the mod entrypoint returns. Requires API 0.23 or newer. Changes take effect through Apply & Restart, before saved quests resume."
+      "when": "During registration, before the mod entrypoint returns. Changes take effect through Apply & Restart, before saved quests resume."
     },
     "sf2.profile.equipment": {
       "params": {},
       "returns": "A fresh contiguous array of snapshot tables. An empty array means no records are marked equipped. Each record contains:",
       "capability": "profile.read",
       "url": "https://dawc17.github.io/ProjectEclipse/api/profile/#sf2profileequipment",
-      "summary": "Available since API **0.39**. Inspect the active profile's equipped records without knowing their item IDs in advance.",
+      "summary": "Inspect the active profile's equipped records without knowing their item IDs in advance.",
       "requires": "`profile.read`. No item handles or `content.register` capability. An unavailable profile raises an error. Enumeration includes all native equipped records, including records from other mods. Passing a returned ID to a separate `profile.item` query still requires that namespace's declared dependency.",
       "when": "After an active game profile has loaded, including UI and story callbacks."
     }
   },
-  "aliases": {
-    "sf2.shop.add": "sf2.shop.addItem",
-    "sf2.mod.log": "sf2.log.info",
-    "sf2.mod.warn": "sf2.log.warn",
-    "sf2.mod.error": "sf2.log.error"
-  },
+  "aliases": {},
   "constants": {
     "sf2.state.NUMBER": "number",
     "sf2.state.INTEGER": "integer",
@@ -1776,7 +1770,7 @@
         ],
         "tactic_subtype?": [
           "string",
-          "API 0.51: optional AI table group, defaults to subtype. 1-128 ASCII letters, digits or underscores."
+          "Optional AI table group, defaults to subtype. 1-128 ASCII letters, digits or underscores."
         ]
       }
     },

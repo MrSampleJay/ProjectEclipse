@@ -118,14 +118,13 @@ internal static class Program
         throw new Exception(message);
     }
 
-    private static string Manifest(string id, string version, string api, params string[] dependencies)
+    private static string Manifest(string id, string version, params string[] dependencies)
     {
         string text =
             "schema = 1\n" +
             "id = \"" + id + "\"\n" +
             "name = \"" + id + "\"\n" +
             "version = \"" + version + "\"\n" +
-            "api = \"" + api + "\"\n" +
             "authors = [\"Tester\"]\n" +
             "entrypoint = \"scripts/main.lua\"\n" +
             "capabilities = [\"content.register\"]\n";
@@ -141,13 +140,13 @@ internal static class Program
     private static ModDescriptor Descriptor(string id, string version, params string[] dependencies)
     {
         ModManifest manifest = ModManifestReader.ParseExternal(
-            Manifest(id, version, ">=0.1 <1.0", dependencies), id + "/mod.toml");
+            Manifest(id, version, dependencies), id + "/mod.toml");
         return new ModDescriptor(manifest, Path.GetFullPath(id), ModSourceKind.Loose);
     }
 
     private static ModDescriptor PatchDescriptor(string id, string version, params string[] dependencies)
     {
-        string text = Manifest(id, version, ">=0.1 <1.0", dependencies).Replace(
+        string text = Manifest(id, version, dependencies).Replace(
             "capabilities = [\"content.register\"]",
             "capabilities = [\"content.register\", \"content.patch\"]");
         ModManifest manifest = ModManifestReader.ParseExternal(text, id + "/mod.toml");
@@ -199,27 +198,27 @@ internal static class Program
         Assert(!range.Contains(SemanticVersion.Parse("1.0.0")), "Range accepted its exclusive upper boundary.");
 
         ModManifest manifest = ModManifestReader.ParseExternal(
-            Manifest("example.weapon", "1.0.0", ">=0.1 <1.0", "core", ">=1.0 <2.0"));
+            Manifest("example.weapon", "1.0.0", "core", ">=1.0 <2.0"));
         Assert(manifest.Id.Value == "example.weapon", "Manifest ID was parsed incorrectly.");
         Assert(manifest.Version == SemanticVersion.Parse("1.0.0"), "Manifest version was parsed incorrectly.");
         Assert(manifest.Dependencies.Count == 1 && manifest.Dependencies[0].Id.Value == "core",
             "Manifest dependency was parsed incorrectly.");
         Assert(manifest.Entrypoint == "scripts/main.lua", "Entrypoint normalization is wrong.");
         Reject(() => ModManifestReader.ParseExternal(
-            Manifest("bad.entrypoint", "1.0.0", ">=0.1 <1.0").Replace(
+            Manifest("bad.entrypoint", "1.0.0").Replace(
                 "entrypoint = \"scripts/main.lua\"", "entrypoint = \"main.lua\"")),
             "Manifest entrypoint outside scripts/ was accepted.");
-        Reject(() => ModManifestReader.ParseExternal(Manifest("core", "1.0.0", ">=0.1 <1.0")),
+        Reject(() => ModManifestReader.ParseExternal(Manifest("core", "1.0.0")),
             "Reserved core manifest ID was accepted externally.");
         Reject(() => ModManifestReader.ParseExternal(
-            Manifest("bad.fields", "1.0.0", ">=0.1 <1.0", "core", ">=1.0 <2.0") +
+            Manifest("bad.fields", "1.0.0", "core", ">=1.0 <2.0") +
             "capabilities = [\"events.combat\"]\n"),
             "Root field after dependency table was accepted as valid TOML schema.");
 
         ModDescriptor baseMod = Descriptor("a.base", "1.2.0", "core", ">=1.0 <2.0");
         ModDescriptor addon = Descriptor("b.addon", "1.0.0", "a.base", ">=1.0 <2.0");
         DependencyResolutionResult ordered = DependencyResolver.Resolve(
-            new[] { addon, baseMod }, ModPlatformVersions.Api, ModPlatformVersions.Core);
+            new[] { addon, baseMod }, ModPlatformVersions.Core);
         Assert(!ordered.HasErrors, "Valid dependency graph produced errors.");
         Assert(ordered.OrderedMods.Count == 2 && ordered.OrderedMods[0].Id.Value == "a.base" &&
             ordered.OrderedMods[1].Id.Value == "b.addon", "Dependency order is not deterministic/topological.");
@@ -227,7 +226,7 @@ internal static class Program
         DependencyResolutionResult missing = DependencyResolver.Resolve(
             new[] { Descriptor("missing.user", "1.0.0", "missing.target", ">=1.0 <2.0"),
                     Descriptor("independent.mod", "1.0.0") },
-            ModPlatformVersions.Api, ModPlatformVersions.Core);
+            ModPlatformVersions.Core);
         Assert(missing.HasErrors && HasCode(missing.Diagnostics, "DEP005"), "Missing dependency was not diagnosed.");
         Assert(missing.OrderedMods.Count == 1 && missing.OrderedMods[0].Id.Value == "independent.mod",
             "Independent mod was disabled by another mod's missing dependency.");
@@ -235,20 +234,20 @@ internal static class Program
         DependencyResolutionResult disabledDependency = DependencyResolver.Resolve(
             new[] { Descriptor("broken.base", "1.0.0", "missing.target", ">=1.0 <2.0"),
                     Descriptor("broken.user", "1.0.0", "broken.base", ">=1.0 <2.0") },
-            ModPlatformVersions.Api, ModPlatformVersions.Core);
+            ModPlatformVersions.Core);
         Assert(disabledDependency.HasErrors && HasCode(disabledDependency.Diagnostics, "DEP008"),
             "Dependent of a disabled mod was not diagnosed.");
         Assert(disabledDependency.OrderedMods.Count == 0, "Dependent of a disabled mod remained enabled.");
 
         DependencyResolutionResult mismatch = DependencyResolver.Resolve(
             new[] { Descriptor("old.base", "1.0.0"), Descriptor("new.user", "1.0.0", "old.base", ">=2.0 <3.0") },
-            ModPlatformVersions.Api, ModPlatformVersions.Core);
+            ModPlatformVersions.Core);
         Assert(mismatch.HasErrors && HasCode(mismatch.Diagnostics, "DEP006"), "Dependency version mismatch was not diagnosed.");
 
         DependencyResolutionResult cycle = DependencyResolver.Resolve(
             new[] { Descriptor("cycle.a", "1.0.0", "cycle.b", ">=1.0 <2.0"),
                     Descriptor("cycle.b", "1.0.0", "cycle.a", ">=1.0 <2.0") },
-            ModPlatformVersions.Api, ModPlatformVersions.Core);
+            ModPlatformVersions.Core);
         Assert(cycle.HasErrors && HasCode(cycle.Diagnostics, "DEP007"), "Dependency cycle was not diagnosed.");
 
         var content = new ModContentCatalog();
@@ -372,7 +371,7 @@ internal static class Program
             string validRoot = Path.Combine(modsRoot, "example.weapon");
             Directory.CreateDirectory(validRoot);
             File.WriteAllText(Path.Combine(validRoot, "mod.toml"),
-                Manifest("example.weapon", "1.0.0", ">=0.1 <1.0", "core", ">=1.0 <2.0"));
+                Manifest("example.weapon", "1.0.0", "core", ">=1.0 <2.0"));
             string spriteRoot = Path.Combine(validRoot, "assets", "sprites");
             string textureRoot = Path.Combine(validRoot, "assets", "textures");
             string modelRoot = Path.Combine(validRoot, "assets", "models");
@@ -382,8 +381,6 @@ internal static class Program
             string spriteDescriptor = "type=sprite\ntexture=textures/weapon.png\npivot=[0.5, 0.5]\n";
             File.WriteAllText(Path.Combine(spriteRoot, "weapon.asset"), spriteDescriptor);
             File.WriteAllBytes(Path.Combine(textureRoot, "weapon.png"), new byte[] { 1, 2, 3, 4 });
-            File.WriteAllBytes(Path.Combine(spriteRoot, "legacy.png"), new byte[] { 1, 2, 3, 4 });
-            File.WriteAllText(Path.Combine(spriteRoot, "legacy.sprite.toml"), "pivot = [0.5, 0.5]");
             // Type comes from the descriptor, not its directory.
             File.WriteAllText(Path.Combine(validRoot, "assets", "outside.asset"), spriteDescriptor);
             File.WriteAllText(Path.Combine(modelRoot, "mdl_weapon_example.xml"), "<Scene><Figures /></Scene>");
@@ -413,8 +410,6 @@ internal static class Program
                 weaponBytes.Data[0] == 1 && weaponBytes.Data[3] == 4, "Texture payload changed.");
             Assert(resolver.TryDescribe(AssetId.Parse("example.weapon:outside"), out weaponMeta) &&
                 weaponMeta.Kind == AssetKind.Sprite, "Descriptor type depended on its folder.");
-            Assert(resolver.TryDescribe(AssetId.Parse("example.weapon:sprites/legacy"), out weaponMeta) &&
-                weaponMeta.Kind == AssetKind.Sprite && weaponMeta.Format == ".png", "Legacy PNG sprite regressed.");
 
             AssetId modelId = AssetId.Parse("example.weapon:models/mdl_weapon_example");
             AssetMetadata modelMeta;
@@ -456,7 +451,7 @@ internal static class Program
             bool collisionRejected = false;
             try { new LooseModProvider(discovery.Mods[0]); }
             catch (InvalidDataException) { collisionRejected = true; }
-            Assert(collisionRejected, "Descriptor and legacy sprite at the same logical ID were accepted.");
+            Assert(collisionRejected, "Descriptor and texture at the same logical ID were accepted.");
         }
         finally
         {
@@ -501,7 +496,7 @@ internal static class Program
             "Canonical vanilla perk coverage changed.");
         PerkDefinition coreLifesteal;
         Assert(catalog.TryGetPerk(CoreContentImporter.PerkId("PERK_ITEM_SPECIAL_LIFESTEAL"), out coreLifesteal) &&
-            coreLifesteal.IsCore && !coreLifesteal.HasTemplate && coreLifesteal.Kind == ModPerkKind.Single &&
+            coreLifesteal.IsCore && coreLifesteal.Kind == ModPerkKind.Single &&
             coreLifesteal.LegacyName == "PERK_ITEM_SPECIAL_LIFESTEAL" &&
             coreLifesteal.LegacyPerkXml.Contains("EnchantmentLifeDrain"),
             "Core lifesteal perk projection lost canonical identity/source fields.");
@@ -773,47 +768,6 @@ internal static class Program
         Assert(catalog.Moves.Count == p1dMoveCount,
             "Disposed P1D registration transaction leaked an additive move into the catalog.");
 
-        int perkCountBefore = catalog.Perks.Count;
-        int enchantmentCountBefore = catalog.Enchantments.Count;
-        string equipmentOnlyFingerprint = contentFingerprint;
-        using (ModRegistrationTransaction registration = catalog.BeginRegistration(mod))
-        {
-            PerkDefinition template = registration.GetPerk("core:perks/PERK_ITEM_SPECIAL_LIFESTEAL_WEAPON");
-            DefinitionId perkTitle = registration.AddLocalization("perk.example_lifesteal", "eng", "Example Lifesteal");
-            DefinitionId perkDescription = registration.AddLocalization("perk.example_lifesteal.description", "eng",
-                "A template-derived lifesteal enchantment used by the contract test.");
-            var parameters = new Dictionary<string, string>(StringComparer.Ordinal)
-            {
-                { "Aspect", "?RandomAspect[-30,30]" }
-            };
-            PerkDefinition perk = registration.RegisterPerk("example_lifesteal", template.Id, perkTitle,
-                perkDescription, default(AssetId), parameters);
-            EnchantmentDefinition enchantment = registration.RegisterEnchantment("example_lifesteal_weapon", perk.Id,
-                ModEnchantmentRecipe.Medium, new[] { ModEquipmentKind.Weapon });
-            RejectContent(() => registration.RegisterEnchantment("duplicate_lifesteal_weapon", perk.Id,
-                ModEnchantmentRecipe.Medium, new[] { ModEquipmentKind.Weapon }),
-                "Two enchantment IDs exposed the same runtime perk candidate in one recipe/equipment slot.");
-            Assert(catalog.Perks.Count == perkCountBefore && catalog.Enchantments.Count == enchantmentCountBefore,
-                "Uncommitted perk/enchantment transaction leaked into global registries.");
-            Assert(perk.HasTemplate && perk.Template == template.Id && perk.Kind == ModPerkKind.Single &&
-                perk.Parameters["Aspect"] == "?RandomAspect[-30,30]" &&
-                enchantment.Perk == perk.Id && enchantment.Recipe == ModEnchantmentRecipe.Medium &&
-                enchantment.Equipment.Count == 1 && enchantment.Equipment[0] == ModEquipmentKind.Weapon,
-                "Staged perk/enchantment definition changed values.");
-            registration.Commit();
-        }
-        PerkDefinition committedPerk;
-        EnchantmentDefinition committedEnchantment;
-        Assert(catalog.TryGetPerk(DefinitionId.Parse("example.weapon:perks/example_lifesteal"), out committedPerk) &&
-            committedPerk.HasTemplate && committedPerk.Template == CoreContentImporter.PerkId("PERK_ITEM_SPECIAL_LIFESTEAL_WEAPON") &&
-            !committedPerk.HasIcon &&
-            catalog.TryGetEnchantment(DefinitionId.Parse("example.weapon:enchantments/example_lifesteal_weapon"),
-                out committedEnchantment) && committedEnchantment.Perk == committedPerk.Id,
-            "Committed perk/enchantment lookup lost typed values.");
-        string perkFingerprint = ModSaveData.ComputeContentSetFingerprint(new[] { mod }, catalog);
-        Assert(perkFingerprint != equipmentOnlyFingerprint,
-            "Content-set fingerprint ignored committed perk/enchantment definitions.");
-
         var behaviorSchema = new ModParameterSchema(new[]
         {
             new ModParameterDefinition("chance", ModParameterType.Number, true),
@@ -821,6 +775,47 @@ internal static class Program
             new ModParameterDefinition("enabled", ModParameterType.Boolean, false, ModParameterValue.FromBoolean(true)),
             new ModParameterDefinition("tag", ModParameterType.String, false, ModParameterValue.FromString("base"))
         });
+        int perkCountBefore = catalog.Perks.Count;
+        int enchantmentCountBefore = catalog.Enchantments.Count;
+        string equipmentOnlyFingerprint = contentFingerprint;
+        using (ModRegistrationTransaction registration = catalog.BeginRegistration(mod))
+        {
+            ModBehaviorDefinition perkBehavior = registration.RegisterBehavior("example_lifesteal", behaviorSchema);
+            DefinitionId perkTitle = registration.AddLocalization("perk.example_lifesteal", "eng", "Example Lifesteal");
+            DefinitionId perkDescription = registration.AddLocalization("perk.example_lifesteal.description", "eng",
+                "A behavior-backed lifesteal enchantment used by the contract test.");
+            var parameters = new Dictionary<string, ModParameterValue>(StringComparer.Ordinal)
+            {
+                { "chance", ModParameterValue.FromNumber(0.3d) }
+            };
+            PerkDefinition perk = registration.RegisterScriptedPerk("example_lifesteal", perkTitle,
+                perkDescription, default(AssetId), ModPerkKind.Single, perkBehavior.Id, parameters);
+            EnchantmentDefinition enchantment = registration.RegisterScriptedEnchantment("example_lifesteal_weapon",
+                perkTitle, perkDescription, default(AssetId), ModEnchantmentRecipe.Medium,
+                new[] { ModEquipmentKind.Weapon }, perkBehavior.Id, parameters);
+            Assert(catalog.Perks.Count == perkCountBefore && catalog.Enchantments.Count == enchantmentCountBefore,
+                "Uncommitted perk/enchantment transaction leaked into global registries.");
+            Assert(perk.HasBehavior && perk.Behavior == perkBehavior.Id && perk.Kind == ModPerkKind.Single &&
+                perk.InitialParameters["chance"].Number == 0.3d &&
+                enchantment.HasBehavior && enchantment.Behavior == perkBehavior.Id &&
+                enchantment.Recipe == ModEnchantmentRecipe.Medium &&
+                enchantment.Equipment.Count == 1 && enchantment.Equipment[0] == ModEquipmentKind.Weapon,
+                "Staged perk/enchantment definition changed values.");
+            registration.Commit();
+        }
+        PerkDefinition committedPerk;
+        EnchantmentDefinition committedEnchantment;
+        Assert(catalog.TryGetPerk(DefinitionId.Parse("example.weapon:perks/example_lifesteal"), out committedPerk) &&
+            committedPerk.HasBehavior &&
+            committedPerk.Behavior == DefinitionId.Parse("example.weapon:behaviors/example_lifesteal") &&
+            !committedPerk.HasIcon &&
+            catalog.TryGetEnchantment(DefinitionId.Parse("example.weapon:enchantments/example_lifesteal_weapon"),
+                out committedEnchantment) && committedEnchantment.Behavior == committedPerk.Behavior,
+            "Committed perk/enchantment lookup lost typed values.");
+        string perkFingerprint = ModSaveData.ComputeContentSetFingerprint(new[] { mod }, catalog);
+        Assert(perkFingerprint != equipmentOnlyFingerprint,
+            "Content-set fingerprint ignored committed perk/enchantment definitions.");
+
         using (ModRegistrationTransaction registration = catalog.BeginRegistration(mod))
         {
             ModBehaviorDefinition behavior = registration.RegisterBehavior("lifesteal", behaviorSchema);
@@ -832,18 +827,15 @@ internal static class Program
             };
             PerkDefinition scriptedPerk = registration.RegisterScriptedPerk("direct_lifesteal", scriptedTitle,
                 scriptedDescription, default(AssetId), ModPerkKind.Single, behavior.Id, scriptedValues);
-            RejectContent(() => registration.RegisterEnchantment("invalid_scripted_perk_bridge", scriptedPerk.Id,
-                ModEnchantmentRecipe.Medium, new[] { ModEquipmentKind.Weapon }),
-                "Behavior-backed perk was accepted through the API 0.2 perk-backed enchantment compatibility path.");
             EnchantmentDefinition scriptedEnchantment = registration.RegisterScriptedEnchantment(
                 "direct_lifesteal_weapon", scriptedTitle, scriptedDescription, default(AssetId),
                 ModEnchantmentRecipe.Medium, new[] { ModEquipmentKind.Weapon }, behavior.Id, scriptedValues);
             Assert(behavior.Id == DefinitionId.Parse("example.weapon:behaviors/lifesteal") &&
-                behavior.Parameters.Count == 4 && catalog.Behaviors.Count == 0 &&
-                scriptedPerk.HasBehavior && !scriptedPerk.HasTemplate && scriptedPerk.Behavior == behavior.Id &&
+                behavior.Parameters.Count == 4 && catalog.Behaviors.Count == 1 &&
+                scriptedPerk.HasBehavior && scriptedPerk.Behavior == behavior.Id &&
                 scriptedPerk.InitialParameters["chance"].Number == 0.55d &&
                 scriptedPerk.InitialParameters["stacks"].Integer == 1 &&
-                scriptedEnchantment.HasBehavior && !scriptedEnchantment.HasPerk &&
+                scriptedEnchantment.HasBehavior &&
                 scriptedEnchantment.Behavior == behavior.Id && scriptedEnchantment.Kind == ModPerkKind.Single,
                 "Behavior-backed perk/enchantment registration leaked or lost typed values.");
             registration.Commit();
@@ -920,13 +912,17 @@ internal static class Program
         using (ModRegistrationTransaction rollback = catalog.BeginRegistration(rollbackMod))
         {
             rollback.RegisterBehavior("rollback", behaviorSchema);
-            PerkDefinition template = rollback.GetPerk("core:perks/PERK_ITEM_SPECIAL_LIFESTEAL_WEAPON");
+            ModBehaviorDefinition behavior = rollback.RegisterBehavior("rollback", behaviorSchema);
             DefinitionId title = rollback.AddLocalization("perk.rollback", "eng", "Rollback Perk");
             DefinitionId description = rollback.AddLocalization("perk.rollback.description", "eng", "Must not commit.");
-            PerkDefinition perk = rollback.RegisterPerk("rollback", template.Id, title, description,
-                default(AssetId), null);
-            rollback.RegisterEnchantment("rollback", perk.Id, ModEnchantmentRecipe.Medium,
-                new[] { ModEquipmentKind.Weapon });
+            var values = new Dictionary<string, ModParameterValue>(StringComparer.Ordinal)
+            {
+                { "chance", ModParameterValue.FromNumber(0.4d) }
+            };
+            rollback.RegisterScriptedPerk("rollback", title, description, default(AssetId),
+                ModPerkKind.Single, behavior.Id, values);
+            rollback.RegisterScriptedEnchantment("rollback", title, description, default(AssetId),
+                ModEnchantmentRecipe.Medium, new[] { ModEquipmentKind.Weapon }, behavior.Id, values);
         }
         Assert(catalog.Localizations.Count == localizationCountBeforeRollback &&
             catalog.Perks.Count == perkCountBeforeRollback && catalog.Enchantments.Count == enchantmentCountBeforeRollback &&

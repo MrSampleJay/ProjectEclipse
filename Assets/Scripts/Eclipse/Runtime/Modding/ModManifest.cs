@@ -21,21 +21,18 @@ namespace Eclipse.Modding
         public ModId Id { get; }
         public string Name { get; }
         public SemanticVersion Version { get; }
-        public VersionRange Api { get; }
         public IReadOnlyList<string> Authors { get; }
         public string Entrypoint { get; }
         public IReadOnlyList<string> Capabilities { get; }
         public IReadOnlyList<ModDependency> Dependencies { get; }
 
         internal ModManifest(int schema, ModId id, string name, SemanticVersion version,
-            VersionRange api, string[] authors, string entrypoint, string[] capabilities,
-            ModDependency[] dependencies)
+            string[] authors, string entrypoint, string[] capabilities, ModDependency[] dependencies)
         {
             Schema = schema;
             Id = id;
             Name = name;
             Version = version;
-            Api = api;
             Authors = Array.AsReadOnly(authors ?? Array.Empty<string>());
             Entrypoint = entrypoint;
             Capabilities = Array.AsReadOnly(capabilities ?? Array.Empty<string>());
@@ -67,7 +64,6 @@ namespace Eclipse.Modding
 
     public static class ModPlatformVersions
     {
-        public static readonly SemanticVersion Api = SemanticVersion.Parse("0.53.0");
         public static readonly SemanticVersion Core = SemanticVersion.Parse("1.0.0");
     }
 }

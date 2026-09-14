@@ -1,6 +1,6 @@
 # Eclipse Item Reward
 
-Requires API 0.33. Enable in the title-screen Mods menu and Apply & Restart.
+Enable in the title-screen Mods menu and Apply & Restart.
 Use a test profile with Lynx's Eclipse replay available and without Monk's Katars.
 Win the first bodyguard encounter in that replay. The example adds Monk's Katars
 to its one-win Eclipse reward scope. Native shared rewards, money and experience

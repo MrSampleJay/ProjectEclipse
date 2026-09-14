@@ -1,6 +1,6 @@
 # AI Dojo
 
-Requires API 0.46. Enable this mod and visit the **AI Dojo** map page using the
+Enable this mod and visit the **AI Dojo** map page using the
 bottom page dots. Four different native fighters demonstrate programmable AI:
 
 1. Patient Gatekeeper prefers a high kick, then waits 1.5 simulation seconds.

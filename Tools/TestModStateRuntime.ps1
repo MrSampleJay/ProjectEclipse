@@ -68,7 +68,6 @@ internal static class Program
             "id = \"" + id + "\"\n" +
             "name = \"" + id + "\"\n" +
             "version = \"" + version + "\"\n" +
-            "api = \">=0.1 <1.0\"\n" +
             "authors = [\"Test\"]\n" +
             "entrypoint = \"scripts/main.lua\"\n" +
             "capabilities = [\"state.read\", \"state.write\"]\n\n" +

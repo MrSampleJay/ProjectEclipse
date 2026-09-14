@@ -3,12 +3,9 @@ title: Story events
 description: React to purchases and completed enchantments with Lua.
 ---
 
-Available since API **0.28**. Declare `story.events` in your manifest.
+Declare `story.events` in your manifest.
 Other operations performed by your callback still require their own capabilities.
-The `level_up` event requires API **0.29**.
-The `scene_enter` event requires API **0.30**.
-The `item_acquired` event requires API **0.36**.
-The `battle_result` event requires API **0.40**; see Battle results below.
+See Battle results below for the `battle_result` event.
 
 `purchase` observes native purchase processing, not every grant or inventory change.
 `enchantment` observes native forge completion. Callbacks run after native quest
@@ -177,7 +174,7 @@ sf2.story.on("item_acquired", function(event)
 end)
 ```
 
-Since API **0.37**, the native delivery-completion routine also emits acquisition
+The native delivery-completion routine also emits acquisition
 when it changes an empty inventory record to count one. Notification follows its
 upgrade/level refresh and native save request. Repeating completion or delivering
 an upgrade without increasing count does not emit acquisition. A grant performed
@@ -197,14 +194,14 @@ failed grants and profile boundaries. Lua tests cover payloads and detached tabl
 Full-game purchase/reward delivery and inventory persistence remain pending.
 
 
-The bundled `example.story-observer` mod (API 0.37+) logs acquisition identity,
+The bundled `example.story-observer` mod logs acquisition identity,
 before/after counts and the delta. Enable it alongside `example.eclipse-reward`
 to observe that example's native grant path. It adds no UI and changes no rewards.
 Its README explains expected messages and the remaining full-game checks.
 
 ### Battle results
 
-Since API 0.40, `sf2.story.on("battle_result", callback)` observes successful native
+`sf2.story.on("battle_result", callback)` observes successful native
 result processing for encounters launched through `StartFight`. It uses the same
 `story.events` capability, subscription limits, cancellation and profile lifetime
 as other story events. No registration capability or fake equipment perk is needed.

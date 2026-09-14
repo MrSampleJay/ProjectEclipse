@@ -132,7 +132,6 @@ namespace Eclipse.Modding
         private static AssetKind GetKind(string logicalPath, string extension)
         {
             string ext = extension.ToLowerInvariant();
-            if (ext == ".png" && logicalPath.StartsWith("sprites/", StringComparison.Ordinal)) return AssetKind.Sprite;
             if (ext == ".png") return AssetKind.Texture;
             if (ext == ".xml" && logicalPath.StartsWith("models/", StringComparison.Ordinal)) return AssetKind.Model;
             if (ext == ".wav") return AssetKind.Audio;

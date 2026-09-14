@@ -3,7 +3,7 @@ title: Scene navigation
 description: Use native menu transitions from custom Lua UI.
 ---
 
-Available since API **0.31**. Declare `presentation.navigate`. This API uses the
+Declare `presentation.navigate`. This API uses the
 same native transition as the game's menu, including its quest and tab checks.
 It does not expose Unity scene objects, raw scene indexes or arbitrary scene loading.
 

@@ -40,7 +40,7 @@ namespace Eclipse.Modding
             string root = Path.GetFullPath(modsRoot);
             ModDiscoveryResult discovery = ModDiscovery.DiscoverLoose(root);
             DependencyResolutionResult resolution = DependencyResolver.Resolve(ModSelection.Load(GetSelectionPath(root)).Filter(discovery.Mods),
-                ModPlatformVersions.Api, ModPlatformVersions.Core);
+                ModPlatformVersions.Core);
 
             var diagnostics = new List<ModDiagnostic>();
             diagnostics.AddRange(discovery.Diagnostics);
@@ -118,8 +118,7 @@ namespace Eclipse.Modding
         public string FormatReport()
         {
             var builder = new StringBuilder();
-            builder.Append("Mod API ").Append(ModPlatformVersions.Api)
-                .Append(" | core ").Append(ModPlatformVersions.Core)
+            builder.Append("core ").Append(ModPlatformVersions.Core)
                 .Append(" | enabled ").Append(EnabledMods.Count)
                 .Append(" | diagnostics ").Append(Diagnostics.Count)
                 .AppendLine();

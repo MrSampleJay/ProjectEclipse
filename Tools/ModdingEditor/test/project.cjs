@@ -61,7 +61,6 @@ test('manifest checks unsupported fields, unsafe paths, duplicates, and missing 
     for (const fragment of ['schema must', 'reserved', 'safe path', 'Unknown', 'Duplicate', 'Missing required']) assert(result.issues.some(i => i.message.includes(fragment)), fragment);
     for (const bad of ['../x', '/x', 'C:\\x', 'a/../x', 'a//x']) assert.equal(p.safe(bad), false);
     assert.equal(p.parseValue('["a", "b",]')[1], 'b');
-    assert(!p.manifest('api=">=0.7.0-beta.1 <1.0"').issues.some(i => i.message.includes('comparison ranges')));
 });
 test('scaffold creates a valid mod, refuses overwrite, and prevents path escape', async t => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), 'eclipse-editor-'));

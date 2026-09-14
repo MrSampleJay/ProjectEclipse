@@ -1,7 +1,7 @@
 # Perk upgrade implementation evidence
 
-Initially inspected against API 0.10 on 2026-09-12. API 0.11 now implements the
-contract below; see PRE_DE_WORK_LOG.md for managed/native-source verification.
+Initially inspected on 2026-09-12. The contract below is implemented; see
+PRE_DE_WORK_LOG.md for managed/native-source verification.
 Full Unity acceptance remains part of the active pre-DE objective.
 
 ## Actual content and engine paths

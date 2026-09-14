@@ -184,9 +184,8 @@ namespace Eclipse.Modding
 
             try
             {
-                var visiting = new HashSet<DefinitionId>();
                 foreach (PerkDefinition definition in _content.Perks)
-                    if (!definition.IsCore) EnsurePerkApplied(definition, visiting);
+                    if (!definition.IsCore) EnsurePerkApplied(definition);
 
                 ApplyForgeExclusions();
                 ApplyForgeDeviations();
@@ -237,9 +236,7 @@ namespace Eclipse.Modding
                         var node = document.CreateElement("UpgradeLevel");
                         node.SetAttribute("Value", upgrade.Level.ToString(CultureInfo.InvariantCulture));
                         node.SetAttribute("Description", upgrade.Description.ToString());
-                        var set = document.CreateElement("Set");
-                        foreach (var pair in upgrade.Parameters) set.SetAttribute(pair.Key, pair.Value);
-                        node.AppendChild(set); root.AppendChild(node);
+                        node.AppendChild(document.CreateElement("Set")); root.AppendChild(node);
                     }
                     _perks.AddExternalPerkUpgrades(RuntimePerkName(perk), root);
                 }
@@ -264,28 +261,12 @@ namespace Eclipse.Modding
 
                 foreach (EnchantmentDefinition enchantment in _content.Enchantments)
                 {
-                    string perkName;
-                    string perkKind;
-                    IReadOnlyDictionary<string, ModParameterValue> initialParameters = null;
-                    if (enchantment.HasPerk)
-                    {
-                        PerkDefinition perk;
-                        if (!_content.TryGetPerk(enchantment.Perk, out perk))
-                            throw new InvalidOperationException("Committed enchantment has no perk: " + enchantment.Id);
-                        perkName = RuntimePerkName(perk);
-                        perkKind = perk.Kind == ModPerkKind.Combo ? "Combo" : "Single";
-                    }
-                    else if (enchantment.HasBehavior)
-                    {
-                        EnsureScriptedEnchantmentApplied(enchantment);
-                        perkName = enchantment.Id.ToString();
-                        perkKind = enchantment.Kind == ModPerkKind.Combo ? "Combo" : "Single";
-                        initialParameters = enchantment.InitialParameters;
-                    }
-                    else
-                    {
+                    if (!enchantment.HasBehavior)
                         throw new InvalidOperationException("Committed enchantment has no behavior backend: " + enchantment.Id);
-                    }
+                    EnsureScriptedEnchantmentApplied(enchantment);
+                    string perkName = enchantment.Id.ToString();
+                    string perkKind = enchantment.Kind == ModPerkKind.Combo ? "Combo" : "Single";
+                    IReadOnlyDictionary<string, ModParameterValue> initialParameters = enchantment.InitialParameters;
                     string recipeName = RecipeName(enchantment.Recipe);
                     for (int i = 0; i < enchantment.Equipment.Count; i++)
                     {
@@ -1051,7 +1032,7 @@ namespace Eclipse.Modding
             _itemsApplied = false;
         }
 
-        private PerkInfoItem EnsurePerkApplied(PerkDefinition definition, HashSet<DefinitionId> visiting)
+        private PerkInfoItem EnsurePerkApplied(PerkDefinition definition)
         {
             if (definition.IsCore)
             {
@@ -1068,69 +1049,13 @@ namespace Eclipse.Modding
                 if (_perkNames.Contains(runtimeName)) return existing;
                 throw new InvalidOperationException("Legacy perk already exists: " + runtimeName);
             }
-            if (definition.HasBehavior)
-            {
-                XmlElement scriptedNode = BuildScriptedPerkNode(definition.Id, definition.DisplayName,
-                    definition.Description, definition.Icon, definition.HasIcon, definition.Kind);
-                PerkInfoItem scripted = _perks.AddExternalBasePerk(scriptedNode);
-                _perkNames.Add(scripted.Name);
-                return scripted;
-            }
-            if (!definition.HasTemplate)
-                throw new InvalidOperationException("External perk has no template: " + definition.Id);
-            if (!visiting.Add(definition.Id))
-                throw new InvalidOperationException("Perk template cycle detected at " + definition.Id);
-
-            try
-            {
-                PerkDefinition templateDefinition;
-                if (!_content.TryGetPerk(definition.Template, out templateDefinition))
-                    throw new InvalidOperationException("Perk template is unavailable: " + definition.Template);
-                PerkInfoItem template = EnsurePerkApplied(templateDefinition, visiting);
-                XmlElement node = BuildPerkNode(definition, template);
-                PerkInfoItem applied = _perks.AddExternalBasePerk(node);
-                _perkNames.Add(applied.Name);
-                return applied;
-            }
-            finally
-            {
-                visiting.Remove(definition.Id);
-            }
-        }
-
-        private XmlElement BuildPerkNode(PerkDefinition definition, PerkInfoItem template)
-        {
-            if (template == null || template.HAAKMBKCMCO == null)
-                throw new InvalidOperationException("Perk template has no canonical runtime XML: " + definition.Template);
-            var document = new XmlDocument();
-            XmlElement node = document.ImportNode(template.HAAKMBKCMCO, true) as XmlElement;
-            if (node == null) throw new InvalidOperationException("Perk template is not a Perk element: " + definition.Template);
-            document.AppendChild(node);
-
-            string templateName = template.Name;
-            string inheritedTemplates = node.GetAttribute("Template");
-            node.SetAttribute("Name", definition.Id.ToString());
-			node.SetAttribute("ID", _perks.CJJEPHDFOCJ().Count.ToString(CultureInfo.InvariantCulture));
-			node.SetAttribute("Alias", definition.DisplayName.ToString());
-			node.SetAttribute("Description", definition.Description.ToString());
-			// Keep the template's logical Image by default. Vanilla intentionally resolves
-			// that one value through different shop and fight sprite paths.
-			if (definition.HasIcon) node.SetAttribute("Image", definition.Icon.ToString());
-			node.SetAttribute("Template", string.IsNullOrEmpty(inheritedTemplates)
-                ? templateName : inheritedTemplates + "|" + templateName);
-
-            XmlElement set = node["Set"];
-            if (set == null && definition.Parameters.Count > 0)
-            {
-                set = document.CreateElement("Set");
-                XmlNode firstTrigger = node.SelectSingleNode("Trigger");
-                if (firstTrigger == null) node.AppendChild(set);
-                else node.InsertBefore(set, firstTrigger);
-            }
-            if (set != null)
-                foreach (KeyValuePair<string, string> parameter in definition.Parameters)
-                    set.SetAttribute(parameter.Key, parameter.Value);
-            return node;
+            if (!definition.HasBehavior)
+                throw new InvalidOperationException("External perk has no behavior: " + definition.Id);
+            XmlElement scriptedNode = BuildScriptedPerkNode(definition.Id, definition.DisplayName,
+                definition.Description, definition.Icon, definition.HasIcon, definition.Kind);
+            PerkInfoItem scripted = _perks.AddExternalBasePerk(scriptedNode);
+            _perkNames.Add(scripted.Name);
+            return scripted;
         }
 
         private PerkInfoItem EnsureScriptedEnchantmentApplied(EnchantmentDefinition definition)

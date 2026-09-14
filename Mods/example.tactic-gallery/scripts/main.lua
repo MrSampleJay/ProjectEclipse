@@ -1,7 +1,7 @@
--- API >=0.46 adds event.opponent.animation with current facing and active intervals.
--- API >=0.44 also provides action.type (none/move/attack) and action.priority.
+-- event.opponent.animation provides current facing and active intervals.
+-- action.type (none/move/attack) and action.priority are also available.
 -- Use these in on_decide to select candidates without matching native names.
--- API >=0.45 adds action.timing.nominal_frames/looped and action.inputs.
+-- action.timing.nominal_frames/looped and action.inputs are also available.
 -- Inputs have control (e.g. Kick) and press (tap/hold/release); timing is nominal.
 local sf2 = require("sf2")
 local function alias(key) return "example.tactic-gallery:localization/" .. key end

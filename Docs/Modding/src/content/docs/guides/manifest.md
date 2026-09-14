@@ -10,7 +10,6 @@ schema = 1
 id = "yourname.training"
 name = "Training Equipment"
 version = "1.0.0"
-api = ">=0.7 <1.0"
 authors = ["Your Name"]
 entrypoint = "scripts/main.lua"
 capabilities = ["content.register"]
@@ -30,7 +29,6 @@ All main fields in the example are required.
 | `id` | Permanent unique identity, using lowercase ASCII letters, digits, `.`, `_`, or `-`. No spaces. `core` and `sf2de` are reserved. |
 | `name` | Human-readable name shown in the mod menu. |
 | `version` | Your mod's release version, such as `1.0.0`. Increase it when publishing changes. |
-| `api` | Accepted Eclipse Mod API versions. It is independent of your mod's own version. |
 | `authors` | Nonempty array of author names. |
 | `entrypoint` | Relative Lua path inside `scripts/`, ending in `.lua`. No absolute paths or `..`. |
 | `capabilities` | Array of permission names. Use `[]` if none are needed. Duplicate entries are rejected. |
@@ -39,9 +37,9 @@ Changing `name` changes the display label. Changing `id` creates a different con
 
 ## Version ranges
 
-`">=0.7 <1.0"` accepts versions at least `0.7.0` and below `1.0.0`. All space-separated comparisons must match. Supported comparison operators are `=`, `>`, `>=`, `<`, and `<=`; an unprefixed version is an exact match. Do not use npm-style `^`, `~`, or `*` ranges.
+A dependency version such as `">=1.0 <2.0"` accepts versions at least `1.0.0` and below `2.0.0`. All space-separated comparisons must match. Supported comparison operators are `=`, `>`, `>=`, `<`, and `<=`; an unprefixed version is an exact match. Do not use npm-style `^`, `~`, or `*` ranges.
 
-Set the minimum API version to one that provides every feature you use. Making the range broader does not add missing functions to older game builds.
+Depend on versions you have tested against. A range cannot add missing functions to an older build.
 
 ## Dependencies
 

@@ -1,6 +1,6 @@
 # Campaign Guard Rule
 
-API 0.10 example using only core assets. Enable at the title screen, apply/restart,
+Example using only core assets. Enable at the title screen, apply/restart,
 then fight the first Lynx bodyguard on a test profile where that encounter remains
 available. The bodyguard takes half incoming damage at or below half health. The
 fight uses the dojo and the existing Samurai Spirit track.

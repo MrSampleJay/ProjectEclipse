@@ -26,8 +26,8 @@ pixels_per_unit=100
 comes from this field, not the folder name or an extra `.sprite` filename suffix.
 `texture` is required and names a PNG file **relative to the owning mod's
 `assets/` root**, including `.png`. Absolute paths, `..`, and namespace-qualified
-texture references are rejected. Put PNG textures outside the legacy `sprites/`
-folder (normally under `textures/`).
+texture references are rejected. Keep descriptors in `sprites/` and their PNG
+textures in `textures/`.
 
 The namespace comes from `mod.toml`'s `id`. Logical asset IDs use the relative
 file path without its final extension, normalized to lowercase. For mod

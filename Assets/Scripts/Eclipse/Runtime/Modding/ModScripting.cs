@@ -281,13 +281,6 @@ namespace Eclipse.Modding
             return RequireRegistration().RegisterBehavior(localId, parameters, state, lifetime, version);
         }
 
-        public PerkDefinition RegisterPerk(string localId, DefinitionId template, DefinitionId displayName,
-            DefinitionId description, AssetId icon, System.Collections.Generic.IReadOnlyDictionary<string, string> parameters)
-        {
-            RequireCapability("content.register");
-            return RequireRegistration().RegisterPerk(localId, template, displayName, description, icon, parameters);
-        }
-
         public PerkDefinition SetPerkUpgrades(DefinitionId id, PerkUpgradeDefinition[] upgrades)
         {
             RequireCapability("content.register");
@@ -301,13 +294,6 @@ namespace Eclipse.Modding
             RequireCapability("content.register");
             return RequireRegistration().RegisterScriptedPerk(localId, displayName, description, icon, kind,
                 behavior, initialParameters);
-        }
-
-        public EnchantmentDefinition RegisterEnchantment(string localId, DefinitionId perk,
-            ModEnchantmentRecipe recipe, ModEquipmentKind[] equipment)
-        {
-            RequireCapability("content.register");
-            return RequireRegistration().RegisterEnchantment(localId, perk, recipe, equipment);
         }
 
         public EnchantmentDefinition RegisterScriptedEnchantment(string localId, DefinitionId displayName,

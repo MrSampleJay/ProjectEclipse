@@ -131,7 +131,7 @@ internal static class Program
         ModDiscoveryResult discovery = ModDiscovery.DiscoverLoose(modsRoot);
         Assert(!discovery.HasErrors, "Discovery failed: " + string.Join(" | ", discovery.Diagnostics));
         DependencyResolutionResult resolution = DependencyResolver.Resolve(discovery.Mods,
-            ModPlatformVersions.Api, ModPlatformVersions.Core);
+            ModPlatformVersions.Core);
         Assert(!resolution.HasErrors, "Dependency resolution failed: " + string.Join(" | ", resolution.Diagnostics));
         Assert(resolution.OrderedMods.Count == 1 && resolution.OrderedMods[0].Id.Value == "example.phase1",
             "Did not resolve exactly the showcase mod.");

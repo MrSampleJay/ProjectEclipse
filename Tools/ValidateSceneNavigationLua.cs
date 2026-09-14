@@ -9,7 +9,7 @@ static class Program {
  static void Main(string[] args){
   var dir=Path.Combine(args[0],"example.navigation");Directory.CreateDirectory(Path.Combine(dir,"scripts"));
   foreach(var scenario in new[]{"accepted","rejected","denied","invalid","nohost","cleanup","example"}){
-   File.WriteAllText(Path.Combine(dir,"mod.toml"),("schema=1\nid='example.navigation'\nname='Navigation'\nversion='1.0.0'\napi='>=0.31 <1.0'\nauthors=['Eclipse']\nentrypoint='scripts/main.lua'\ncapabilities=['story.events','ui.create'"+(scenario=="denied"?"":",'presentation.navigate'")+"]\n").Replace("'","\""));
+   File.WriteAllText(Path.Combine(dir,"mod.toml"),("schema=1\nid='example.navigation'\nname='Navigation'\nversion='1.0.0'\nauthors=['Eclipse']\nentrypoint='scripts/main.lua'\ncapabilities=['story.events','ui.create'"+(scenario=="denied"?"":",'presentation.navigate'")+"]\n").Replace("'","\""));
    string code="local sf2=require('sf2')\nassert(sf2.scenes.open('shop')=="+(scenario=="rejected"?"false":"true")+")";
    if(scenario=="invalid")code="local sf2=require('sf2');sf2.scenes.open('fight')";
    if(scenario=="cleanup")code=@"local sf2=require('sf2')

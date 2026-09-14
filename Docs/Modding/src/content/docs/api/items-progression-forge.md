@@ -69,7 +69,7 @@ An `upgrade` entry must refer to a perk that supports upgrades. Keep alternative
 
 ## sf2.items.set_tactic_subtype
 
-Replace the AI table group of a core or owned weapon without changing its animation subtype. Available since **API 0.52**.
+Replace the AI table group of a core or owned weapon without changing its animation subtype.
 
 **Signature:** `sf2.items.set_tactic_subtype { item = ItemHandle, group = string }`
 
@@ -77,7 +77,7 @@ Replace the AI table group of a core or owned weapon without changing its animat
 
 **When:** During entrypoint registration. The override applies when content is loaded, before subsequent fights are constructed.
 
-**Requires:** `content.patch`; item lookup also requires `content.register`. Declare dependencies for referenced namespaces and require `api = ">=0.52 <1.0"`.
+**Requires:** `content.patch`; item lookup also requires `content.register`. Declare dependencies for referenced namespaces.
 
 Both fields are required. `item` must resolve to a weapon. `group` is a native AI table group containing at most 128 ASCII letters, digits or underscores. An empty string explicitly selects the weapon's actual subtype instead of an existing separate AI group. It does not create AI tables or animation moves; supply a group supported by your tactics.
 
@@ -99,7 +99,7 @@ The group participates in the content compatibility fingerprint. Disabling the m
 
 **Returns:** Nothing (`nil`).
 
-**When:** During mod loading, before fighters are built. Available since API `0.50`.
+**When:** During mod loading, before fighters are built.
 
 **Requires:** `content.patch`; item/perk lookup or registration also requires `content.register`. Declare dependencies for referenced core or other-mod content.
 
@@ -116,7 +116,6 @@ Parameter names must begin with an ASCII letter or underscore, contain only ASCI
 
 ```lua
 local sf2 = require("sf2")
--- Manifest: api = ">=0.50 <1.0"
 -- capabilities = ["content.register", "content.patch"]
 -- Also declare the core dependency in mod.toml.
 sf2.items.set_innate_perks {
@@ -144,7 +143,7 @@ This does not expose automatic activated abilities, arbitrary item metadata or p
 
 **Returns:** Nothing (`nil`).
 
-**When:** During mod loading. Available since API `0.49`.
+**When:** During mod loading.
 
 **Requires:** `content.patch`; item/perk lookup or registration also requires `content.register`. Declare dependencies for referenced content from core or other mods.
 
@@ -159,7 +158,6 @@ Replaces an equipment item's default enchantment loadout. Shop previews and the 
 
 ```lua
 local sf2 = require("sf2")
--- Manifest: api = ">=0.49 <1.0"
 -- capabilities = ["content.register", "content.patch"]
 -- Also declare the core dependency in mod.toml.
 sf2.items.set_default_enchantments {
@@ -246,7 +244,7 @@ Registering a new family does not change the original family's candidate pool or
 
 **Returns:** Nothing (`nil`).
 
-**When:** During mod loading. Available since API `0.47`.
+**When:** During mod loading.
 
 **Requires:** `content.patch`, `content.register` for handle lookups, and a declared `core` dependency.
 
@@ -260,7 +258,6 @@ Removes a native enchantment from one core recipe's eligible pool for one equipm
 
 ```lua
 local sf2 = require("sf2")
--- Manifest: api = ">=0.47 <1.0"
 -- capabilities = ["content.register", "content.patch"]
 -- Also declare the core dependency in mod.toml.
 sf2.forge.exclude_candidate {
@@ -282,7 +279,7 @@ Unloading the applied content restores the original native candidate pool. Enabl
 
 **Returns:** Nothing (`nil`).
 
-**When:** During mod loading. Available since API `0.48`.
+**When:** During mod loading.
 
 **Requires:** `content.patch`, `content.register` for the profile lookup, and a declared `core` dependency.
 
@@ -299,7 +296,6 @@ The limits are validation bounds, not recommended balance values. Start close to
 
 ```lua
 local sf2 = require("sf2")
--- Manifest: api = ">=0.48 <1.0"
 -- capabilities = ["content.register", "content.patch"]
 -- Also declare the core dependency in mod.toml.
 sf2.forge.override_deviation {

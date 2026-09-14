@@ -5,7 +5,7 @@ description: Author playable animation moves and program opponent decisions in L
 
 These are advanced content APIs. They configure the native animation and AI systems; Lua combat callbacks are covered separately in [Combat callbacks](../combat-callbacks/). Begin with a working fight and change one move at a time.
 
-Native equipment can use a different AI table group from its animation subtype. Eclipse respects the shipped `TacticSubtype` metadata (for example, a `TwoHandedBlunt` weapon can use `TwoHanded` AI tables), falling back to `SubType` when it is absent. Item cloning preserves this distinction, and weapon changes update the fighter's own AI group. Animation and item-condition matching still use the actual subtype. Owned weapon registration supports an optional `tactic_subtype` since API 0.51; see [weapon registration](../equipment-shop-logging/#sf2itemsregister_weapon). API 0.52 also supports [overriding weapon AI groups](../items-progression-forge/#sf2itemsset_tactic_subtype). Managed tests cover parsing and group updates; live combat acceptance remains separate.
+Native equipment can use a different AI table group from its animation subtype. Eclipse respects the shipped `TacticSubtype` metadata (for example, a `TwoHandedBlunt` weapon can use `TwoHanded` AI tables), falling back to `SubType` when it is absent. Item cloning preserves this distinction, and weapon changes update the fighter's own AI group. Animation and item-condition matching still use the actual subtype. Owned weapon registration supports an optional `tactic_subtype`; see [weapon registration](../equipment-shop-logging/#sf2itemsregister_weapon). You can also [override weapon AI groups](../items-progression-forge/#sf2itemsset_tactic_subtype). Managed tests cover parsing and group updates; live combat acceptance remains separate.
 
 ## Shared move fields
 
@@ -176,7 +176,7 @@ A value table accepts the following finite numbers, all defaulting to `0`: `base
 
 ## on_decide
 
-Available since API **0.22**. Attach this function to `sf2.tactics.register` to
+Attach this function to `sf2.tactics.register` to
 program an opponent using ordinary Lua. Keep `type = "tabular"` (the default)
 and a native `template`, usually `"Standard"`, for fallback behavior.
 
@@ -197,10 +197,10 @@ legal input-driven actions. It may be empty. Each candidate has these fields:
 | Field | Meaning |
 | --- | --- |
 | `name` | Native runtime action name, including namespaced authored moves. |
-| `type` | Since API **0.44**: native classification `"none"`, `"move"`, or `"attack"`. This is authored animation metadata, not a prediction of contact or damage. |
-| `priority` | Since API **0.44**: native integer move priority. Higher numbers take precedence among competing moves when native conditions apply; this is not an AI utility score. |
-| `timing` | Since API **0.45**: detached nominal clip timing, described below. Older name-only host adapters leave this `nil`. |
-| `inputs` | Since API **0.45**: array of `{ control, press }` entries from the native key combination used to dispatch this action. Empty if key metadata is unavailable. |
+| `type` | Native classification `"none"`, `"move"`, or `"attack"`. This is authored animation metadata, not a prediction of contact or damage. |
+| `priority` | Native integer move priority. Higher numbers take precedence among competing moves when native conditions apply; this is not an AI utility score. |
+| `timing` | Detached nominal clip timing, described below. Older name-only host adapters leave this `nil`. |
+| `inputs` | Array of `{ control, press }` entries from the native key combination used to dispatch this action. Empty if key metadata is unavailable. |
 
 The host filters move conditions, equipment availability and priority before
 Lua sees this list; a selected action still goes through normal input dispatch.
@@ -234,7 +234,7 @@ local patient = sf2.tactics.register {
 -- tactic = sf2.tactics.name(patient)
 ```
 
-This example requires `api = ">=0.44 <1.0"` in your manifest. Returning a
+Returning a
 candidate selects its original identity even if Lua edits its fields. Field edits
 cannot change the move, its priority, or a later decision's snapshot. An action
 classified as `"move"` or `"none"` can still contain authored combat behavior;
@@ -242,7 +242,7 @@ use your own move knowledge when classification alone is insufficient.
 
 ### Clip timing and controls
 
-With `api = ">=0.45 <1.0"`, each native candidate's `timing` contains:
+Each native candidate's `timing` contains:
 
 | Field | Meaning |
 | --- | --- |
@@ -297,14 +297,14 @@ original candidate table to select it.
 
 ### Reacting to the current animation
 
-Since API **0.46**, `event.self.animation` and `event.opponent.animation` expose
+`event.self.animation` and `event.opponent.animation` expose
 the same detached [active animation observations](../fighter/#fightersnapshot)
 as combat callbacks. Check for a missing opponent or `nil` animation. This lets
 your AI react to live native intervals, rather than infer an attack from the
 opponent's animation name or its nominal duration:
 
 ```lua
--- An on_decide callback; requires api = ">=0.46 <1.0".
+-- An on_decide callback.
 local function evade_active_attack(memory, event)
     local animation = event.opponent and event.opponent.animation
     if not animation then return nil end
@@ -340,7 +340,7 @@ AI. This callback is not a coroutine.
 The [programmable AI example](https://github.com/dawc17/ProjectEclipse/tree/main/Mods/example.programmable-ai)
 includes four opponents. The fourth, **Reactive Guardian**, uses active attack
 intervals to choose backward movement and nominal clip timing to choose a quick
-kick, without matching move names. It requires API 0.46. Isolated Lua tests cover
+kick, without matching move names. Isolated Lua tests cover
 those reactions, fallback, memory isolation, stale actions and failures. Native combat and physical input
 acceptance require a game playtest.
 

@@ -653,10 +653,7 @@ namespace Eclipse.Modding
                 log.Set("warn", DynValue.NewCallback((ctx, args) => LogCallback(ModLogLevel.Warning, "sf2.log.warn", args)));
                 log.Set("error", DynValue.NewCallback((ctx, args) => LogCallback(ModLogLevel.Error, "sf2.log.error", args)));
                 root.Set("log", DynValue.NewTable(log));
-                // Compatibility aliases for early mods; new scripts should use sf2.log.
-                mod.Set("log", log.Get("info"));
-                mod.Set("warn", log.Get("warn"));
-                mod.Set("error", log.Get("error"));
+
                 root.Set("mod", DynValue.NewTable(mod));
 
                 var assets = new Table(_script);
@@ -848,7 +845,6 @@ namespace Eclipse.Modding
                 shop.Set("FORCE_HIDDEN", DynValue.NewString("force_hidden"));
                 shop.Set("set_availability", DynValue.NewCallback(SetItemAvailability));
                 shop.Set("addItem", DynValue.NewCallback(ShopAddItem));
-                shop.Set("add", shop.Get("addItem"));
                 root.Set("shop", DynValue.NewTable(shop));
 
                 AddP1DModules(root);
@@ -1404,7 +1400,7 @@ namespace Eclipse.Modding
                 Table table = args.AsType(0, function, DataType.Table, false).Table;
                 return ApiCall(function, () =>
                 {
-                    ValidateFields(table, function, "id", "template", "behavior", "display_name", "description",
+                    ValidateFields(table, function, "id", "behavior", "display_name", "description",
                         "icon", "parameters", "kind", "upgrades");
                     string id = RequiredString(table, "id", function);
                     DefinitionId displayName = RequiredHandle(table, "display_name", _localizationHandles,
@@ -1415,37 +1411,20 @@ namespace Eclipse.Modding
                     DynValue iconValue = table.Get("icon");
                     if (iconValue.Type != DataType.Nil && iconValue.Type != DataType.Void)
                         icon = RequiredHandle(table, "icon", _spriteHandles, "sprite", function);
-                    bool hasTemplate = !table.Get("template").IsNil();
-                    bool hasBehavior = !table.Get("behavior").IsNil();
-                    if (hasTemplate == hasBehavior)
-                        throw new ModContentException(function + " requires exactly one of 'template' or 'behavior'.");
-
-                    PerkDefinition definition;
-                    if (hasTemplate)
+                    ModBehaviorDefinition behavior = RequiredHandle(table, "behavior", _behaviorHandles,
+                        "behavior", function);
+                    string kindText = RequiredString(table, "kind", function);
+                    ModPerkKind kind;
+                    switch (kindText)
                     {
-                        if (!table.Get("kind").IsNil())
-                            throw new ModContentException(function + " legacy template form must not set 'kind'.");
-                        DefinitionId template = RequiredHandle(table, "template", _perkHandles, "perk", function);
-                        Dictionary<string, string> parameters = OptionalScalarMap(table, "parameters", function);
-                        definition = _api.RegisterPerk(id, template, displayName, description, icon, parameters);
+                        case "single": kind = ModPerkKind.Single; break;
+                        case "combo": kind = ModPerkKind.Combo; break;
+                        default: throw new ModContentException(function + " field 'kind' is not supported.");
                     }
-                    else
-                    {
-                        ModBehaviorDefinition behavior = RequiredHandle(table, "behavior", _behaviorHandles,
-                            "behavior", function);
-                        string kindText = RequiredString(table, "kind", function);
-                        ModPerkKind kind;
-                        switch (kindText)
-                        {
-                            case "single": kind = ModPerkKind.Single; break;
-                            case "combo": kind = ModPerkKind.Combo; break;
-                            default: throw new ModContentException(function + " field 'kind' is not supported.");
-                        }
-                        Dictionary<string, ModParameterValue> parameters = OptionalTypedParameterMap(table,
-                            "parameters", behavior.Parameters, function);
-                        definition = _api.RegisterScriptedPerk(id, displayName, description, icon, kind,
-                            behavior.Id, parameters);
-                    }
+                    Dictionary<string, ModParameterValue> parameters = OptionalTypedParameterMap(table,
+                        "parameters", behavior.Parameters, function);
+                    PerkDefinition definition = _api.RegisterScriptedPerk(id, displayName, description, icon, kind,
+                        behavior.Id, parameters);
                     if (!table.Get("upgrades").IsNil())
                     {
                         var list = table.Get("upgrades");
@@ -1465,14 +1444,8 @@ namespace Eclipse.Modding
                             var upgradeDescription = upgrade.Get("description").IsNil() ? description :
                                 RequiredHandle(upgrade, "description", _localizationHandles, "localization", function);
                             int level = RequiredInt(upgrade, "level", function);
-                            if (hasBehavior)
-                            {
-                                var behavior = RequiredHandle(table, "behavior", _behaviorHandles, "behavior", function);
-                                upgrades[i - 1] = new PerkUpgradeDefinition(level, upgradeDescription, null,
-                                    OptionalTypedParameterMap(upgrade, "parameters", behavior.Parameters, function));
-                            }
-                            else upgrades[i - 1] = new PerkUpgradeDefinition(level, upgradeDescription,
-                                OptionalScalarMap(upgrade, "parameters", function));
+                            upgrades[i - 1] = new PerkUpgradeDefinition(level, upgradeDescription,
+                                OptionalTypedParameterMap(upgrade, "parameters", behavior.Parameters, function));
                         }
                         definition = _api.SetPerkUpgrades(definition.Id, upgrades);
                     }
@@ -1486,7 +1459,7 @@ namespace Eclipse.Modding
                 Table table = args.AsType(0, function, DataType.Table, false).Table;
                 return ApiCall(function, () =>
                 {
-                    ValidateFields(table, function, "id", "perk", "behavior", "display_name", "description",
+                    ValidateFields(table, function, "id", "behavior", "display_name", "description",
                         "icon", "recipe", "item_types", "parameters");
                     string id = RequiredString(table, "id", function);
                     string recipeText = RequiredString(table, "recipe", function);
@@ -1499,38 +1472,20 @@ namespace Eclipse.Modding
                         default: throw new ModContentException(function + " field 'recipe' is not supported.");
                     }
                     ModEquipmentKind[] itemTypes = RequiredEquipmentKinds(table, "item_types", function);
-                    bool hasPerk = !table.Get("perk").IsNil();
-                    bool hasBehavior = !table.Get("behavior").IsNil();
-                    if (hasPerk == hasBehavior)
-                        throw new ModContentException(function + " requires exactly one of 'perk' or 'behavior'.");
-
-                    EnchantmentDefinition definition;
-                    if (hasPerk)
-                    {
-                        if (!table.Get("display_name").IsNil() || !table.Get("description").IsNil() ||
-                            !table.Get("icon").IsNil() || !table.Get("parameters").IsNil())
-                            throw new ModContentException(function +
-                                " legacy perk form must not set direct behavior presentation/parameters.");
-                        DefinitionId perk = RequiredHandle(table, "perk", _perkHandles, "perk", function);
-                        definition = _api.RegisterEnchantment(id, perk, recipe, itemTypes);
-                    }
-                    else
-                    {
-                        ModBehaviorDefinition behavior = RequiredHandle(table, "behavior", _behaviorHandles,
-                            "behavior", function);
-                        DefinitionId displayName = RequiredHandle(table, "display_name", _localizationHandles,
-                            "localization", function);
-                        DefinitionId description = RequiredHandle(table, "description", _localizationHandles,
-                            "localization", function);
-                        AssetId icon = default;
-                        DynValue iconValue = table.Get("icon");
-                        if (iconValue.Type != DataType.Nil && iconValue.Type != DataType.Void)
-                            icon = RequiredHandle(table, "icon", _spriteHandles, "sprite", function);
-                        Dictionary<string, ModParameterValue> parameters = OptionalTypedParameterMap(table,
-                            "parameters", behavior.Parameters, function);
-                        definition = _api.RegisterScriptedEnchantment(id, displayName, description, icon, recipe,
-                            itemTypes, behavior.Id, parameters);
-                    }
+                    ModBehaviorDefinition behavior = RequiredHandle(table, "behavior", _behaviorHandles,
+                        "behavior", function);
+                    DefinitionId displayName = RequiredHandle(table, "display_name", _localizationHandles,
+                        "localization", function);
+                    DefinitionId description = RequiredHandle(table, "description", _localizationHandles,
+                        "localization", function);
+                    AssetId icon = default;
+                    DynValue iconValue = table.Get("icon");
+                    if (iconValue.Type != DataType.Nil && iconValue.Type != DataType.Void)
+                        icon = RequiredHandle(table, "icon", _spriteHandles, "sprite", function);
+                    Dictionary<string, ModParameterValue> parameters = OptionalTypedParameterMap(table,
+                        "parameters", behavior.Parameters, function);
+                    EnchantmentDefinition definition = _api.RegisterScriptedEnchantment(id, displayName, description,
+                        icon, recipe, itemTypes, behavior.Id, parameters);
                     return NewHandle(_enchantmentHandles, definition.Id);
                 });
             }
@@ -2573,45 +2528,6 @@ namespace Eclipse.Modding
                     entries++;
                 }
                 if (entries != count) throw new ModContentException(function + " must be a dense array table.");
-            }
-
-            private static Dictionary<string, string> OptionalScalarMap(Table table, string field, string function)
-            {
-                DynValue value = table.Get(field);
-                var result = new Dictionary<string, string>(StringComparer.Ordinal);
-                if (value.IsNil()) return result;
-                if (value.Type != DataType.Table)
-                    throw new ModContentException(function + " field '" + field + "' must be a table.");
-                foreach (TablePair pair in value.Table.Pairs)
-                {
-                    if (pair.Key.Type != DataType.String || string.IsNullOrEmpty(pair.Key.String))
-                        throw new ModContentException(function + " field '" + field + "' contains a non-string key.");
-                    string scalar;
-                    switch (pair.Value.Type)
-                    {
-                        case DataType.String:
-                            scalar = pair.Value.String;
-                            break;
-                        case DataType.Number:
-                            if (double.IsNaN(pair.Value.Number) || double.IsInfinity(pair.Value.Number))
-                                throw new ModContentException(function + " field '" + field + "' contains a non-finite number.");
-                            scalar = pair.Value.Number.ToString("R", CultureInfo.InvariantCulture);
-                            break;
-                        case DataType.Boolean:
-                            scalar = pair.Value.Boolean ? "1" : "0";
-                            break;
-                        default:
-                            throw new ModContentException(function + " field '" + field +
-                                "' values must be strings, numbers, or booleans.");
-                    }
-                    if (string.IsNullOrEmpty(scalar))
-                        throw new ModContentException(function + " field '" + field + "' contains an empty value.");
-                    if (result.ContainsKey(pair.Key.String))
-                        throw new ModContentException(function + " field '" + field + "' contains a duplicate key '" +
-                            pair.Key.String + "'.");
-                    result.Add(pair.Key.String, scalar);
-                }
-                return result;
             }
 
             private static T OptionalHandle<T>(Table table, string field, Dictionary<Table, T> handles,

@@ -13,7 +13,7 @@ static class Program {
  static void Check(bool value,string message){checks++;if(!value)throw new Exception(message);}
  static void Main(string[] args){
   var mod=ModDiscovery.DiscoverLoose(args[0]).Mods.Single();
-  Check(!DependencyResolver.Resolve(new[]{mod},ModPlatformVersions.Api,ModPlatformVersions.Core).HasErrors,"Manifest compatibility");
+  Check(!DependencyResolver.Resolve(new[]{mod},ModPlatformVersions.Core).HasErrors,"Manifest compatibility");
   Check(File.Exists(Path.Combine(args[1],"Assets/Resources/ui/achievements/ach_boss_butcher.asset")),"Core icon missing");
   var assets=new AssetResolver(new IAssetProvider[]{new Core(),new LooseModProvider(mod)});var catalog=new ModContentCatalog();var errors=new List<string>();var logs=new List<string>();
   var bus=new ModStoryEvents((id,message)=>errors.Add(message));bus.BindProfile();

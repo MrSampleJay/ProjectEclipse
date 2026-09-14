@@ -2,7 +2,6 @@ schema = 1
 id = "example.battle-rules"
 name = "Third Strike Trial"
 version = "1.0.0"
-api = ">=0.9 <1.0"
 entrypoint = "scripts/main.lua"
 authors = ["Eclipse"]
 capabilities = ["content.register", "combat.modify_hit"]

@@ -41,7 +41,7 @@ for(const [name,{fields,parent}] of Object.entries(schema.types)){
     for(const [key,value] of Object.entries(fields)){const [type,doc]=Array.isArray(value)?value:[value,''];out+=`---@field ${key} ${type}${doc?' '+doc:''}\n`;}
     out+=`local ${name} = {}\n\n`;
 }
-const modules=[...new Set([...Object.keys(schema.functions),...Object.keys(schema.aliases),...Object.keys(constants)].map(n=>n.split('.')[1]))].sort();
+const modules=[...new Set([...Object.keys(schema.functions),...Object.keys(schema.aliases),...Object.keys(constants)].map(n=>n.split('.')[1]).concat('mod'))].sort();
 for(const m of modules){out+=`---@class Eclipse.Module_${m}\n`;if(m==='mod')for(const n of ['id','name','version'])out+=`---@field ${n} string\n`;out+=`local ${m} = {}\n\n`;}
 function comment(name){const d=docs[name];return [d.summary,`Requires: ${d.requires}`,`When: ${d.when}`,`Returns: ${d.returns}`,`[Full reference](${d.url})`].filter(Boolean).map(s=>'---'+s).join('\n')+'\n';}
 for(const [name,f] of Object.entries(schema.functions)){
@@ -61,10 +61,7 @@ for(const [name,f] of Object.entries(schema.fighterMethods))for(const opponent o
     out+=`function ${opponent?'Opponent':name==='scale_incoming_damage'?'ResolvingFighter':name==='scale_outgoing_damage'?'OutgoingFighter':'Fighter'}:${name}(${Object.keys(f.params).join(', ')}) end\n\n`;
 }
 out+=`return { ${modules.map(m=>`${m} = ${m}`).join(', ')} }\n`;
-const runtimeManifest=fs.readFileSync(path.join(repo,'Assets/Scripts/Eclipse/Runtime/Modding/ModManifest.cs'),'utf8');
-const apiVersion=runtimeManifest.match(/Api = SemanticVersion.Parse\("([^"]+)"\)/)?.[1];
-assert(apiVersion,'Runtime API version was not found.');
-const metadata={apiVersion,functions:Object.fromEntries(Object.entries(schema.functions).map(([n,f])=>[n,{...f,...docs[n]}])),aliases:schema.aliases,constants,callbacks:schema.callbacks,modeCallbacks:schema.modeCallbacks,uiCallbacks:schema.uiCallbacks,aiCallbacks:schema.aiCallbacks,fighterMethods:schema.fighterMethods,types:schema.types};
+const metadata={functions:Object.fromEntries(Object.entries(schema.functions).map(([n,f])=>[n,{...f,...docs[n]}])),aliases:schema.aliases,constants,callbacks:schema.callbacks,modeCallbacks:schema.modeCallbacks,uiCallbacks:schema.uiCallbacks,aiCallbacks:schema.aiCallbacks,fighterMethods:schema.fighterMethods,types:schema.types};
 fs.mkdirSync(path.join(root,'data'),{recursive:true});
 for(const [file,content] of [['library/sf2.d.lua',out],['data/api.json',JSON.stringify(metadata,null,2)+'\n']]){
     if(process.argv.includes('--check'))assert.equal(fs.readFileSync(path.join(root,file),'utf8').replace(/\r\n/g,'\n'),content,`${file} is stale; run npm run generate`);

@@ -147,8 +147,7 @@ using both awards twice.
 
 **Returns:** Nothing.
 
-**When:** During registration, before the mod entrypoint returns. Requires API 0.23
-or newer. Changes take effect through Apply & Restart, before saved quests resume.
+**When:** During registration, before the mod entrypoint returns. Changes take effect through Apply & Restart, before saved quests resume.
 
 **Requires:** `content.patch`. The target must already be registered in your mod or
 an explicitly declared dependency. Declare `core` when targeting base quests.

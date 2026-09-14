@@ -112,22 +112,3 @@ sf2.shop.set_availability {
 Other choices are `sf2.shop.FORCE_HIDDEN` and `sf2.shop.INHERIT`. The shop and
 availability checks share this policy. Competing policies for the same item are
 errors; the API cannot modify price, currency, or progression formulas.
-
-## sf2.shop.add
-
-Legacy alias for `sf2.shop.addItem`. Use `addItem` in new scripts.
-
-**Signature:** `sf2.shop.add { section, item, level, price }`
-
-**Requires:** `content.register`.
-
-**When:** Entrypoint after item registration.
-
-**Returns:** The listing ID string, with the same validation as `addItem`.
-
-```lua
-sf2.shop.add {
-    section = sf2.shop.WEAPONS, item = weapon,
-    level = 1, price = sf2.price.coins(1000),
-}
-```

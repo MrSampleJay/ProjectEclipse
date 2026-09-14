@@ -7,8 +7,8 @@ the requirements in the two source roadmaps.
 ## Reporting rule
 
 A public API, a managed test, a native fixture and a game playtest prove different
-things. Track implementation and acceptance separately. Do not use API version,
-function count, test count, elapsed time or XML delta count as completion percent.
+things. Track implementation and acceptance separately. Do not use function count, test count or elapsed
+time as completion percent.
 
 Do not publish an overall percentage until all rows have been decomposed into
 explicit requirements and their evidence reconciled. A broad track is not closed

@@ -268,7 +268,7 @@ Replace supported fields on an existing registered fight.
 
 `target` is a fight definition ID string. Supply at least one changed field.
 `description` is a string; `rounds` is 1–100; `round_time` is 1–86400 seconds.
-Since API 0.10, `location` and `music` accept nonempty recovered runtime names,
+`location` and `music` accept nonempty recovered runtime names,
 as in fight registration. For a registered custom location, use
 `sf2.locations.name(location)`. This changes the encounter's presentation; it does
 not register or validate the existence of an asset named by that string.
@@ -281,7 +281,7 @@ native rules on a core encounter. `rules = {}` explicitly clears it; an empty
 duplicate handles. Handles may be registered earlier in this same entrypoint.
 Both static rules and [Lua behavior rules](../rules/#sf2rulesbehavior) are supported.
 
-Since API 0.32, `warriors = { opponent, ... }` replaces the entire opponent list.
+`warriors = { opponent, ... }` replaces the entire opponent list.
 Supply 1–100 unique registered warrior handles, in encounter order. An empty list
 is rejected. These are warrior handles, not warrior-template handles or string IDs;
 you may register them earlier in the same entrypoint. Omitting `warriors` preserves
@@ -353,7 +353,7 @@ economy overrides. Reward editing is limited to the item-drop scopes below.
 
 ### Editing encounter item drops
 
-Since API 0.33, `reward_drops` accepts 1–100 scoped edits. Each edit replaces the
+`reward_drops` accepts 1–100 scoped edits. Each edit replaces the
 selected scope's direct item grants and item-only weighted choices. It does not
 replace the entire native reward row.
 

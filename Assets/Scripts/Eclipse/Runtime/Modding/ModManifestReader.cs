@@ -27,7 +27,6 @@ namespace Eclipse.Modding
             string id = null;
             string name = null;
             string version = null;
-            string api = null;
             string[] authors = null;
             string entrypoint = null;
             string[] capabilities = null;
@@ -73,7 +72,6 @@ namespace Eclipse.Modding
                     case "id": id = ParseString(raw, sourceName, lineNumber); break;
                     case "name": name = ParseString(raw, sourceName, lineNumber); break;
                     case "version": version = ParseString(raw, sourceName, lineNumber); break;
-                    case "api": api = ParseString(raw, sourceName, lineNumber); break;
                     case "authors": authors = ParseStringArray(raw, sourceName, lineNumber); break;
                     case "entrypoint": entrypoint = ParseString(raw, sourceName, lineNumber); break;
                     case "capabilities": capabilities = ParseStringArray(raw, sourceName, lineNumber); break;
@@ -82,10 +80,10 @@ namespace Eclipse.Modding
             }
 
             if (schema != 1) Fail(sourceName, 0, "Manifest schema must be exactly 1.");
-            if (id == null || name == null || version == null || api == null || authors == null ||
+            if (id == null || name == null || version == null || authors == null ||
                 entrypoint == null || capabilities == null)
                 Fail(sourceName, 0,
-                    "Manifest requires schema, id, name, version, api, authors, entrypoint and capabilities.");
+                    "Manifest requires schema, id, name, version, authors, entrypoint and capabilities.");
             if (string.IsNullOrWhiteSpace(name)) Fail(sourceName, 0, "Manifest name must not be empty.");
             if (authors.Length == 0) Fail(sourceName, 0, "Manifest authors must contain at least one author.");
 
@@ -97,9 +95,6 @@ namespace Eclipse.Modding
 
             SemanticVersion semanticVersion;
             try { semanticVersion = SemanticVersion.Parse(version); }
-            catch (FormatException ex) { Fail(sourceName, 0, ex.Message); throw; }
-            VersionRange apiRange;
-            try { apiRange = VersionRange.Parse(api); }
             catch (FormatException ex) { Fail(sourceName, 0, ex.Message); throw; }
 
             string normalizedEntrypoint;
@@ -129,7 +124,7 @@ namespace Eclipse.Modding
                 parsedDependencies.Add(new ModDependency(dependencyId, dependencyRange));
             }
 
-            return new ModManifest(1, modId, name.Trim(), semanticVersion, apiRange,
+            return new ModManifest(1, modId, name.Trim(), semanticVersion,
                 authors, normalizedEntrypoint, capabilities, parsedDependencies.ToArray());
         }
 

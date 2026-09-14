@@ -2,7 +2,6 @@ schema = 1
 id = "example.outgoing-rule"
 name = "Third Hit Power"
 version = "1.0.0"
-api = ">=0.12 <1.0"
 entrypoint = "scripts/main.lua"
 authors = ["Eclipse"]
 capabilities = ["content.register", "content.patch", "combat.modify_outgoing_hit"]

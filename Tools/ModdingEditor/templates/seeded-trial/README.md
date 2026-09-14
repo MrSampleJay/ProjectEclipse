@@ -1,6 +1,6 @@
 # Seeded Trial
 
-Requires Eclipse API 0.20 or later. Install this folder as a loose mod. The trial
+Install this folder as a loose mod. The trial
 uses existing core assets and adds no item rewards or entry cost.
 
 Winning the first encounter chooses encounter 2 or 3 using a saved random

@@ -57,9 +57,9 @@ This registers the language option. Put translated strings in localization files
 | `wall`, `floor` | `200`, `80`; arena boundaries. |
 | `position_y` | `0`; vertical offset. |
 | `friction_force`, `grid_size` | `0`; physics/layout settings. Grid size cannot be negative. |
-| `dojo` | `false`; opt this location into saved dojo selection (API 0.26). At most 256 choices across active mods. |
+| `dojo` | `false`; opt this location into saved dojo selection . At most 256 choices across active mods. |
 | `music` | Optional single audio handle; cannot be combined with nonempty `music_choices`. |
-| `music_choices` | Optional dense array of up to 16 distinct audio handles (API 0.25). Empty/omitted means no choices. |
+| `music_choices` | Optional dense array of up to 16 distinct audio handles. Empty/omitted means no choices. |
 | `layers` | Required, nonempty array of layer tables. |
 
 Each layer has `type` (integer, default `1`), `factor` (number, default `1`), and `scaling` (boolean, default `false`). It needs images or fighter placements. Use `type = 2` for a layer with `fighters`.
@@ -112,7 +112,7 @@ local arena_name = sf2.locations.name(arena)
 
 ## Animated image curves
 
-API 0.24 adds optional `motion_x`, `motion_y`, `rotation` and `opacity` tables to
+Optional `motion_x`, `motion_y`, `rotation` and `opacity` tables apply to
 location images. Each is `{ offset = 0, points = { ... } }`. Points require
 `period` (seconds) and `value`; `ease` defaults to zero. Curves loop from the last
 point back to the first. Each period is the time from that point to the next.
@@ -155,7 +155,7 @@ full-game visual, pause and lifetime acceptance remains outstanding.
 
 ## Random fight music
 
-Since API 0.25, set `music_choices` on a location to let the native game choose
+Set `music_choices` on a location to let the native game choose
 one track at fight entry. Each entry has equal probability; a track may repeat
 on the next entry. The chosen track loops. This is not a sequential playlist,
 and selection is not tied to a mode's saved random stream.

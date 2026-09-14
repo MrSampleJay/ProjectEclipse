@@ -33,7 +33,7 @@ static class Program
         // Metadata-only assets: this fixture never claims image/model decoding.
         File.WriteAllBytes(Path.Combine(folder,"assets/sprites/icon.png"),new byte[]{0});
         File.WriteAllText(Path.Combine(folder,"assets/models/model.xml"),"<Model/>");
-        File.WriteAllText(Path.Combine(folder,"mod.toml"), "schema=1\nid=\"test.innate\"\nname=\"Innate execution\"\nversion=\"1.0.0\"\napi=\">=0.51 <1.0\"\nauthors=[\"Eclipse\"]\nentrypoint=\"scripts/main.lua\"\ncapabilities=[\"content.register\",\"content.patch\",\"combat.change_life\"]\n[[dependencies]]\nid=\"core\"\nversion=\">=1.0 <2.0\"\n");
+        File.WriteAllText(Path.Combine(folder,"mod.toml"), "schema=1\nid=\"test.innate\"\nname=\"Innate execution\"\nversion=\"1.0.0\"\nauthors=[\"Eclipse\"]\nentrypoint=\"scripts/main.lua\"\ncapabilities=[\"content.register\",\"content.patch\",\"combat.change_life\"]\n[[dependencies]]\nid=\"core\"\nversion=\">=1.0 <2.0\"\n");
         File.WriteAllText(Path.Combine(folder,"scripts/main.lua"), @"
 local sf2=require('sf2')
 local title=sf2.localization.key('fixture')

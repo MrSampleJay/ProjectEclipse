@@ -25,7 +25,7 @@ public static class Program
         void Mod(string name, string dependency)
         {
             string folder = Path.Combine(root, name); Directory.CreateDirectory(folder);
-            File.WriteAllText(Path.Combine(folder, "mod.toml"), "schema = 1\nid = \"" + name + "\"\nname = \"" + name + "\"\nversion = \"1.0.0\"\napi = \">=0.7 <1.0\"\nauthors = [\"Test\"]\nentrypoint = \"scripts/main.lua\"\ncapabilities = []\n[[dependencies]]\nid = \"" + dependency + "\"\nversion = \">=1.0 <2.0\"\n");
+            File.WriteAllText(Path.Combine(folder, "mod.toml"), "schema = 1\nid = \"" + name + "\"\nname = \"" + name + "\"\nversion = \"1.0.0\"\nauthors = [\"Test\"]\nentrypoint = \"scripts/main.lua\"\ncapabilities = []\n[[dependencies]]\nid = \"" + dependency + "\"\nversion = \">=1.0 <2.0\"\n");
         }
         Mod("test.library", "core"); Mod("test.child", "test.library"); Mod("test.grandchild", "test.child"); Mod("test.other", "core");
         var mods = ModDiscovery.DiscoverLoose(root).Mods;
@@ -39,7 +39,7 @@ public static class Program
         selection.Save(path);
         var restored = ModSelection.Load(path);
         Check(restored.Filter(mods).Count == 1, "Restart lost selection.");
-        var resolution = DependencyResolver.Resolve(restored.Filter(mods), ModPlatformVersions.Api, ModPlatformVersions.Core);
+        var resolution = DependencyResolver.Resolve(restored.Filter(mods), ModPlatformVersions.Core);
         Check(!resolution.HasErrors && resolution.OrderedMods.Count == 1, "Intentionally disabled mods reached dependency resolution.");
         restored.SetEnabled(Id("test.grandchild"), true, mods);
         Check(restored.Filter(mods).Count == 4, "Enabling child did not enable requirements.");

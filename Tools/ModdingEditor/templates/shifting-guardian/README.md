@@ -1,6 +1,6 @@
 # Shifting Guardian
 
-Experimental character-form showcase for API 0.53. Enable this mod, Apply & Restart,
+Experimental character-form showcase. Enable this mod, Apply & Restart,
 then select **Shifting Guardian** using the map's bottom zone dots and press FIGHT.
 This is a separate encounter, not the third Act 1 tournament fight.
 

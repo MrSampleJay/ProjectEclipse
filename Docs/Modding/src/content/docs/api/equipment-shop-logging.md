@@ -41,7 +41,7 @@ Create a new weapon definition owned by your mod.
 
 Use the equipment fields above. Optional `subtype` defaults to `"Katana"`. Match it to the chosen model and move family.
 
-Since API **0.51**, optional `tactic_subtype` selects the native AI table group independently of the animation subtype. Omit it to use `subtype`. If supplied, it must contain 1–128 ASCII letters, digits or underscores and name a group supported by your tactics. For example, use `subtype = "TwoHandedBlunt", tactic_subtype = "TwoHanded"` for a mace that shares two-handed AI tables. This does not create new moves or tables, or change item-condition matching. Changing the group changes the content compatibility fingerprint. Require `api = ">=0.51 <1.0"` in your manifest when using this field.
+Optional `tactic_subtype` selects the native AI table group independently of the animation subtype. Omit it to use `subtype`. If supplied, it must contain 1–128 ASCII letters, digits or underscores and name a group supported by your tactics. For example, use `subtype = "TwoHandedBlunt", tactic_subtype = "TwoHanded"` for a mace that shares two-handed AI tables. This does not create new moves or tables, or change item-condition matching. Changing the group changes the content compatibility fingerprint.
 
 ```lua
 local weapon = sf2.items.register_weapon {

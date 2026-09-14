@@ -130,10 +130,10 @@ this counter API has no rename/migration function.
 ### An encounter-and-equipment condition
 
 The [Katana Achievement example](https://github.com/dawc17/ProjectEclipse/tree/main/Mods/example.katana-achievement)
-uses API 0.40's `battle_result` event instead of attaching a counting perk. It checks
+uses the `battle_result` event instead of attaching a counting perk. It checks
 an exact Butcher encounter ID, a win, and captured `Weapon` / `Katana` equipment
 before advancing its owned counter. The normal and Eclipse boss fights are number
-6; bodyguards 1–5 must not count. The intermission gauntlet is a separate encounter.
+6; bodyguards 1ï¿½5 must not count. The intermission gauntlet is a separate encounter.
 
 A maximum of one and a `counters.get` check prevent repeated unlock handling.
 The rewardless achievement appears through the existing Profile achievement list;

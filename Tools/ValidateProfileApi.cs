@@ -10,7 +10,7 @@ static class Program {
   string dir=Path.Combine(args[0],"example.profile");Directory.CreateDirectory(Path.Combine(dir,"scripts"));
   var source=new XmlDocument();source.Load(Path.Combine(args[1],"Assets/vanillaXml/list.xml"));
   foreach(var scenario in new[]{"present","absent","denied","unavailable","forged"}){
-   File.WriteAllText(Path.Combine(dir,"mod.toml"),("schema=1\nid='example.profile'\nname='Profile'\nversion='1.0.0'\napi='>=0.27 <1.0'\nauthors=['Eclipse']\nentrypoint='scripts/main.lua'\ncapabilities=['content.register'"+(scenario=="denied"?"":",'profile.read'")+"]\n[[dependencies]]\nid='core'\nversion='>=1.0 <2.0'\n").Replace("'","\""));
+   File.WriteAllText(Path.Combine(dir,"mod.toml"),("schema=1\nid='example.profile'\nname='Profile'\nversion='1.0.0'\nauthors=['Eclipse']\nentrypoint='scripts/main.lua'\ncapabilities=['content.register'"+(scenario=="denied"?"":",'profile.read'")+"]\n[[dependencies]]\nid='core'\nversion='>=1.0 <2.0'\n").Replace("'","\""));
    string script=@"local sf2=require('sf2')
 local item=sf2.items.get('core:items/weapon/weapon_nunchaku')
 assert(sf2.profile.level()==12)
@@ -63,7 +63,7 @@ assert(next.count==2 and next.equipped and next~=first)";
   }
   foreach(string category in new[]{"items","perks"}) foreach(string scenario in new[]{"core","own","foreign","malformed","category","denied"}){
    string reference=scenario=="own"?"example.profile:"+category+"/test":scenario=="foreign"?"other.mod:"+category+"/test":scenario=="malformed"?"test":scenario=="category"?"core:quests/test":"core:"+category+"/test";
-   File.WriteAllText(Path.Combine(dir,"mod.toml"),("schema=1\nid='example.profile'\nname='Profile'\nversion='1.0.0'\napi='>=0.38 <1.0'\nauthors=['Eclipse']\nentrypoint='scripts/main.lua'\ncapabilities=['story.events'"+(scenario=="denied"?"":",'profile.read'")+"]\n[[dependencies]]\nid='core'\nversion='>=1.0 <2.0'\n").Replace("'","\""));
+   File.WriteAllText(Path.Combine(dir,"mod.toml"),("schema=1\nid='example.profile'\nname='Profile'\nversion='1.0.0'\nauthors=['Eclipse']\nentrypoint='scripts/main.lua'\ncapabilities=['story.events'"+(scenario=="denied"?"":",'profile.read'")+"]\n[[dependencies]]\nid='core'\nversion='>=1.0 <2.0'\n").Replace("'","\""));
    string query=category=="items"?"item":"perk";
    File.WriteAllText(Path.Combine(dir,"scripts/main.lua"),"local sf2=require('sf2');sf2.story.on('scene_enter',function(e) local a=sf2.profile."+query+"('"+reference+"');assert("+(category=="items"?"a.count==2":"a.learned and a.upgrade==2")+");sf2.log.info('queried') end)");
    var mod=ModDiscovery.DiscoverLoose(args[0]).Mods.Single();var catalog=new ModContentCatalog();int reads=0,completed=0;
@@ -78,7 +78,7 @@ assert(next.count==2 and next.equipped and next~=first)";
    }
   }
   foreach(string scenario in new[]{"known","missing_item","missing_perk","unbound"}){
-   File.WriteAllText(Path.Combine(dir,"mod.toml"),("schema=1\nid='example.profile'\nname='Profile'\nversion='1.0.0'\napi='>=0.38 <1.0'\nauthors=['Eclipse']\nentrypoint='scripts/main.lua'\ncapabilities=['story.events','profile.read']\n[[dependencies]]\nid='core'\nversion='>=1.0 <2.0'\n").Replace("'","\""));
+   File.WriteAllText(Path.Combine(dir,"mod.toml"),("schema=1\nid='example.profile'\nname='Profile'\nversion='1.0.0'\nauthors=['Eclipse']\nentrypoint='scripts/main.lua'\ncapabilities=['story.events','profile.read']\n[[dependencies]]\nid='core'\nversion='>=1.0 <2.0'\n").Replace("'","\""));
    File.WriteAllText(Path.Combine(dir,"scripts/main.lua"),@"local sf2=require('sf2')
 sf2.story.on('item_acquired',function(e)
  local item=sf2.profile.item(e.item)

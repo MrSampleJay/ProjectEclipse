@@ -1,6 +1,6 @@
 # Generated Expedition
 
-Requires API 0.22. Visit **Generated Expedition** using the map page dots.
+Visit **Generated Expedition** using the map page dots.
 Press Fight to open the original-style setup panel. Toggle a stronger opponent,
 adjust round time, then press Begin Encounter. Each encounter chooses one of
 three distinct fighters using the saved random stream and applies the chosen

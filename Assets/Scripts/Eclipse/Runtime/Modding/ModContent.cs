@@ -670,38 +670,29 @@ namespace Eclipse.Modding
         }
     }
 
-    // API 0.3 treats behavior as an independent executable definition. Perks and enchantments
-    // may both reference the same behavior without referencing each other. The template-backed
-    // fields remain only for API 0.2 compatibility with the recovered PerkInfoItem backend.
+    // A behavior is an independent executable definition: perks and enchantments may both
+    // reference the same behavior without referencing each other.
     public sealed class PerkUpgradeDefinition
     {
         public int Level { get; }
         public DefinitionId Description { get; }
-        public IReadOnlyDictionary<string, string> Parameters { get; }
         public IReadOnlyDictionary<string, ModParameterValue> TypedParameters { get; }
         public PerkUpgradeDefinition(int level, DefinitionId description,
-            IReadOnlyDictionary<string, string> parameters = null,
             IReadOnlyDictionary<string, ModParameterValue> typedParameters = null)
         {
             if (level < 1 || level > 100) throw new ModContentException("Perk upgrade level must be 1..100.");
             Level = level; Description = description;
-            var native = new Dictionary<string, string>(StringComparer.Ordinal);
-            if (parameters != null) foreach (var pair in parameters) native.Add(pair.Key, pair.Value);
             var typed = new Dictionary<string, ModParameterValue>(StringComparer.Ordinal);
             if (typedParameters != null) foreach (var pair in typedParameters) typed.Add(pair.Key, pair.Value);
-            Parameters = new System.Collections.ObjectModel.ReadOnlyDictionary<string, string>(native);
             TypedParameters = new System.Collections.ObjectModel.ReadOnlyDictionary<string, ModParameterValue>(typed);
         }
     }
 
     public sealed class PerkDefinition
     {
-        private readonly Dictionary<string, string> _parameters;
         private readonly IReadOnlyDictionary<string, ModParameterValue> _initialParameters;
 
         public DefinitionId Id { get; }
-        public DefinitionId Template { get; }
-        public bool HasTemplate { get; }
         public DefinitionId Behavior { get; }
         public bool HasBehavior { get; }
         public DefinitionId DisplayName { get; }
@@ -709,7 +700,6 @@ namespace Eclipse.Modding
         public AssetId Icon { get; }
         public bool HasIcon => !string.IsNullOrEmpty(Icon.Path);
         public ModPerkKind Kind { get; }
-        public IReadOnlyDictionary<string, string> Parameters => _parameters;
         public IReadOnlyDictionary<string, ModParameterValue> InitialParameters => _initialParameters;
         public bool IsScripted => HasBehavior;
         public string LegacyName { get; }
@@ -717,25 +707,19 @@ namespace Eclipse.Modding
         public IReadOnlyList<PerkUpgradeDefinition> Upgrades { get; }
         public bool IsCore => Id.Namespace.Value == "core";
 
-        internal PerkDefinition(DefinitionId id, DefinitionId template, bool hasTemplate,
-            DefinitionId displayName, DefinitionId description, AssetId icon, ModPerkKind kind,
-            IReadOnlyDictionary<string, string> parameters = null, string legacyName = null,
-            string legacyPerkXml = null, DefinitionId behavior = default,
+        internal PerkDefinition(DefinitionId id, DefinitionId displayName, DefinitionId description,
+            AssetId icon, ModPerkKind kind, string legacyName = null, string legacyPerkXml = null,
+            DefinitionId behavior = default,
             IReadOnlyDictionary<string, ModParameterValue> initialParameters = null, PerkUpgradeDefinition[] upgrades = null)
         {
             Upgrades = Array.AsReadOnly(upgrades == null ? Array.Empty<PerkUpgradeDefinition>() : (PerkUpgradeDefinition[])upgrades.Clone());
             Id = id;
-            Template = template;
-            HasTemplate = hasTemplate;
             Behavior = behavior;
             HasBehavior = !string.IsNullOrEmpty(behavior.Category);
             DisplayName = displayName;
             Description = description;
             Icon = icon;
             Kind = kind;
-            _parameters = new Dictionary<string, string>(StringComparer.Ordinal);
-            if (parameters != null)
-                foreach (KeyValuePair<string, string> pair in parameters) _parameters.Add(pair.Key, pair.Value);
             var copiedInitial = new Dictionary<string, ModParameterValue>(StringComparer.Ordinal);
             if (initialParameters != null)
                 foreach (KeyValuePair<string, ModParameterValue> pair in initialParameters) copiedInitial.Add(pair.Key, pair.Value);
@@ -744,8 +728,8 @@ namespace Eclipse.Modding
             LegacyPerkXml = legacyPerkXml;
         }
         internal PerkDefinition WithUpgrades(PerkUpgradeDefinition[] upgrades) => new PerkDefinition(
-            Id, Template, HasTemplate, DisplayName, Description, Icon, Kind, Parameters, LegacyName,
-            LegacyPerkXml, Behavior, InitialParameters, upgrades);
+            Id, DisplayName, Description, Icon, Kind, LegacyName, LegacyPerkXml, Behavior,
+            InitialParameters, upgrades);
 
         public Dictionary<string, ModParameterValue> ResolveSavedUpgradeParameters(System.Xml.XmlNode node,
             IReadOnlyDictionary<string, ModParameterValue> saved)
@@ -780,8 +764,6 @@ namespace Eclipse.Modding
         private readonly IReadOnlyDictionary<string, ModParameterValue> _initialParameters;
 
         public DefinitionId Id { get; }
-        public DefinitionId Perk { get; }
-        public bool HasPerk { get; }
         public DefinitionId Behavior { get; }
         public bool HasBehavior { get; }
         public DefinitionId DisplayName { get; }
@@ -794,31 +776,11 @@ namespace Eclipse.Modding
         public bool IsScripted => HasBehavior;
         public ModPerkKind Kind => Recipe == ModEnchantmentRecipe.Complex ? ModPerkKind.Combo : ModPerkKind.Single;
 
-        internal EnchantmentDefinition(DefinitionId id, DefinitionId perk, ModEnchantmentRecipe recipe,
-            ModEquipmentKind[] equipment)
-        {
-            Id = id;
-            Perk = perk;
-            HasPerk = true;
-            Behavior = default;
-            HasBehavior = false;
-            DisplayName = default;
-            Description = default;
-            Icon = default;
-            Recipe = recipe;
-            _equipment = equipment == null ? Array.Empty<ModEquipmentKind>() : (ModEquipmentKind[])equipment.Clone();
-            _readOnlyEquipment = Array.AsReadOnly(_equipment);
-            _initialParameters = new System.Collections.ObjectModel.ReadOnlyDictionary<string, ModParameterValue>(
-                new Dictionary<string, ModParameterValue>(StringComparer.Ordinal));
-        }
-
         internal EnchantmentDefinition(DefinitionId id, DefinitionId displayName, DefinitionId description,
             AssetId icon, ModEnchantmentRecipe recipe, ModEquipmentKind[] equipment,
             DefinitionId behavior, IReadOnlyDictionary<string, ModParameterValue> initialParameters)
         {
             Id = id;
-            Perk = default;
-            HasPerk = false;
             Behavior = behavior;
             HasBehavior = true;
             DisplayName = displayName;
@@ -1734,16 +1696,7 @@ namespace Eclipse.Modding
                     !_localizations.TryGet(perk.Description, out LocalizationDefinition ignoredDescription))
                     throw new ModContentException("Perk '" + perk.Id +
                         "' references missing description localization '" + perk.Description + "'.");
-                if (perk.HasTemplate)
-                {
-                    PerkDefinition template;
-                    if (!TryGetPendingPerk(perk.Template, perks, out template) && !_perks.TryGet(perk.Template, out template))
-                        throw new ModContentException("Perk '" + perk.Id + "' references missing template '" +
-                            perk.Template + "'.");
-                    if (template.Id == perk.Id)
-                        throw new ModContentException("Perk cannot derive from itself: '" + perk.Id + "'.");
-                }
-                else if (perk.HasBehavior)
+                if (perk.HasBehavior)
                 {
                     ModBehaviorDefinition behavior;
                     if (!TryGetPendingBehavior(perk.Behavior, behaviors, out behavior) &&
@@ -1754,7 +1707,7 @@ namespace Eclipse.Modding
                 else if (!perk.IsCore)
                 {
                     throw new ModContentException("External perk '" + perk.Id +
-                        "' must either use the legacy template bridge or register Lua behavior.");
+                        "' must register a Lua behavior.");
                 }
             }
 
@@ -1763,36 +1716,21 @@ namespace Eclipse.Modding
                 EnchantmentDefinition enchantment = enchantments[i];
                 if (enchantment.Equipment.Count == 0)
                     throw new ModContentException("Enchantment '" + enchantment.Id + "' has no equipment categories.");
-                if (enchantment.HasPerk)
-                {
-                    PerkDefinition perk;
-                    if (!TryGetPendingPerk(enchantment.Perk, perks, out perk) && !_perks.TryGet(enchantment.Perk, out perk))
-                        throw new ModContentException("Enchantment '" + enchantment.Id + "' references missing perk '" +
-                            enchantment.Perk + "'.");
-                    if (enchantment.Recipe == ModEnchantmentRecipe.Complex && perk.Kind != ModPerkKind.Combo)
-                        throw new ModContentException("Complex enchantment '" + enchantment.Id + "' requires a combo perk.");
-                    if (enchantment.Recipe != ModEnchantmentRecipe.Complex && perk.Kind != ModPerkKind.Single)
-                        throw new ModContentException("Simple/medium enchantment '" + enchantment.Id +
-                            "' requires a single perk.");
-                }
-                else
-                {
-                    if (!enchantment.HasBehavior)
-                        throw new ModContentException("Enchantment '" + enchantment.Id + "' has no behavior backend.");
-                    ModBehaviorDefinition behavior;
-                    if (!TryGetPendingBehavior(enchantment.Behavior, behaviors, out behavior) &&
-                        !_behaviors.TryGet(enchantment.Behavior, out behavior))
-                        throw new ModContentException("Enchantment '" + enchantment.Id +
-                            "' references missing behavior '" + enchantment.Behavior + "'.");
-                    if (!ContainsLocalization(localizations, enchantment.DisplayName) &&
-                        !_localizations.TryGet(enchantment.DisplayName, out LocalizationDefinition ignoredEnchantName))
-                        throw new ModContentException("Enchantment '" + enchantment.Id +
-                            "' references missing display localization '" + enchantment.DisplayName + "'.");
-                    if (!ContainsLocalization(localizations, enchantment.Description) &&
-                        !_localizations.TryGet(enchantment.Description, out LocalizationDefinition ignoredEnchantDescription))
-                        throw new ModContentException("Enchantment '" + enchantment.Id +
-                            "' references missing description localization '" + enchantment.Description + "'.");
-                }
+                if (!enchantment.HasBehavior)
+                    throw new ModContentException("Enchantment '" + enchantment.Id + "' has no behavior backend.");
+                ModBehaviorDefinition behavior;
+                if (!TryGetPendingBehavior(enchantment.Behavior, behaviors, out behavior) &&
+                    !_behaviors.TryGet(enchantment.Behavior, out behavior))
+                    throw new ModContentException("Enchantment '" + enchantment.Id +
+                        "' references missing behavior '" + enchantment.Behavior + "'.");
+                if (!ContainsLocalization(localizations, enchantment.DisplayName) &&
+                    !_localizations.TryGet(enchantment.DisplayName, out LocalizationDefinition ignoredEnchantName))
+                    throw new ModContentException("Enchantment '" + enchantment.Id +
+                        "' references missing display localization '" + enchantment.DisplayName + "'.");
+                if (!ContainsLocalization(localizations, enchantment.Description) &&
+                    !_localizations.TryGet(enchantment.Description, out LocalizationDefinition ignoredEnchantDescription))
+                    throw new ModContentException("Enchantment '" + enchantment.Id +
+                        "' references missing description localization '" + enchantment.Description + "'.");
             }
 
             ValidateStageGraph(zones, battles, fights, warriors, fightRules, rewards,
@@ -2143,7 +2081,7 @@ namespace Eclipse.Modding
             if (perks == null) throw new ArgumentNullException(nameof(perks));
             _perks.ValidateCanAdd(perks);
             for (int i = 0; i < perks.Length; i++)
-                if (!perks[i].IsCore || perks[i].HasTemplate || string.IsNullOrEmpty(perks[i].LegacyName))
+                if (!perks[i].IsCore || string.IsNullOrEmpty(perks[i].LegacyName))
                     throw new ModContentException("Invalid core perk import: " + perks[i].Id);
             _perks.AddRange(perks);
         }
@@ -2619,44 +2557,6 @@ namespace Eclipse.Modding
             return definition;
         }
 
-        public PerkDefinition RegisterPerk(string localId, DefinitionId template, DefinitionId displayName,
-            DefinitionId description, AssetId icon, IReadOnlyDictionary<string, string> parameters)
-        {
-            ThrowIfCompleted();
-            DefinitionId id = Qualify("perks", localId);
-            if (_perks.ContainsKey(id)) throw new ModContentException("Duplicate perk definition: '" + id + "'.");
-            if (displayName.Namespace != Mod.Id || displayName.Category != "localization")
-                throw new ModContentException("Perk display_name must be a localization owned by mod '" + Mod.Id + "'.");
-            if (description.Namespace != Mod.Id || description.Category != "localization")
-                throw new ModContentException("Perk description must be a localization owned by mod '" + Mod.Id + "'.");
-            PerkDefinition templateDefinition;
-            if (!_perks.TryGetValue(template, out templateDefinition) && !_catalog.TryGetPerk(template, out templateDefinition))
-                throw new ModContentException("Perk template is not registered: '" + template + "'.");
-            if (!CanReferenceNamespace(template.Namespace))
-                throw new ModContentException("Perk template belongs to undeclared namespace '" + template.Namespace + "'.");
-            if (!icon.Equals(default(AssetId)) && !CanReferenceNamespace(icon.Namespace))
-                throw new ModContentException("Perk icon belongs to undeclared namespace '" + icon.Namespace + "'.");
-
-            var copiedParameters = new Dictionary<string, string>(StringComparer.Ordinal);
-            if (parameters != null)
-            {
-                if (parameters.Count > 64) throw new ModContentException("Perk parameter limit exceeded (64).");
-                foreach (KeyValuePair<string, string> pair in parameters)
-                {
-                    ValidatePerkParameterName(pair.Key);
-                    if (pair.Value == null || pair.Value.Length == 0 || pair.Value.Length > 2048)
-                        throw new ModContentException("Perk parameter '" + pair.Key + "' must be 1..2048 characters.");
-                    copiedParameters.Add(pair.Key, pair.Value);
-                }
-            }
-
-            EnsureCapacityForNewRegistration();
-            var definition = new PerkDefinition(id, templateDefinition.Id, true, displayName, description, icon,
-                templateDefinition.Kind, copiedParameters);
-            _perks.Add(id, definition);
-            return definition;
-        }
-
         public PerkDefinition RegisterScriptedPerk(string localId, DefinitionId displayName,
             DefinitionId description, AssetId icon, ModPerkKind kind, DefinitionId behavior,
             IReadOnlyDictionary<string, ModParameterValue> initialParameters)
@@ -2671,8 +2571,8 @@ namespace Eclipse.Modding
             Dictionary<string, ModParameterValue> initial = behaviorDefinition.Parameters.ResolveValues(initialParameters);
 
             EnsureCapacityForNewRegistration();
-            var definition = new PerkDefinition(id, default, false, displayName, description, icon, kind,
-                null, null, null, behaviorDefinition.Id, initial);
+            var definition = new PerkDefinition(id, displayName, description, icon, kind,
+                behavior: behaviorDefinition.Id, initialParameters: initial);
             _perks.Add(id, definition);
             return definition;
         }
@@ -2689,81 +2589,13 @@ namespace Eclipse.Modding
                 var upgrade = upgrades[i];
                 if (upgrade == null || upgrade.Level != i + 1) throw new ModContentException("Perk upgrades must be ordered and contiguous from level 1.");
                 ValidateScriptedPresentation(perk.DisplayName, upgrade.Description, perk.Icon, "Perk upgrade");
-                if (perk.HasBehavior)
-                {
-                    if (upgrade.Parameters.Count != 0) throw new ModContentException("Scripted upgrades require typed parameters.");
-                    var combined = new Dictionary<string, ModParameterValue>();
-                    foreach (var pair in perk.InitialParameters) combined.Add(pair.Key, pair.Value);
-                    foreach (var pair in upgrade.TypedParameters) combined[pair.Key] = pair.Value;
-                    RequirePendingBehavior(perk.Behavior, "Perk upgrade").Parameters.ResolveValues(combined);
-                }
-                else
-                {
-                    if (upgrade.TypedParameters.Count != 0) throw new ModContentException("Native upgrades require native parameters.");
-                    if (upgrade.Parameters.Count > 64) throw new ModContentException("Perk upgrade parameter limit exceeded (64).");
-                    foreach (var pair in upgrade.Parameters)
-                    {
-                        ValidatePerkParameterName(pair.Key);
-                        if (pair.Value == null || pair.Value.Length == 0 || pair.Value.Length > 2048) throw new ModContentException("Invalid perk upgrade parameter value.");
-                    }
-                }
+                var combined = new Dictionary<string, ModParameterValue>();
+                foreach (var pair in perk.InitialParameters) combined.Add(pair.Key, pair.Value);
+                foreach (var pair in upgrade.TypedParameters) combined[pair.Key] = pair.Value;
+                RequirePendingBehavior(perk.Behavior, "Perk upgrade").Parameters.ResolveValues(combined);
             }
             var definition = perk.WithUpgrades(upgrades);
             _perks[id] = definition;
-            return definition;
-        }
-
-        public EnchantmentDefinition RegisterEnchantment(string localId, DefinitionId perk,
-            ModEnchantmentRecipe recipe, ModEquipmentKind[] equipment)
-        {
-            ThrowIfCompleted();
-            DefinitionId id = Qualify("enchantments", localId);
-            if (_enchantments.ContainsKey(id))
-                throw new ModContentException("Duplicate enchantment definition: '" + id + "'.");
-            if (perk.Namespace != Mod.Id || perk.Category != "perks")
-                throw new ModContentException("Mod API 0.2 enchantments may only expose perks owned by the registering mod.");
-            PerkDefinition perkDefinition;
-            if (!_perks.TryGetValue(perk, out perkDefinition))
-                throw new ModContentException("Enchantment perk must be registered by the same transaction: '" + perk + "'.");
-            if (!perkDefinition.HasTemplate)
-                throw new ModContentException("Mod API 0.2 perk-backed enchantments require a template-backed perk. " +
-                    "Behavior-backed enchantments must register their behavior directly.");
-            if (!Enum.IsDefined(typeof(ModEnchantmentRecipe), recipe))
-                throw new ModContentException("Unsupported enchantment recipe: " + recipe);
-            if (equipment == null || equipment.Length == 0)
-                throw new ModContentException("Enchantment must support at least one equipment category.");
-            var seen = new HashSet<ModEquipmentKind>();
-            var copied = new ModEquipmentKind[equipment.Length];
-            for (int i = 0; i < equipment.Length; i++)
-            {
-                if (!Enum.IsDefined(typeof(ModEquipmentKind), equipment[i]))
-                    throw new ModContentException("Unsupported enchantment equipment category: " + equipment[i]);
-                if (!seen.Add(equipment[i]))
-                    throw new ModContentException("Duplicate enchantment equipment category: " + equipment[i]);
-                copied[i] = equipment[i];
-            }
-            if (recipe == ModEnchantmentRecipe.Complex && perkDefinition.Kind != ModPerkKind.Combo)
-                throw new ModContentException("Complex enchantments require a combo perk.");
-            if (recipe != ModEnchantmentRecipe.Complex && perkDefinition.Kind != ModPerkKind.Single)
-                throw new ModContentException("Simple/medium enchantments require a single perk.");
-
-            foreach (EnchantmentDefinition existing in _enchantments.Values)
-            {
-                if (existing.Perk != perkDefinition.Id || existing.Recipe != recipe) continue;
-                for (int i = 0; i < copied.Length; i++)
-                {
-                    for (int j = 0; j < existing.Equipment.Count; j++)
-                    {
-                        if (copied[i] != existing.Equipment[j]) continue;
-                        throw new ModContentException("Enchantment '" + id + "' duplicates perk candidate '" +
-                            existing.Id + "' for recipe " + recipe + " and equipment " + copied[i] + ".");
-                    }
-                }
-            }
-
-            EnsureCapacityForNewRegistration();
-            var definition = new EnchantmentDefinition(id, perkDefinition.Id, recipe, copied);
-            _enchantments.Add(id, definition);
             return definition;
         }
 
@@ -3312,18 +3144,6 @@ namespace Eclipse.Modding
             foreach (ModDependency dependency in Mod.Manifest.Dependencies)
                 if (dependency.Id == namespaceId) return true;
             return false;
-        }
-
-        private static void ValidatePerkParameterName(string name)
-        {
-            if (string.IsNullOrEmpty(name) || name.Length > 64)
-                throw new ModContentException("Perk parameter name must be 1..64 characters.");
-            for (int i = 0; i < name.Length; i++)
-            {
-                char c = name[i];
-                if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '_'))
-                    throw new ModContentException("Unsafe perk parameter name '" + name + "'.");
-            }
         }
 
         private void ValidateScriptedPresentation(DefinitionId displayName, DefinitionId description,

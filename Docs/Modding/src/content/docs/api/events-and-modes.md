@@ -5,7 +5,7 @@ description: Build repeatable modes, schedule events, require entry tickets, and
 
 A mode starts with an ordered roster of already registered fights. It controls which
 step is available, what happens after a win/loss, and whether entry costs a
-mod-owned item. Events and raids share this format. Since API 0.19, an optional
+mod-owned item. Events and raids share this format. An optional
 Lua result callback can choose branches or finish a run.
 
 ## Sequence fields
@@ -24,8 +24,8 @@ The three registration functions below accept the same table:
 | `entry_item` | Consumable item handle | Omitted | Entry ticket owned by this mod. |
 | `entry_count` | Integer, 1–100000 | Required with entry item | Number consumed per fight attempt. |
 | `hard_mode` | Boolean | `false` | Raid-only Power Mode filter setting. |
-| `on_result` | Lua function | Omitted | Since API 0.19: choose the next fight after native result settlement. See below. |
-| `on_prepare` | Lua function | Omitted | Since API 0.22: generate an encounter or wait for a player choice before entry. |
+| `on_result` | Lua function | Omitted | Choose the next fight after native result settlement. See below. |
+| `on_prepare` | Lua function | Omitted | Generate an encounter or wait for a player choice before entry. |
 
 Timestamps are integer seconds since 1970-01-01 UTC, from 0 through 253402300799.
 A nonzero end must be after the start. Omit both for permanent availability.
@@ -203,7 +203,7 @@ custom UI and call `sf2.modes.resolve` from its input callback later. Combat
 launch is deferred until the Lua callback has returned. Repeated Fight clicks
 while preparing do not create another request.
 
-**Requires:** API 0.22 and `content.register` on mode registration. UI choices
+**Requires:** `content.register` on mode registration. UI choices
 also need `ui.create`; saved random draws need `state.read` and `state.write`.
 The callback is bounded to 200,000 instructions. Invalid results/errors cancel
 entry and report a diagnostic. It cannot yield a Lua coroutine.
@@ -267,7 +267,7 @@ encounter selection, not deterministic combat simulation.
 a resolved/canceled request or supplying an invalid plan is an error. It marks
 the request ready; native validation/save/entry occur after Lua returns.
 
-**Requires:** API 0.22 and the pending request supplied to this script's
+**Requires:** The pending request supplied to this script's
 `on_prepare`. Forged or foreign request tables are rejected. No extra capability.
 
 ```lua
@@ -287,7 +287,7 @@ No ticket is charged and no fight starts. Repeated cancellation is harmless.
 Cancellation after resolution is a no-op, so closing a successful choice view
 cannot undo the selected plan. Scene/script teardown can still prevent launch.
 
-**Requires:** API 0.22 and an owned request. No extra capability.
+**Requires:** An owned request. No extra capability.
 
 ```lua
 on_close = function() sf2.modes.cancel(request) end
@@ -301,7 +301,7 @@ on_close = function() sf2.modes.cancel(request) end
 
 **When:** Guard buttons or late callbacks against stale requests.
 
-**Requires:** API 0.22 and an owned request. No extra capability.
+**Requires:** An owned request. No extra capability.
 
 ```lua
 if sf2.modes.is_pending(request) then

@@ -1,6 +1,6 @@
 # Owned custom UI implementation
 
-Status: the initial `sf2.ui` contract is published in API 0.15. API 0.16 adds safe-area anchor placement. It advances E4
+Status: the initial `sf2.ui` contract is published, with safe-area anchor placement. It advances E4
 but does not satisfy its full creator-facing acceptance criteria. The public
 reference in Docs/Modding documents the exact available surface and limits.
 
@@ -78,7 +78,7 @@ press/release delivery is preserved. These native hooks compile and have source
 contracts; physical-device behavior in the complete game remains unverified.
 
 Every MoonSharp script context owns a UI scope and disposes it before clearing
-its script tables. API 0.15 binds creation, close, is_open and text/value/visible/
+its script tables. The API binds creation, close, is_open and text/value/visible/
 enabled setters through `sf2.ui`. An injected mount callback connects the game
 host to the bridge and permits renderer-isolated Lua tests. Weak-key handle
 storage avoids accumulating closed handles. Click callbacks use the existing
@@ -114,7 +114,7 @@ scope disposal, stale handles and teardown failures.
 `Tools/TestModUiUnity.ps1` creates a separate temporary Unity 2022.3.62f3 project
 and enters play mode. It checks production native hierarchy/layout components,
 font fallback, targeted updates, guarded activation/focus and cleanup. It uses
-the installed Unity UI package. Since API 0.18 it also copies the original
+the installed Unity UI package. It also copies the original
 button/parchment/combat-bar assets and game font, and the production ResolutionImage
 loader. Resource/bundle and atlas lookup backends are fixture substitutes. Optional
 `-WithPreview` enables graphics and saves a native rendered PNG for inspection.
@@ -128,7 +128,7 @@ checks pass, plus 209 battle-rule checks including actual Lua-context UI scope
 ownership/disposal, the existing combat/mode regression and all four managed
 project builds. Bridge fixture shell/controller signals are substitutes; the
 production bridge, coordinator and renderer execute in Unity play mode. No
-physical-device/full-game acceptance is claimed. API 0.15 adds a separate
+physical-device/full-game acceptance is claimed. A separate
 434-check real-Lua fixture for validation, capabilities, handles, callback
 instruction bounds, mounting/entrypoint failure cleanup and the full Charged
 Strike source across 300 ticks, arming, blocked hits, consumption and rounds.
@@ -136,7 +136,7 @@ Strike source across 300 ticks, arming, blocked hits, consumption and rounds.
 
 ## Anchored placement and Lua-to-Unity verification
 
-API 0.16 adds an immutable optional `placement` with nine anchors and finite
+An immutable optional `placement` is provided with nine anchors and finite
 reference-unit offsets. Center remains the default. Positive X moves right and
 positive Y moves down; the renderer uniformly fits oversized roots and clamps
 their full rectangle to the safe area, recomputing from requested offsets after
@@ -156,7 +156,7 @@ cover the same placement contract.
 
 ## Dynamic translations
 
-API 0.17 exposes `sf2.localization.text` using a registration-time localization
+The API exposes `sf2.localization.text` using a registration-time localization
 handle. Reads resolve the current catalog or the current transaction's pending
 values/patches, with the native game language provided by ModRuntime on every
 call. The shared assembly has no dependency on LocalizationManager. UI widgets
@@ -178,7 +178,7 @@ native sliced borders with authored height so the pointed ends retain proportion
 Resources go through the existing ResolutionImage compatibility loader; no source
 texture, serialized sprite geometry, asset GUID or meta file was changed.
 
-API 0.18 provides immutable explicit style fields for font size, horizontal text
+The API provides immutable explicit style fields for font size, horizontal text
 alignment, text color, background tint and progress-fill tint. Validation enforces
 integer font sizes 8..128, known alignment values and #RRGGBB/#RRGGBBAA syntax;
 irrelevant widget/style combinations fail. Defaults do not require authors to
@@ -192,7 +192,7 @@ Complete native screen composition and physical input still need full-game QA.
 
 ## Close notification and cancellation
 
-API 0.21 adds on_close(view, reason) after successful mount and teardown. The
+`on_close(view, reason)` runs after successful mount and teardown. The
 neutral surface records the first reason and clears widgets/click handlers,
 removes ownership and runs native Closed listeners before calling Lua. Back,
 scene-stack disposal, external native destruction and callback/render errors

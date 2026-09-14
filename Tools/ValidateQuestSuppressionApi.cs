@@ -11,7 +11,7 @@ static class Program
     static ModDescriptor Mod(string id, string script, string capabilities = "\"content.patch\",\"content.register\"", string dependency = "core")
     {
         string dir = Path.Combine(root,id); Directory.CreateDirectory(Path.Combine(dir,"scripts"));
-        File.WriteAllText(Path.Combine(dir,"mod.toml"), "schema=1\nid=\""+id+"\"\nname=\"Fixture\"\nversion=\"1.0.0\"\napi=\">=0.23 <1.0\"\nauthors=[\"Eclipse\"]\nentrypoint=\"scripts/main.lua\"\ncapabilities=["+capabilities+"]\n"+
+        File.WriteAllText(Path.Combine(dir,"mod.toml"), "schema=1\nid=\""+id+"\"\nname=\"Fixture\"\nversion=\"1.0.0\"\nauthors=[\"Eclipse\"]\nentrypoint=\"scripts/main.lua\"\ncapabilities=["+capabilities+"]\n"+
             (dependency==null?"":"[[dependencies]]\nid=\""+dependency+"\"\nversion=\">=1.0 <2.0\"\n"));
         File.WriteAllText(Path.Combine(dir,"scripts/main.lua"),"local sf2=require('sf2')\n"+script);
         return ModDiscovery.DiscoverLoose(root).Mods.Single(m=>m.Id.Value==id);

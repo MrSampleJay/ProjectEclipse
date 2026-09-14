@@ -43,7 +43,7 @@ local name = sf2.localization.key("item.training_blade")
 
 **Returns:** A plain translated string. Resolution uses the requested language,
 then `eng`, then an empty string if neither exists. Invalid handles or language
-values raise an error. Available since API **0.17**.
+values raise an error.
 
 **When:** Entrypoint or later callbacks. Obtain the handle with `key` during
 registration and retain it for later reads. Each call reads current content,

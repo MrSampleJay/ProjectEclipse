@@ -2,7 +2,6 @@ schema = 1
 id = "example.quest-suppression"
 name = "Quest Suppression"
 version = "1.0.0"
-api = ">=0.23 <1.0"
 authors = ["Eclipse"]
 entrypoint = "scripts/main.lua"
 capabilities = ["content.register", "content.patch"]

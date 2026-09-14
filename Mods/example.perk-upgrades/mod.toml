@@ -2,7 +2,6 @@ schema = 1
 id = "example.perk-upgrades"
 name = "Steady Guard Upgrades"
 version = "1.0.0"
-api = ">=0.11 <1.0"
 entrypoint = "scripts/main.lua"
 authors = ["Eclipse"]
 capabilities = ["content.register", "content.patch", "combat.modify_hit"]

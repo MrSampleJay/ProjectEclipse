@@ -141,7 +141,6 @@ namespace Eclipse.Modding
                 state.SetAttribute("schema", "1");
                 warrior.AppendChild(state);
             }
-            state.SetAttribute("api", ModPlatformVersions.Api.ToString());
             state.SetAttribute("core", ModPlatformVersions.Core.ToString());
             if (content != null)
                 state.SetAttribute("contentHash", ComputeContentSetFingerprint(activeMods, content, modState));
@@ -173,8 +172,7 @@ namespace Eclipse.Modding
             if (content == null) throw new ArgumentNullException(nameof(content));
 
             var canonical = new StringBuilder();
-            Append(canonical, "fingerprint-v7");
-            Append(canonical, ModPlatformVersions.Api.ToString());
+            Append(canonical, "fingerprint-v8");
             Append(canonical, ModPlatformVersions.Core.ToString());
 
             var mods = new List<ModDescriptor>(activeMods.Count);
@@ -295,7 +293,6 @@ namespace Eclipse.Modding
             foreach (PerkDefinition perk in perks)
             {
                 Append(canonical, perk.Id.ToString());
-                Append(canonical, perk.HasTemplate ? perk.Template.ToString() : string.Empty);
                 Append(canonical, perk.HasBehavior ? perk.Behavior.ToString() : string.Empty);
                 Append(canonical, perk.DisplayName.ToString());
                 Append(canonical, perk.Description.ToString());
@@ -303,14 +300,6 @@ namespace Eclipse.Modding
                 Append(canonical, ((int)perk.Kind).ToString(CultureInfo.InvariantCulture));
                 Append(canonical, perk.LegacyName ?? string.Empty);
                 Append(canonical, perk.LegacyPerkXml ?? string.Empty);
-                var parameterNames = new List<string>(perk.Parameters.Keys);
-                parameterNames.Sort(StringComparer.Ordinal);
-                Append(canonical, parameterNames.Count);
-                foreach (string parameter in parameterNames)
-                {
-                    Append(canonical, parameter);
-                    Append(canonical, perk.Parameters[parameter]);
-                }
                 AppendParameterValues(canonical, perk.InitialParameters);
                 if (perk.Upgrades.Count > 0)
                 {
@@ -318,10 +307,6 @@ namespace Eclipse.Modding
                     foreach (var upgrade in perk.Upgrades)
                     {
                         Append(canonical, upgrade.Level); Append(canonical, upgrade.Description.ToString());
-                        var upgradeNames = new List<string>(upgrade.Parameters.Keys); upgradeNames.Sort(StringComparer.Ordinal);
-                        Append(canonical, upgradeNames.Count);
-                        foreach (var name in upgradeNames)
-                        { Append(canonical, name); Append(canonical, upgrade.Parameters[name]); }
                         AppendParameterValues(canonical, upgrade.TypedParameters);
                     }
                 }
@@ -334,7 +319,6 @@ namespace Eclipse.Modding
             foreach (EnchantmentDefinition enchantment in enchantments)
             {
                 Append(canonical, enchantment.Id.ToString());
-                Append(canonical, enchantment.HasPerk ? enchantment.Perk.ToString() : string.Empty);
                 Append(canonical, enchantment.HasBehavior ? enchantment.Behavior.ToString() : string.Empty);
                 Append(canonical, enchantment.DisplayName.ToString());
                 Append(canonical, enchantment.Description.ToString());

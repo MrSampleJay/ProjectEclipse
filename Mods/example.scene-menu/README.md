@@ -1,6 +1,6 @@
 # Scene Menu
 
-Enable this example on API 0.31, then enter map, shop, profile or dojo. A menu
+Enable this example, then enter map, shop, profile or dojo. A menu
 using Eclipse's original-game UI styling opens. Choose a destination; BACK or
 Escape closes the menu. The menu opens again when you enter another supported
 scene. Choosing the current scene simply closes it.

@@ -1,6 +1,6 @@
 # Third Hit Power
 
-API 0.12 example: in the first tournament fight in Act I, every third unblocked,
+In the first tournament fight in Act I, every third unblocked,
 positive-damage player hit receives a 2x outgoing multiplier. The counter resets
 each round. This is a custom battle rule with no equipment or DE asset dependency.
 

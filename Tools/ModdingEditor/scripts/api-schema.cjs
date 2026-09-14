@@ -61,7 +61,7 @@ const fighterMethods = {
 type('FormRequest',{status:enumOf('queued','applied','failed'),'error?':'string'});
 const equipment = { id:'string', display_name:H('Localization'), icon:H('Sprite'), model:H('Model') };
 for (const name of ['Weapon','Armor','Helm','Ranged','Magic']) {
-    type(`${name}Definition`, { ...equipment, ...(name === 'Weapon' ? {'subtype?':['string','Defaults to Katana. Match the model and move family.'], 'tactic_subtype?':['string','API 0.51: optional AI table group, defaults to subtype. 1-128 ASCII letters, digits or underscores.']} : ['Ranged','Magic'].includes(name) ? {subtype:'string'} : {}) });
+    type(`${name}Definition`, { ...equipment, ...(name === 'Weapon' ? {'subtype?':['string','Defaults to Katana. Match the model and move family.'], 'tactic_subtype?':['string','Optional AI table group, defaults to subtype. 1-128 ASCII letters, digits or underscores.']} : ['Ranged','Magic'].includes(name) ? {subtype:'string'} : {}) });
     reg(`items.register_${name.toLowerCase()}`,`${name}Definition`,name);
 }
 type('NonEquipmentDefinition', {id:'string',display_name:H('Localization'),'icon?':H('Sprite'),'model?':H('Model'),'subtype?':'string','pack_label?':'string','silent_receive?':'boolean','spend_after_use?':'boolean'});
@@ -70,7 +70,7 @@ lookup('items.get','Item');
 type('ItemAlias',{from:'string',to:H('Item')}); reg('items.alias','ItemAlias');
 type('IdDefinition',{id:'string'}); reg('items.tombstone','IdDefinition');
 type('ShopListing',{section:enumOf('weapons','armor','helmets','ranged','magic'),item:H('Item'),level:['integer','Weapon: 1-52; armor/helm: 2-52; ranged/magic: 6-52.'],price:H('Price')});
-fn('shop.addItem',{definition:E('ShopListing')},'string'); aliases['sf2.shop.add']='sf2.shop.addItem';
+fn('shop.addItem',{definition:E('ShopListing')},'string');
 type('Availability',{item:H('Item'),'visibility?':enumOf('inherit','force_visible','force_hidden'),'required_group?':'string'}); reg('shop.set_availability','Availability',null,'content.patch');
 for (const name of ['coins','gems']) fn(`price.${name}`,{amount:'integer'},H('Price'),null,{bounds:{amount:[0,2147483647]}});
 for (const name of ['sprite','model','audio','binary']) fn(`assets.${name}`,{reference:'string'},H(name[0].toUpperCase()+name.slice(1)),null,{referenceKind:name});
@@ -166,7 +166,6 @@ fn('modes.resolve',{request:E('ModeRequest'),plan:E('EncounterPlan')},'nil',null
 type('TimerPolicy',{subsystem:'"forge"',seconds:'integer','skip_enabled?':'boolean'});reg('timers.set','TimerPolicy',null,'policy.timers');fn('services.disable',{name:enumOf('paid_offers','battle_pass','ads','rewarded_video','online_services','payments')},'nil','policy.services');
 type('CounterDefinition',{id:'string','maximum?':'integer'});reg('counters.register','CounterDefinition','Counter');fn('counters.get',{counter:H('Counter')},'integer','progression.read');fn('counters.add',{counter:H('Counter'),amount:'integer'},'integer','progression.write');type('AchievementDefinition',{id:'string',counter:H('Counter'),title:H('Localization'),description:H('Localization'),icon:H('Sprite'),threshold:'integer','hidden?':'boolean'});reg('achievements.register','AchievementDefinition');
 for(const name of ['debug','info','warn','error']) fn('log.'+name,{message:'string'},'nil',null);
-for(const [name,target] of Object.entries({log:'info',warn:'warn',error:'error'})) aliases['sf2.mod.'+name]='sf2.log.'+target;
 type('UiHandle', { 'private __eclipseUi': 'true' });
 type('UiStyle', { 'font_size?':'integer','text_align?':enumOf('left','center','right'),
     'text_color?':'string','background_color?':'string','fill_color?':'string' });

@@ -15,7 +15,6 @@ id = "example.authored"
 name = "Authored character fixture"
 authors = ["Eclipse"]
 version = "1.0.0"
-api = ">=0.22 <1.0"
 entrypoint = "scripts/main.lua"
 capabilities = ["content.register"]
 [[dependencies]]

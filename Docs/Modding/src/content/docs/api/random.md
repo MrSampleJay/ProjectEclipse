@@ -3,7 +3,7 @@ title: Saved random streams
 description: Make reproducible random choices that continue from a player's saved mod state.
 ---
 
-API **0.20** provides random streams for encounter selection and other Lua
+Random streams make reproducible random choices for encounter selection and other Lua
 behavior. A stream is an ordinary, declared integer field in your mod's
 [saved state](../mod-state/). Its default value is its seed. Each draw updates
 that field in the loaded profile; normal game saves persist the updated value.

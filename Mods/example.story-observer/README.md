@@ -1,6 +1,6 @@
 # Story Observer
 
-Enable this mod with Eclipse API 0.37 or later, then make a normal shop purchase
+Enable this mod, then make a normal shop purchase
 and complete an enchantment. Unity's Console/player log should contain one
 `Story Observer purchase:` or `Story Observer enchantment:` message per native
 notification, with qualified item/recipe identities where registered.
@@ -39,7 +39,7 @@ Expect its acquisition message if the native reward reaches the grant routine.
 Full-game reward granting/persistence remains pending; both examples have automated
 Lua checks, and native acquisition fixtures use controlled host services.
 
-With API 0.40 the observer also logs battle_result (fight ID, outcome and Eclipse
+The observer also logs battle_result (fight ID, outcome and Eclipse
 state). Launch a normal or Eclipse encounter from the map and finish or surrender.
 Expect one battle line per tracked result. This adds no UI and certifies neither
 lottery settlement nor disk-save completion. The payload also supports captured

@@ -6,30 +6,30 @@ callbacks; 76 constants; and 179 typed structures. Version 0.1.0 retains the ID
 
 ## Install
 
-API 0.52 adds `sf2.items.set_tactic_subtype { item, group }` for core or owned weapons; an empty group selects subtype fallback. Requires `content.patch`.
+Adds `sf2.items.set_tactic_subtype { item, group }` for core or owned weapons; an empty group selects subtype fallback. Requires `content.patch`.
 
-API 0.51 adds optional `tactic_subtype` to weapon registration for an independent native AI table group; omission preserves the animation subtype fallback.
+Adds optional `tactic_subtype` to weapon registration for an independent native AI table group; omission preserves the animation subtype fallback.
 
-API 0.50 adds `sf2.items.set_innate_perks { item, entries }`; each entry has a
+Adds `sf2.items.set_innate_perks { item, entries }`; each entry has a
 perk handle and optional named numeric parameters. Empty entries remove innate effects.
-API 0.49 adds `sf2.items.set_default_enchantments { item, entries }`; each entry
+Adds `sf2.items.set_default_enchantments { item, entries }`; each entry
 has a perk handle and optional integer aspect. An empty entries array removes defaults.
-API 0.48 adds `sf2.forge.override_deviation { profile, equipment, minimum, maximum }`
+Adds `sf2.forge.override_deviation { profile, equipment, minimum, maximum }`
 for an existing random-aspect recipe category. Its typed table requires integer bounds.
-API 0.47 adds `sf2.forge.exclude_candidate { profile, perk, equipment }` with
+Adds `sf2.forge.exclude_candidate { profile, perk, equipment }` with
 typed core profile/perk handles and a `content.patch` capability diagnostic.
-API 0.46 adds optional `animation` observations to both sides of AI decisions
+Adds optional `animation` observations to both sides of AI decisions
 and `fighter:snapshot()`: current name/type, facing and active named intervals.
-API 0.45 adds AI candidate `timing` (sample bounds, spacing, nominal duration,
+Adds AI candidate `timing` (sample bounds, spacing, nominal duration,
 loop flag) and `inputs` (native controls and press types). Nested fields complete
 inside `on_decide`; nominal duration is not a prediction of completion or hits.
-API 0.44 adds `type` (`none`, `move`, `attack`) and integer `priority` to AI
+Adds `type` (`none`, `move`, `attack`) and integer `priority` to AI
 action candidates, with completions in `on_decide` callbacks.
-API 0.43 adds `kind = "grid"` with required `columns`, `cell_width` and
+Adds `kind = "grid"` with required `columns`, `cell_width` and
 `cell_height`, using the existing game-styled child widgets and `gap` spacing.
-API 0.42 adds `sf2.ui.set_sprite(view, widget_id, sprite)` for changing a live image
+Adds `sf2.ui.set_sprite(view, widget_id, sprite)` for changing a live image
 without rebuilding its panel. Completion requires a typed sprite handle.
-API 0.41 adds `kind = "image"` UI nodes with a typed `sprite` handle and explicit
+Adds `kind = "image"` UI nodes with a typed `sprite` handle and explicit
 positive width/height. The generated `UiNode` contract includes completion for
 `sprite`; artwork preserves aspect ratio and uses the shared UI container styling.
 
@@ -44,7 +44,7 @@ VSIX artifact. Project indexing runs locally and never executes your Lua scripts
 
 ## Features
 
-API 0.22 includes game-styled `toggle` and `slider` nodes, typed `on_change`
+Includes game-styled `toggle` and `slider` nodes, typed `on_change`
 callbacks and `sf2.ui.set_checked`. Slider values are normalized to 0–1;
 map them to your own units in Lua. Setters update presentation without calling
 input callbacks. See the Custom UI reference for lifetime and input rules.
@@ -152,44 +152,43 @@ Implementation uses the [VS Code language feature APIs](https://code.visualstudi
 
 Battle rules: completion supports `sf2.rules.behavior` and its typed behavior,
 parameters, target, mode, and rounds fields. See the executable starter in
-`Mods/example.battle-rules` and the wiki's programmable-rules guide. Requires API
-0.8.0. IntelliSense reflects the implemented API; it does not replace a game playtest.
+`Mods/example.battle-rules` and the wiki's programmable-rules guide. IntelliSense reflects the implemented API; it does not replace a game playtest.
 
 `templates/battle-rules/` is a complete manual starter (copy it into your Mods
 folder, then change its manifest ID). The Create Mod wizard still defaults to
 the weapon starter. Its Lua resolves localization through `sf2.mod.id`.
 
-Combat callbacks now complete `fighter:snapshot()` and its typed health, position, and clock result (API 0.9). The battle-rules template includes a health-dependent guard transition. Generated metadata reads the API version from the runtime manifest.
+Combat callbacks now complete `fighter:snapshot()` and its typed health, position, and clock result. The battle-rules template includes a health-dependent guard transition.
 
-API 0.10 fight-patch completion includes `rules`, `append_rules`, `location`, and `music`. The `core-fight` template demonstrates editing an existing encounter; copy it manually as described for the battle-rules template.
+Fight-patch completion includes `rules`, `append_rules`, `location`, and `music`. The `core-fight` template demonstrates editing an existing encounter; copy it manually as described for the battle-rules template.
 
-API 0.11 adds perk `upgrades` completion with level, description and parameter fields. Runtime/native upgrade acceptance is tracked in `Mods/PRE_DE_WORK_LOG.md`.
+Adds perk `upgrades` completion with level, description and parameter fields. Runtime/native upgrade acceptance is tracked in `Mods/PRE_DE_WORK_LOG.md`.
 
 The manual `perk-upgrades` template demonstrates a learned guard with three upgrades; its matching mod and automated checks are under `Mods/example.perk-upgrades` and `Tools/TestPerkUpgrades.ps1`.
 
-API 0.12 infers `OutgoingFighter` in `on_damage_dealing`, with `scale_outgoing_damage` requiring `combat.modify_outgoing_hit`. The manual `outgoing-rule` template demonstrates a per-round third-hit modifier.
+Infers `OutgoingFighter` in `on_damage_dealing`, with `scale_outgoing_damage` requiring `combat.modify_outgoing_hit`. The manual `outgoing-rule` template demonstrates a per-round third-hit modifier.
 
-API 0.13 completes native combo/style event fields in callbacks. The manual `combo-reserve` template combines those events with a timed outgoing bonus and ordinary Lua control flow.
+Completes native combo/style event fields in callbacks. The manual `combo-reserve` template combines those events with a timed outgoing bonus and ordinary Lua control flow.
 
-API 0.15 adds `sf2.ui.open`, owned UI handles, targeted widget setters, close and
+Adds `sf2.ui.open`, owned UI handles, targeted widget setters, close and
 open-state queries. Recursive layout definitions and click callback arguments
 are typed. The manual `charge-ui` template links a live HUD to a fresh combat
 callback; HUD buttons currently require pointer input. Full-game UI verification
 is separate from editor diagnostics.
 
-API 0.14 adds typed `on_tick` event fields (`frame`, `seconds`, `delta_frames`,
+Adds typed `on_tick` event fields (`frame`, `seconds`, `delta_frames`,
 `delta_seconds`). The combo-reserve template now expires its state on active
 simulation ticks. Editor completion does not replace a Unity pause/round playtest.
 
-API 0.16 adds typed `placement` completion for UI anchors and offsets. The Charged Strike starter places its HUD near the top-right safe-area corner.
+Adds typed `placement` completion for UI anchors and offsets. The Charged Strike starter places its HUD near the top-right safe-area corner.
 
-API 0.17 adds `sf2.localization.text(key, language?)` for translated strings. Charged Strike includes English and Polish translation files and refreshes localized labels using Lua.
+Adds `sf2.localization.text(key, language?)` for translated strings. Charged Strike includes English and Polish translation files and refreshes localized labels using Lua.
 
-API 0.18 adds typed UI style fields. Defaults reuse the game font, parchment, beveled buttons and combat bar textures; styles provide limited explicit overrides.
+Adds typed UI style fields. Defaults reuse the game font, parchment, beveled buttons and combat bar textures; styles provide limited explicit overrides.
 
-API 0.19 adds mode/event/raid `on_result` completion and result types. The `templates/branching-trial` starter demonstrates saved alternating routes with original game assets.
+Adds mode/event/raid `on_result` completion and result types. The `templates/branching-trial` starter demonstrates saved alternating routes with original game assets.
 
-API 0.20 adds `sf2.random.integer(field, minimum, maximum)` and
+Adds `sf2.random.integer(field, minimum, maximum)` and
 `sf2.random.number(field)`, backed by declared integer save fields. Diagnostics
 report each missing capability separately: draws require both `state.read` and
 `state.write`. The manual `templates/seeded-trial` starter uses a saved stream to
@@ -197,13 +196,13 @@ select a route; it retains the original game assets. LuaLS checks signatures and
 the example, while runtime fixtures verify save/reload and stream behavior.
 
 
-API 0.21 adds typed `on_close(view, reason)` notification to UI definitions.
+Adds typed `on_close(view, reason)` notification to UI definitions.
 The public reference and generated callback inventory cover both `on_click`
 and `on_close`. Charged Strike demonstrates canceling pending gameplay state
 when its native view closes, retaining the existing game skin. Shutdown does
 not execute close callbacks; editor completion does not prove lifecycle timing.
 
-API 0.22 adds typed encounter preparation (`on_prepare`, `sf2.modes.resolve`,
+Adds typed encounter preparation (`on_prepare`, `sf2.modes.resolve`,
 `cancel`, `is_pending`), generated encounter plans, programmable tactic
 `on_decide` callbacks, and native-styled toggles/sliders with `on_change` and
 `set_checked`. The manual `generated-expedition` and `programmable-ai` starters
@@ -222,68 +221,68 @@ completion; Blender, native animation reading, and game tests remain separate ch
 
 The primary visual character workflow is now the [Gymnast guide](../../Docs/Modding/src/content/docs/guides/gymnast.md).
 The generated package includes ordinary `scripts/character.lua` and `scripts/main.lua`
-using API 0.22; no new Lua binding or editor schema is introduced. Blender scene
+using the public API; no new Lua binding or editor schema is introduced. Blender scene
 preparation, node/pose validation and native export tests are separate from editor
 completion and diagnostics. Keep source scenes outside the distributed mod.
 
 
-API 0.23 adds `sf2.quests.suppress { target = "..." }` with `content.patch`.
+Adds `sf2.quests.suppress { target = "..." }` with `content.patch`.
 Completion uses `QuestSuppression`; core IDs include the original XML source file
 and quest name. Unknown runtime targets and cross-mod conflicts are checked by
 registration, not inferred from editor diagnostics. See the public quests reference.
 
-API 0.24 adds LocationCurve and LocationCurvePoint completion for image motion_x,
+Adds LocationCurve and LocationCurvePoint completion for image motion_x,
 motion_y, rotation and opacity. Points specify period/value and optional ease;
 curves specify points and optional offset. The public location reference documents
 units and bounds. Mods/example.animated-arena is a complete registration example.
 
-API 0.25 includes optional LocationDefinition.music_choices (AudioHandle[]).
+Includes optional LocationDefinition.music_choices (AudioHandle[]).
 Use it instead of music for native random track selection at fight entry. The
 location guide documents the 16-track limit and mutually exclusive settings.
 
-API 0.26 adds LocationDefinition.dojo and locations.select_dojo/selected_dojo/
+Adds LocationDefinition.dojo and locations.select_dojo/selected_dojo/
 reset_dojo, with presentation.dojo capability diagnostics and completion. The
 Dojo Selector example is validated as a complete mod; callbacks run after profile
 loading, and changes apply on next dojo entry. See the public location guide.
 
-API 0.27 adds profile.level(), profile.item(ItemHandle) and ProfileItemSnapshot
+Adds profile.level(), profile.item(ItemHandle) and ProfileItemSnapshot
 completion, plus profile.read capability diagnostics. See Player profile queries
 in the wiki for timing and the distinction between item presence and ownership.
 
-API 0.28 adds story.on/off/is_active, typed StoryEvent callback payloads and opaque
+Adds story.on/off/is_active, typed StoryEvent callback payloads and opaque
 StorySubscription handles, with story.events capability diagnostics. See Story
 events in the wiki for native timing, cancellation and delivery limits.
 
-API 0.29 adds the level_up story event and optional integer previous_level/level
+Adds the level_up story event and optional integer previous_level/level
 payload fields. The observer example includes experience-driven level changes.
 
-API 0.30 adds scene_enter with a typed scene field. It observes initialized
+Adds scene_enter with a typed scene field. It observes initialized
 destinations after a deferred frame; it does not grant combat authority or bypass
 native dialogs. Existing UI close callbacks handle scene teardown.
 
-API 0.31 adds scenes.open with destination completion and presentation.navigate
+Adds scenes.open with destination completion and presentation.navigate
 capability diagnostics. Scene Menu demonstrates native navigation from game-styled
 UI; native quests can consume a request, and loading completion is asynchronous.
 
-API 0.32 adds FightPatch.warriors: an optional array of 1–100 unique warrior handles for replacing an existing encounter's opponents. See the fight patch reference for preservation and conflict semantics.
+Adds FightPatch.warriors: an optional array of 1–100 unique warrior handles for replacing an existing encounter's opponents. See the fight patch reference for preservation and conflict semantics.
 
-API 0.33 adds FightPatch.reward_drops and typed RewardDropPatch entries for scoped item rewards. Currency and other native reward scopes are preserved; mixed economic choices reject replacement. See the fight patch reference for additive mode and level semantics.
+Adds FightPatch.reward_drops and typed RewardDropPatch entries for scoped item rewards. Currency and other native reward scopes are preserved; mixed economic choices reject replacement. See the fight patch reference for additive mode and level semantics.
 
-API 0.34 adds profile.perk and a detached learned/upgrade snapshot under profile.read. This queries learned progression, not active combat effects.
+Adds profile.perk and a detached learned/upgrade snapshot under profile.read. This queries learned progression, not active combat effects.
 
-API 0.35 adds optional type/subtype fields to profile.item snapshots. Native catalog classification is available independently of ownership; nil indicates missing runtime metadata.
+Adds optional type/subtype fields to profile.item snapshots. Native catalog classification is available independently of ownership; nil indicates missing runtime metadata.
 
-API 0.36 adds item_acquired story notifications with previous_count/count. It observes positive increases through the native grant routine, not all inventory changes.
+Adds item_acquired story notifications with previous_count/count. It observes positive increases through the native grant routine, not all inventory changes.
 
-API 0.37 extends item_acquired to native delivery completion that raises an empty record to count one; upgrade-only deliveries do not emit acquisition.
+Extends item_acquired to native delivery completion that raises an empty record to count one; upgrade-only deliveries do not emit acquisition.
 
-Profile item/perk queries support qualified ID strings in API 0.38, including IDs received by story callbacks. Completion retains the typed snapshot fields; declare dependencies for queried foreign namespaces.
+Profile item/perk queries support qualified ID strings, including IDs received by story callbacks. Completion retains the typed snapshot fields; declare dependencies for queried foreign namespaces.
 
-API 0.39 adds typed equipment-array completion for `sf2.profile.equipment()`.
+Adds typed equipment-array completion for `sf2.profile.equipment()`.
 
-API 0.40 adds battle_result completion and typed outcome/equipment payload fields.
+Adds battle_result completion and typed outcome/equipment payload fields.
 
-API 0.53 adds `fighter:change_form(character)` and `Eclipse.FormRequest`
+Adds `fighter:change_form(character)` and `Eclipse.FormRequest`
 (`queued`, `applied`, `failed`, optional `error`). Requires `combat.transform`
 and a warrior handle registered by the requesting mod. Native form acceptance
 and remaining effect cases are still under verification; see the combat callback

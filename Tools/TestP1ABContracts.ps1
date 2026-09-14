@@ -72,7 +72,6 @@ internal static class Program
             "id = \"" + id + "\"\n" +
             "name = \"" + id + "\"\n" +
             "version = \"1.0.0\"\n" +
-            "api = \">=0.1 <1.0\"\n" +
             "authors = [\"P1AB Contract\"]\n" +
             "entrypoint = \"scripts/main.lua\"\n" +
             "capabilities = [\"content.register\"" + (patch ? ", \"content.patch\"" : "") + "]\n" +

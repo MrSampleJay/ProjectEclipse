@@ -3,16 +3,13 @@ title: Eclipse Modding
 description: Build your first mod, learn the content model, and explore the Eclipse Lua API.
 ---
 
-import { readFileSync } from 'node:fs';
 import { LinkCard, CardGrid } from '@astrojs/starlight/components';
 import { pageUrl } from '../../../site.config.mjs';
-export const apiVersion = readFileSync(new URL('../../../../../Mods/README.md', import.meta.url), 'utf8').match(/Current public Mod API version: \*\*([^*]+)\*\*/)?.[1];
 
 Create equipment, perks, battles, and other content for Eclipse using Lua and
 namespaced assets. Add custom behavior through the API's supported callbacks.
 
-**Documented API: {apiVersion}.** Start with a working weapon mod, then explore
-the systems you need.
+Start with a working weapon mod, then explore the systems you need.
 
 <CardGrid>
   <LinkCard title="Your first weapon" description="Set up a manifest, register a weapon, and find it in the shop." href={pageUrl('guides/first-weapon')} />
@@ -33,4 +30,4 @@ the systems you need.
 
 Every public function and combat callback has its own section. **Signature** shows how to call it, **Requires** lists permissions and dependencies, **When** explains the valid time to call it, and **Returns** explains the result. Field tables mark required inputs, defaults, and limits. Reference snippets may use handles defined earlier on the page; the beginner tutorial supplies complete files.
 
-This wiki documents the implemented Eclipse API. It covers supported behavior and clearly labels compatibility forms and current limits. Your mod's manifest declares which API versions it accepts.
+This wiki documents the implemented Eclipse API. It covers supported behavior and clearly labels current limits.

@@ -1,6 +1,6 @@
 # Pre-DE manual test checklist
 
-Current additions: API 0.22 generated encounters, deferred mode preparation,
+Current additions: generated encounters, deferred mode preparation,
 programmable AI, character authoring and native toggle/slider controls. Use Unity 2022.3.62f3 and allow script compilation/import to
 finish. These checks complement the automated fixtures; full-game acceptance
 has not been claimed.
@@ -141,9 +141,8 @@ seconds, at close and long distances:
   paused and per-fighter decision memory must not leak to another opponent.
   Unmodified campaign opponents should retain their native AI.
 
-For API 0.45 authoring acceptance, use the `choose_quick_kick` callback from
-`Docs/Modding/src/content/docs/api/moves-and-tactics.md` in a test tactic and
-set its manifest to `api = ">=0.45 <1.0"`:
+For move-authoring acceptance, use the `choose_quick_kick` callback from
+`Docs/Modding/src/content/docs/api/moves-and-tactics.md` in a test tactic:
 
 - With both native and custom kick-tap moves eligible, it should choose the
   candidate with the shortest nominal clip length. It should ignore looping
@@ -161,7 +160,7 @@ set its manifest to `api = ">=0.45 <1.0"`:
 The automated `Tools/TestModAi.ps1` checks the native adapter and Lua snapshot
 isolation; these full-game observations remain a separate acceptance step.
 
-For API 0.46, use `evade_active_attack` from the same guide in a test tactic:
+For programmable AI, use `evade_active_attack` from the same guide in a test tactic:
 
 - Attack at close range. When a backward movement candidate is legal during
   an observed attack interval, the callback should select it. Native reaction
@@ -227,7 +226,7 @@ The automated manager fixture does not prove full-game serialized resume timing.
 Lua/projection and native curve checks pass. This checklist is the outstanding
 rendered and full-game acceptance, not a report that it has passed.
 
-For Animated Arena on API 0.25, also listen for Samurai Spirit or Blade Dance.
+For Animated Arena, also listen for Samurai Spirit or Blade Dance.
 A new entry may repeat the same track. Check music volume/mute and menu return;
 there should be no simultaneous leftover fight tracks. This is a random choice
 per entry, not continuous playlist advancement.
@@ -250,7 +249,7 @@ per entry, not continuous playlist advancement.
 These are pending full-game checks. Automated save and Lua UI callback fixtures
 pass, but do not prove visual rendering, actual disk saving or live scene behavior.
 
-## 11. Story notifications (API 0.28)
+## 11. Story notifications
 
 Enable `example.story-observer`. This example logs to Unity's Console/player log;
 there is no on-screen overlay to look for.
@@ -268,7 +267,7 @@ there is no on-screen overlay to look for.
 These full-game checks remain pending. The transport, production-method fixtures,
 actual Lua subscriptions and shipped observer script pass automated checks.
 
-### Level notifications (API 0.29)
+### Level notifications
 
 - With Story Observer enabled, gain a level through normal experience. Expect
   `Story Observer level: old -> new` once, with the final visible player level.
@@ -282,7 +281,7 @@ actual Lua subscriptions and shipped observer script pass automated checks.
 These remain full-game acceptance checks. Automated fixtures execute native
 experience processing with controlled inventory/save dependencies and real Lua.
 
-### Scene entry (API 0.30)
+### Scene entry
 
 - With Story Observer enabled, enter map, shop, profile, dojo and a fight. Expect
   one `Story Observer scene: name` message after each destination initializes.
@@ -302,7 +301,7 @@ an isolated Unity 2022.3.62f3 play-mode fixture now passes
 deactivation/reactivation cancellation. Native full-game scenes, rendered menu
 placement and input still need the manual checks above.
 
-## 12. Native menu navigation (API 0.31)
+## 12. Native menu navigation
 
 Enable `example.scene-menu` and enter the map. The Travel menu should use the
 normal game font, parchment/button styling and keyboard/controller navigation.
@@ -327,7 +326,7 @@ It verifies game font/sprites, button bounds, directional submit, dialog blockin
 rejection labels, teardown and remounting. Navigation results are controlled, so
 actual native destinations and physical-device checks above remain pending.
 
-## 13. Existing fight opponent replacement (API 0.32)
+## 13. Existing fight opponent replacement
 
 In a test mod declaring content.register and content.patch, register an opponent
 using a known working template/loadout. Pass its warrior handle as the sole entry
@@ -346,7 +345,7 @@ These full-game checks remain pending. The automated fixture checks Lua validati
 conflicts, order/fingerprints and XML collection replacement with a controlled
 warrior builder; it does not replace gameplay acceptance.
 
-## 14. Scoped fight item rewards (API 0.33)
+## 14. Scoped fight item rewards
 
 Use the item-drop example in the public fight-patch reference on a test profile.
 Its Eclipse target is core:fights/zone_1/boss_lynx_eclipsemode/1; vanilla uses a
@@ -381,7 +380,7 @@ Runnable fixture: enable example.eclipse-reward, Apply & Restart, and follow its
 README for section 14. Its actual manifest/Lua now passes canonical catalog checks;
 this does not mark the full-game grant and persistence checks complete.
 
-## 15. Learned-perk queries (API 0.34)
+## 15. Learned-perk queries
 
 In a profile-loaded UI/story callback, query sf2.profile.perk with a registered perk
 handle (for example sf2.perks.get("core:perks/PERK_COBRA") acquired at entrypoint).
@@ -397,7 +396,7 @@ handle (for example sf2.perks.get("core:perks/PERK_COBRA") acquired at entrypoin
 These full-game checks remain pending. Host tests use controlled UserPerks entries;
 Lua tests verify capability/handle rejection and detached snapshots.
 
-## 16. Item classification (API 0.35)
+## 16. Item classification
 
 After profile load, query sf2.profile.item with known weapon, armor and consumable
 handles. Compare type/subtype to their native item definitions. Repeat before and
@@ -407,7 +406,7 @@ runtime metadata produces nil. Earlier returned tables must remain unchanged.
 
 Controlled host/Lua tests pass; full-game catalog comparisons remain pending.
 
-## 17. Item acquisition events (API 0.36)
+## 17. Item acquisition events
 
 Subscribe to item_acquired under story.events and log item, previous_count and count.
 Grant an unowned reward item and increase an existing consumable stack: each positive
@@ -420,27 +419,27 @@ The hook does not cover separate delivery-completion or direct inventory-edit pa
 An outer reward flow can still add enchantments afterward. Full-game acceptance is
 pending; native/Lua fixtures use controlled services.
 
-API 0.37 delivery follow-up for section 17: complete a pending empty-item delivery.
+Delivery follow-up for section 17: complete a pending empty-item delivery.
 Expect one item_acquired notification after completion, and none when checking it
 again. Upgrade-only delivery must remain silent. A delivery quest that grants the
 same item must not cause a second notification for that same increase. These
 full-game checks remain pending; the extracted native fixture passes 20 checks.
 
 For sections 17 and the delivery follow-up, enable the updated example.story-observer
-(API 0.37+) to see acquisition identities, counts and deltas in the Console/player
+to see acquisition identities, counts and deltas in the Console/player
 log. Its README describes using example.eclipse-reward alongside it. Exact known/
 unknown-item log messages pass automated Lua checks; full-game acceptance is pending.
 
-### Runtime item IDs (API 0.38)
+### Runtime item IDs
 
 Use the acquisition callback example in the public profile reference with
-`story.events`, `profile.read`, API >=0.38 and a core dependency. No
+`story.events`, `profile.read` and a core dependency. No
 `content.register` capability is needed. Acquire a core item and confirm its
 logged current quantity matches inventory. Unknown event items are skipped.
 Nested grants can make current quantity newer than the event snapshot. Verify
 profile switching reads the newly active inventory. Full-game checks pending.
 
-### Equipped profile records (API 0.39)
+### Equipped profile records
 
 From an after-load UI/story callback, log sf2.profile.equipment() entries with
 profile.read enabled. Compare item IDs, type/subtype and upgrades to the equipment
@@ -450,7 +449,7 @@ rule-imposed equipment and verify the query still represents profile equipment.
 The public profile reference contains a Katana condition example. These full-game
 checks remain pending; no automatic popup is added by the API.
 
-### Battle result observer (API 0.40)
+### Battle result observer
 
 Enable example.story-observer and launch a normal encounter from the map. Finish
 it and inspect the Story Observer battle log: one line with fight ID and outcome.
@@ -482,7 +481,7 @@ TestProfileSaveBoundary.ps1; do not interrupt or corrupt a real player's save to
 run these checks. Lottery claim recovery now has implementation and controlled
 fixtures; full-game claim/restart acceptance remains pending.
 
-### Custom UI artwork (API 0.41)
+### Custom UI artwork
 
 - Use an image node with a sprite handle from sf2.assets.sprite and explicit
   positive width/height; see the wiki UI image example. No DE assets are needed.
@@ -496,7 +495,7 @@ fixtures; full-game claim/restart acceptance remains pending.
   must still apply. Isolated Unity checks passed; these full-game checks are pending.
 Lottery artwork: check the saved slot or first-item icon preserves aspect ratio, a short summary is visible without blank scrolling, missing optional art leaves Claim usable, and dismiss/reopen keeps the same reward. Full-game acceptance remains pending.
 
-### Live custom UI artwork (API 0.42)
+### Live custom UI artwork
 
 - In a menu/modal with an image node, call sf2.ui.set_sprite from a button callback
   using a second handle from sf2.assets.sprite. The image must change in place;
@@ -507,7 +506,7 @@ Lottery artwork: check the saved slot or first-item icon preserves aspect ratio,
   Wrong handle types and attempts to update a closed view must be rejected.
 - Runtime/Lua and isolated Unity tests passed; full-game/device acceptance pending.
 
-### Custom UI grids (API 0.43)
+### Custom UI grids
 
 - Ready-to-open test: enable Grid UI Showcase (`example.grid-ui`), restart and
   enter map/shop/profile/dojo. Its modal opens automatically, not as a map battle.
@@ -515,7 +514,7 @@ Lottery artwork: check the saved slot or first-item icon preserves aspect ratio,
   compaction; DISABLE SPEAR tests skipped focus; BACK closes. Enter another scene
   to reopen. Disable competing auto-opening examples during this test.
 
-- Use the wiki's Grid layouts example with ui.create and API >=0.43. Check the
+- Use the wiki's Grid layouts example with ui.create. Check the
   six buttons form two rows of three with the original game font/button textures.
 - Select cells by pointer, Tab/Shift+Tab, arrows and D-pad/stick. Arrows should move
   by grid rows/columns; Tab remains ordered. Disabled cells must be skipped;
@@ -566,9 +565,9 @@ Lottery artwork: check the saved slot or first-item icon preserves aspect ratio,
   or automatic skipped reward is defined. Paid spins and multiple pending draws
   are not implemented. Controlled queue/disk tests do not prove native crash recovery.
 
-## Forge candidate exclusion (API 0.47)
+## Forge candidate exclusion
 
-- [ ] Use the complete sf2.forge.exclude_candidate example in the forge wiki with API >=0.47, content.register/content.patch and the core dependency. Enable and Apply & Restart.
+- [ ] Use the complete sf2.forge.exclude_candidate example in the forge wiki with content.register/content.patch and the core dependency. Enable and Apply & Restart.
 - [ ] Open Complex enchantments for a weapon: Monk set enchantment must be absent from the recipe preview and eligible rolls. Existing enchanted equipment must retain its enchantment.
 - [ ] Compare armor/helm previews and recipe costs, timers and power ranges against the disabled-mod baseline: unchanged.
 - [ ] Disable the mod and Apply & Restart: the weapon candidate returns when its usual native eligibility conditions are met.
@@ -576,7 +575,7 @@ Lottery artwork: check the saved slot or first-item icon preserves aspect ratio,
 
 Automated command: ./Tools/TestModForgeExclusions.ps1 (Lua registration, native filtering and compiled adapter lifecycle). These checks do not replace the game checks above.
 
-## Forge deviation overrides (API 0.48)
+## Forge deviation overrides
 
 - [ ] Use sf2.forge.override_deviation from the forge wiki with Simple/weapon and minimum=15, maximum=75; enable and Apply & Restart.
 - [ ] At the same equipment level, inspect recipe power range and complete weapon enchantments: random-aspect candidates use the new delta from the normal base aspect. Fixed values/compound expressions remain unchanged.
@@ -587,7 +586,7 @@ Automated command: ./Tools/TestModForgeExclusions.ps1 (Lua registration, native 
 
 Automated verification: ./Tools/TestModForgeExclusions.ps1 and ./Tools/TestModForgeDeviation.ps1. Native fixtures verify projection and lifecycle, not the random draw, rendered recipe UI or full-game unload.
 
-## Default equipment enchantments (API 0.49)
+## Default equipment enchantments
 
 - [ ] Use the set_default_enchantments example in the forge/items wiki (WEAPON_KNIVES, precision weapon perk, aspect 100), with content.register/content.patch and core dependency. Enable and Apply & Restart.
 - [ ] On a test profile where Knives have not been bought, inspect their shop enchantment preview and acquire them. Confirm precision is present at the specified aspect.
@@ -597,7 +596,7 @@ Automated verification: ./Tools/TestModForgeExclusions.ps1 and ./Tools/TestModFo
 
 Automated checks: ./Tools/TestModDefaultEnchantments.ps1 and ./Tools/TestModForgeExclusions.ps1 (the latter also runs actual Lua loadout cases). Neither is a full-game acquisition/save/render test.
 
-## Innate equipment perks (API 0.50)
+## Innate equipment perks
 
 - [ ] Apply the set_innate_perks wiki example to Knives, equip them and enter a new fight. Verify the chosen native precision effect follows its normal activation conditions.
 - [ ] Unequip Knives and enter another fight: the added effect must be absent. Confirm existing saved forge enchantments are unchanged.
@@ -611,9 +610,9 @@ Automated innate execution check: run `pwsh -NoProfile -File Tools/TestModInnate
 
 - [ ] Use a native TwoHandedBlunt weapon with TacticSubtype=TwoHanded in an AI fight, then disarm the fighter: verify weapon and barehand movement/attacks remain valid. Check the other fighter's weapon behavior stays independent. Automated prerequisite: `pwsh -NoProfile -File Tools/TestItemTacticSubtype.ps1` (native classification helper, clone/merge, canonical metadata and own/enemy updates; no physical combat).
 
-- [ ] With manifest API >=0.51, register a custom mace with subtype=TwoHandedBlunt and tactic_subtype=TwoHanded, provide matching assets/moves and a shop listing, then equip it on an AI fighter. Verify the mace animation family is retained and AI uses the intended table group, including after disarm. Removing tactic_subtype falls back to subtype. Changing it should trigger the normal content compatibility handling.
+- [ ] Register a custom mace with subtype=TwoHandedBlunt and tactic_subtype=TwoHanded, provide matching assets/moves and a shop listing, then equip it on an AI fighter. Verify the mace animation family is retained and AI uses the intended table group, including after disarm. Removing tactic_subtype falls back to subtype. Changing it should trigger the normal content compatibility handling.
 
-- [ ] API >=0.52: use items.set_tactic_subtype on a core weapon; start a new fight and verify AI grouping independently of animation subtype. Try group empty to select subtype fallback. Disable and Apply & Restart to restore the original group. Two mods targeting the same weapon should report a conflict. Existing fight copies are not refreshed.
+- [ ] Use items.set_tactic_subtype on a core weapon; start a new fight and verify AI grouping independently of animation subtype. Try group empty to select subtype fallback. Disable and Apply & Restart to restore the original group. Two mods targeting the same weapon should report a conflict. Existing fight copies are not refreshed.
 
 - [ ] Buy multiple units through a supported consumable/shop quantity flow: granted quantity must match the selected quantity and charge. Default single-unit purchases should behave as before. Automated dispatcher check: `pwsh -NoProfile -File Tools/TestPurchaseQuantity.ps1`; real inventory/save behavior still needs a playtest.
 
@@ -648,7 +647,7 @@ Tools/TestVisualExamples.ps1 and Tools/TestModUiUnity.ps1 (-WithPreview renders
 standalone menu/HUD screenshots in the fixture directory). Controlled combat and
 isolated UI checks do not replace the full-game acceptance above.
 
-## Shifting Guardian / API 0.53 (native acceptance pending)
+## Shifting Guardian (native acceptance pending)
 - Enable example.shifting-guardian, Apply & Restart; choose Shifting Guardian on map zone dots.
 - FIGHT: after three seconds, require both BATON FORM HUD and actual changed weapon/name.
 - Check combat continues, timer does not reset, and damaged health percentage is retained.

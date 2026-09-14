@@ -3,7 +3,7 @@ title: Custom UI
 description: Open owned layouts, update their widgets from Lua, and handle clicks safely.
 ---
 
-Available since API **0.15**. Layout tables describe presentation; ordinary Lua
+Layout tables describe presentation; ordinary Lua
 functions perform calculations and handle clicks. No expression strings or
 operation lists are needed. A **view handle** identifies one live surface owned
 by the script that created it. It is not save data and cannot be forged by
@@ -17,8 +17,8 @@ It runs on a button click with a bounded instruction budget. An error closes
 that view and logs a diagnostic. It receives no fighter capability: change Lua
 state and act through a fresh combat callback when gameplay authority is needed.
 
-API **0.21** adds optional [`on_close`](#on_close), a notification for canceling
-pending choices and releasing Lua references after a live view closes.
+An optional [`on_close`](#on_close) lets you cancel
+pending choices and release Lua references after a live view closes.
 
 Mounts are `menu`, `modal`, and `hud`. Modals have priority over menus, then HUDs;
 the newest view wins within a priority. Only the foreground view accepts input.
@@ -28,7 +28,7 @@ capture keyboard navigation automatically; their buttons currently use pointer
 input. Opening any view **does not pause combat**.
 
 Layouts use a 1280×720 reference canvas and default to the center of the screen's
-safe area. API **0.16** adds optional `placement` to the open definition:
+safe area. The open definition accepts an optional `placement`:
 
 ```lua
 placement = { anchor = "top_right", x = -24, y = 104 },
@@ -55,7 +55,7 @@ Each node is a table:
 | Field | Required/default | Meaning |
 | --- | --- | --- |
 | `id` | Required | Unique within this view; 1–64 ASCII letters, digits, `_` or `-`. View IDs use the same syntax. |
-| `kind` | Required | `stack`, `row`, `column`, `scroll`, `text`, `button`, `progress`, `toggle`, `slider`, `image`, or `grid`. Toggle/slider require API 0.22; image requires API 0.41; grid requires API 0.43. |
+| `kind` | Required | `stack`, `row`, `column`, `scroll`, `text`, `button`, `progress`, `toggle`, `slider`, `image`, or `grid`. |
 | `width`, `height` | `0` | Finite 0–8192 reference units. Both must be positive on the root. Zero gives flexible size in a row/column; use explicit dimensions inside stacks. |
 | `children` | Empty | Dense array of nodes. Only containers accept children; `scroll` requires exactly one content node. |
 | `gap` | `0` | Row/column/grid spacing, finite 0–1024. Other kinds require zero. Grid uses this spacing on both axes. |
@@ -66,7 +66,7 @@ Each node is a table:
 | `checked` | `false` | Boolean, toggles only. |
 | `sprite` | Required for image | Typed handle from `sf2.assets.sprite`. Only image widgets accept this field. Images require positive width and height, preserve aspect ratio, and do not receive clicks. |
 | `visible`, `enabled` | `true` | Widget state; hidden/disabled ancestors also prevent button activation. |
-| `style` | Game defaults | Optional style table, available since API 0.18; see below. |
+| `style` | Game defaults | Optional style table; see below. |
 
 Rows and columns lay out their children in order; stacks center their children.
 Scroll is vertical with clipped content. Default labels use the game font with
@@ -75,7 +75,7 @@ use the native white beveled sprite and native button tints. Progress bars use
 the recovered combat bar textures. HUD roots stay transparent. Keep custom UI
 consistent with the game: prefer these shared defaults and use overrides for
 readability or a specific semantic emphasis. Unknown fields, duplicate IDs, malformed arrays and invalid values
-are errors. Dynamic text accepts plain strings. Since API 0.17, use
+are errors. Dynamic text accepts plain strings. Use
 [`sf2.localization.text`](../localization-patches/#sf2localizationtext) to resolve
 translation handles during UI refreshes. Custom fonts and virtualized lists are not
 supported yet.
@@ -90,7 +90,7 @@ label and HIDE BLADE / DISABLE SPEAR controls. BACK or Escape closes it; enter
 another non-combat scene to reopen. Disable other auto-opening UI examples while
 testing. It selects labels only and does not change equipment or saves.
 
-API **0.43** adds fixed-column grids for equipment, character and reward selectors.
+Fixed-column grids arrange widgets for equipment, character and reward selectors.
 A grid arranges existing widgets, so buttons and labels retain the original game
 sprites and font. A cell may also be a column or stack containing artwork and a
 button. Direct child widths/heights are overridden by the grid's cell dimensions;
@@ -144,7 +144,7 @@ collections are not implemented.
 
 ### Image widgets
 
-Requires API **0.41** and the usual `ui.create` capability. Put a PNG at
+Requires the usual `ui.create` capability. Put a PNG at
 `assets/sprites/reward.png` in your mod, then obtain its sprite handle. Replace
 `example.my-mod` with your manifest's ID:
 
@@ -167,8 +167,7 @@ local view = sf2.ui.open {
 The sprite fits inside its rectangle without stretching or cropping. Use the
 shared parchment container and game-font caption to keep the presentation
 consistent. Images are decorative: they accept neither text, values, children,
-nor style overrides. Put any background on their parent. API **0.42** adds
-[`sf2.ui.set_sprite`](#sf2uiset_sprite) to replace artwork in place. Visibility and enabled
+nor style overrides. Put any background on their parent. [`sf2.ui.set_sprite`](#sf2uiset_sprite) replaces artwork in place. Visibility and enabled
 state use the existing UI functions. Closing a view does not destroy shared
 loader-owned artwork. A missing or unloadable sprite fails mounting and closes
 the surface rather than leaving a white missing-image rectangle.
@@ -178,7 +177,7 @@ paths, strings in `sprite`, forged handles, and Unity objects are not accepted.
 Automated Lua/runtime checks cover this contract; native rendering acceptance is
 tracked separately from editor diagnostics.
 
-API **0.22** adds toggles using the original checkbox sprites and sliders using
+Toggles use the original checkbox sprites, and sliders use
 the original settings track, fill and handle. In a menu/modal, Up/Down or Tab
 moves focus, Enter/Space (controller A) toggles the selected checkbox, and
 Left/Right (D-pad or stick) adjusts the selected slider in steps of 0.05.
@@ -199,7 +198,7 @@ including unchecked toggles. Programmatic changes update the checkmark immediate
 
 **When:** Set a toggle's boolean state without triggering `on_change`.
 
-**Requires:** API 0.22, an open owned view and a toggle ID. No additional capability.
+**Requires:** An open owned view and a toggle ID. No additional capability.
 
 ```lua
 sf2.ui.set_checked(view, "challenge", true)
@@ -217,7 +216,7 @@ sliders. The new value is committed before notification. Repeated identical
 values and programmatic setters do not notify. Hidden/disabled ancestors and
 native dialogs block input. A callback may update widgets or close its view.
 
-**Requires:** API 0.22 and `ui.create` to open the view. No fighter authority is
+**Requires:** `ui.create` to open the view. No fighter authority is
 supplied. The callback has a 200,000-instruction budget; failure closes the view
 and logs an error. Already committed Lua or saved state is not rolled back.
 
@@ -242,7 +241,7 @@ sf2.ui.open {
 
 ## Widget styles
 
-API **0.18** accepts an optional `style` table on each node. Styles are immutable
+Each node accepts an optional `style` table. Styles are immutable
 for the view's lifetime, do not inherit, and preserve game defaults when omitted.
 They affect presentation only; they do not enable rich text or change input rules.
 
@@ -358,7 +357,7 @@ sf2.ui.set_text(view, "count", "Charge: " .. tostring(charge))
 
 **When:** After opening a surface, including from its click/change callbacks. Use
 this to switch a character portrait, equipment icon or reward preview without
-rebuilding the panel. Requires API **0.42**.
+rebuilding the panel.
 
 **Requires:** An open UI handle and a sprite handle created by the same script
 context. The widget must be an `image`. Its size, aspect-preserving rendering,
@@ -387,7 +386,7 @@ other views. To hide artwork, use `sf2.ui.set_visible`; `nil` is not a sprite.
 **When:** Change a progress widget's fill or a slider's position to a finite fraction from 0 to 1.
 Invalid values are rejected before mutation.
 
-**Requires:** An open owned view and a progress/slider ID; no additional capability. Sliders require API 0.22. Setters do not invoke `on_change`.
+**Requires:** An open owned view and a progress/slider ID; no additional capability. Setters do not invoke `on_change`.
 
 ```lua
 sf2.ui.set_value(view, "meter", math.min(1, charge / maximum))
@@ -461,8 +460,7 @@ or acquire a fighter handle.
 
 ## on_close
 
-Clear pending choices or Lua references when a view closes. Available since API
-**0.21**. Set this optional function in the table passed to `sf2.ui.open`.
+Clear pending choices or Lua references when a view closes. Set this optional function in the table passed to `sf2.ui.open`.
 
 **Signature:** `on_close = function(view, reason) ... end`
 

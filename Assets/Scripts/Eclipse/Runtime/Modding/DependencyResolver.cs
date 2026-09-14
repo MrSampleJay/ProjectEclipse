@@ -7,7 +7,7 @@ namespace Eclipse.Modding
     public static class DependencyResolver
     {
         public static DependencyResolutionResult Resolve(IEnumerable<ModDescriptor> mods,
-            SemanticVersion apiVersion, SemanticVersion coreVersion)
+            SemanticVersion coreVersion)
         {
             if (mods == null) throw new ArgumentNullException(nameof(mods));
             var diagnostics = new List<ModDiagnostic>();
@@ -30,12 +30,6 @@ namespace Eclipse.Modding
             foreach (ModDescriptor mod in byId.Values)
             {
                 dependencies[mod.Id] = new List<ModId>();
-                if (!mod.Manifest.Api.Contains(apiVersion))
-                {
-                    diagnostics.Add(Error("DEP002", mod.Id, "Requires Mod API '" + mod.Manifest.Api +
-                        "', current API is " + apiVersion + "."));
-                    invalid.Add(mod.Id);
-                }
             }
 
             foreach (ModDescriptor mod in byId.Values)

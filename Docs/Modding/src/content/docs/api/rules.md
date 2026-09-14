@@ -209,7 +209,7 @@ local rule = sf2.rules.attributes {
 ## sf2.rules.behavior
 
 Attach executable Lua behavior directly to a fight, without creating a perk or
-requiring an equipped item. Available since API **0.8.0**.
+requiring an equipped item.
 
 **Signature:** `sf2.rules.behavior { id, behavior, parameters?, target?, mode?, rounds? }`
 
@@ -275,8 +275,8 @@ Shield keys are isolated by rule ID, so two rules reusing one behavior do not
 replace each other's shield on the same fighter.
 
 This API does **not** yet provide custom victory conditions, tick callbacks, animation control, additional fighters, or custom
-HUDs. The available operations remain the documented fighter methods. Rules can be attached to new fights or, since API 0.10, appended to or replace
+HUDs. The available operations remain the documented fighter methods. Rules can be attached to new fights or appended to or replace
 the rules of existing encounters through [fight patches](../content-graph/#sf2fightspatch).
 
 Attacker-side scaling is available through `on_damage_dealing` and
-`fighter:scale_outgoing_damage` with `combat.modify_outgoing_hit` (API 0.12).
+`fighter:scale_outgoing_damage` with `combat.modify_outgoing_hit`.

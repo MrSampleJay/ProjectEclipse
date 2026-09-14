@@ -9,7 +9,7 @@ static class Program {
  static void Main(string[] args){
   string dir=Path.Combine(args[0],"example.story");Directory.CreateDirectory(Path.Combine(dir,"scripts"));
   foreach(string scenario in new[]{"good","denied","forged","unknown","error","loop","nohost","example","level","scene","acquired","battle"}){
-   File.WriteAllText(Path.Combine(dir,"mod.toml"),("schema=1\nid='example.story'\nname='Story'\nversion='1.0.0'\napi='>=0.30 <1.0'\nauthors=['Eclipse']\nentrypoint='scripts/main.lua'\ncapabilities=["+(scenario=="denied"?"":"'story.events'")+(scenario=="scene"?",'ui.create'":"")+"]\n").Replace("'","\""));
+   File.WriteAllText(Path.Combine(dir,"mod.toml"),("schema=1\nid='example.story'\nname='Story'\nversion='1.0.0'\nauthors=['Eclipse']\nentrypoint='scripts/main.lua'\ncapabilities=["+(scenario=="denied"?"":"'story.events'")+(scenario=="scene"?",'ui.create'":"")+"]\n").Replace("'","\""));
    string script="local sf2=require('sf2')\n";
    if(scenario=="forged")script+="sf2.story.off({})";
    else if(scenario=="unknown")script+="sf2.story.on('made_up',function(e) end)";

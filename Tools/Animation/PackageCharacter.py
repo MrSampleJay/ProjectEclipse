@@ -179,7 +179,7 @@ def package(rig_path, animation_path, skins, destination, mod_id, title='Charact
         (staging / 'scripts/main.lua').write_text(PREVIEW_MAIN, encoding='utf-8')
         (staging / 'mod.toml').write_text(
             f'schema = 1\nid = {json.dumps(mod_id)}\nname = {json.dumps(title, ensure_ascii=False)}\n'
-            'version = "1.0.0"\napi = ">=0.22 <1.0"\nauthors = ["Local author"]\n'
+            'version = "1.0.0"\nauthors = ["Local author"]\n'
             'entrypoint = "scripts/main.lua"\ncapabilities = ["content.register"]\n'
             '[[dependencies]]\nid = "core"\nversion = ">=1.0 <2.0"\n', encoding='utf-8')
         label = json.dumps(title, ensure_ascii=False)

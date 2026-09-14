@@ -4,7 +4,7 @@ Enable the mod at the title screen, apply/restart, then enter Campaign and selec
 Third Strike Trial on its added map page. Hit the guardian: only every third
 positive incoming hit can reduce health. Each new round starts a fresh counter.
 At or below one third health, the guardian loses its guard and every hit can
-damage it. This uses API 0.9 combat snapshots. Normal blocking and other game rules still apply. No enchantment is required.
+damage it. This uses combat snapshots. Normal blocking and other game rules still apply. No enchantment is required.
 
 This example uses core art and the default warrior template. It changes no
 inventory or shared economy. Rule counters are transient, separate for every

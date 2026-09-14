@@ -1,4 +1,4 @@
-# Archived DE XML versus public API 0.7
+# Archived DE XML versus the public API
 
 Reviewed 2026-09-10. Plan tasks: **P4.2 intentional-delta inventory and P5.1/P5.4 coverage review**. This is an audit, not an implementation or a declaration of DE parity.
 
@@ -54,8 +54,8 @@ All **11 DE-only quest extension files are empty roots** in this archive, includ
 
 ## Implementation follow-up (2026-09-12)
 
-The findings below retain their API 0.7 audit baseline. API 0.8 added direct Lua
-rule hosts; 0.9 added combat snapshots. API 0.10 now covers the G01 subset of
+The findings below retain their original audit baseline. Direct Lua rule hosts
+and combat snapshots are supported, covering the G01 subset of
 existing fight rule append/replacement and location/music replacement. Core
 encounter identity, opponents, rewards and progress are preserved. G01 is still
 open for other content domains and fight opponent/reward editing; G10's scenery
@@ -154,9 +154,9 @@ Evidence: [arena_new](../Assets/DExml/locations/arena_new/arena_new_params.xml),
 
 DE item deltas include `TacticSubtype`, core item template changes, innate `<Perks>`/aspect changes, `SingleTimeBuy`, acquisition flags, package behavior and presentation metadata. There is no general field-complete registration/patch surface or contextual grant API for these. Do not count a visually matching weapon as the same item behavior.
 
-API 0.49 now supports replacing acquisition-time default enchantments for core or owned equipment through `items.set_default_enchantments`, with typed perk handles and optional numeric aspects. Preview/acquisition projection, ownership conflicts, compatibility fingerprints and rollback are tested. Existing inventory is not migrated; full-game acquisition/save/render acceptance remains pending. This does not supply permanent innate `<Perks>`, tactic metadata or arbitrary grant operations.
+The API now supports replacing acquisition-time default enchantments for core or owned equipment through `items.set_default_enchantments`, with typed perk handles and optional numeric aspects. Preview/acquisition projection, ownership conflicts, compatibility fingerprints and rollback are tested. Existing inventory is not migrated; full-game acquisition/save/render acceptance remains pending. This does not supply permanent innate `<Perks>`, tactic metadata or arbitrary grant operations.
 
-API 0.50 adds `items.set_innate_perks` for the separate permanent equipment-perk list, with literal numeric native parameters and Lua-backed perk handles (their initial parameters belong at perk registration). Native model collection, cloned-instance isolation, composition with acquisition defaults, rollback and public Lua validation are tested. Live combat acceptance, activated ability mechanics, tactic metadata and general acquisition operations remain open.
+The API adds `items.set_innate_perks` for the separate permanent equipment-perk list, with literal numeric native parameters and Lua-backed perk handles (their initial parameters belong at perk registration). Native model collection, cloned-instance isolation, composition with acquisition defaults, rollback and public Lua validation are tested. Live combat acceptance, activated ability mechanics, tactic metadata and general acquisition operations remain open.
 
 Important boundary: prices, bonus prices, upgrade/stat scaling and level changes must first be checked against the canonical economy policy. This audit does **not** request arbitrary core stat/economy overrides. Non-economic subtype, identity, availability, display and supported enchantment loadout changes are the separate legitimate API work.
 
@@ -164,7 +164,7 @@ Evidence: [DE list](../Assets/DExml/list.xml); `RegisterWeapon`, `RegisterArmor`
 
 ### G12 â€” Forge family editing and candidate structure
 
-**Implemented operations, gameplay acceptance pending.** Added families are `Abilities`, `Abilities2`, `Abilities3`, `Complex2`, `Complex3`. Registering a family using a host economic profile and candidate level ranges works. API 0.47 adds targeted native candidate exclusions for existing recipes. API 0.48 adds per-equipment deviation overrides for existing random-aspect recipes, covering both effective item settings and embedded native candidate ranges. These provide the operations needed for the cited Complex candidate removals and Simple deviation changes; the downstream DE records have not been ported or accepted in game. Arbitrary candidate conditions, full native family replacement and broader variation/availability editing remain outside these operations.
+**Implemented operations, gameplay acceptance pending.** Added families are `Abilities`, `Abilities2`, `Abilities3`, `Complex2`, `Complex3`. Registering a family using a host economic profile and candidate level ranges works. Targeted native candidate exclusions and per-equipment deviation overrides for existing random-aspect recipes are supported, covering both effective item settings and embedded native candidate ranges. These provide the operations needed for the cited Complex candidate removals and Simple deviation changes; the downstream DE records have not been ported or accepted in game. Arbitrary candidate conditions, full native family replacement and broader variation/availability editing remain outside these operations.
 
 Exact prices/costs must remain base-owned. Check deviations/quality scaling against that boundary before deciding they should be configurable. New family registration is not evidence that the entire original forge is converted.
 
@@ -206,6 +206,6 @@ No runtime API, economy, XML source, asset identity or mod behavior was changed 
 
 G11/G09 native prerequisite update: shipped TacticSubtype was ignored by ItemInfo; it is now parsed independently from SubType, preserved by cloning/merge and consumed by Model's AI initialization and weapon changes. SetWeaponBot now updates the own-weapon table group used by native decision tables instead of the enemy field. Native metadata/AI checks and existing AI suite pass. A public typed metadata override and live combat acceptance remain open; this is not a DE port.
 
-API 0.51 exposes optional tactic_subtype on owned weapon registration, independent of animation subtype. Literal native group names are validated, projected by the actual native item builder and included in compatibility fingerprints. Lua omission/invalid/rollback/hash checks and compiled projection checks pass. Core equipment metadata patching, other G11 metadata/acquisition gaps and live combat acceptance remain open.
+The API exposes optional tactic_subtype on owned weapon registration, independent of animation subtype. Literal native group names are validated, projected by the actual native item builder and included in compatibility fingerprints. Lua omission/invalid/rollback/hash checks and compiled projection checks pass. Core equipment metadata patching, other G11 metadata/acquisition gaps and live combat acceptance remain open.
 
-API 0.52 adds items.set_tactic_subtype for core and owned weapons. Required group supports explicit empty fallback; weapon/dependency checks, conflict ledger, compatibility fingerprint, native scope restoration and adapter partial-failure rollback are implemented. 51 native/content/adapter tests and 123 Lua forge/loadout tests pass. Other equipment metadata/acquisition and full-game acceptance remain open.
+The API adds items.set_tactic_subtype for core and owned weapons. Required group supports explicit empty fallback; weapon/dependency checks, conflict ledger, compatibility fingerprint, native scope restoration and adapter partial-failure rollback are implemented. 51 native/content/adapter tests and 123 Lua forge/loadout tests pass. Other equipment metadata/acquisition and full-game acceptance remain open.

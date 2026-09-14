@@ -2,7 +2,6 @@ schema = 1
 id = "example.core-fight"
 name = "Campaign Guard Rule"
 version = "1.0.0"
-api = ">=0.10 <1.0"
 entrypoint = "scripts/main.lua"
 authors = ["Eclipse"]
 capabilities = ["content.register", "content.patch", "combat.modify_hit"]

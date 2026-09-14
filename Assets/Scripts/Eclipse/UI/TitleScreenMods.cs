@@ -43,7 +43,7 @@ namespace Eclipse.UI
         }
 
         private DependencyResolutionResult ResolveModSelection() => DependencyResolver.Resolve(
-            modSelection.Filter(modDiscovery.Mods), ModPlatformVersions.Api, ModPlatformVersions.Core);
+            modSelection.Filter(modDiscovery.Mods), ModPlatformVersions.Core);
 
         private void DrawMods(int focus = 0)
         {

@@ -12,11 +12,10 @@ only takes damage on every third hit. Its `hits` counter belongs to this battle,
 not to a weapon or enchantment. You can reuse the behavior with `every = 5` in
 another fight, without rewriting the callback.
 
-1. Set `api = ">=0.9 <1.0"` in your manifest.
-2. Declare `content.register` and `combat.modify_hit`.
-3. Register the behavior and its parameter/state schema.
-4. Register a rule referencing the behavior.
-5. Add the rule handle to your fight's `rules` array.
+1. Declare `content.register` and `combat.modify_hit`.
+2. Register the behavior and its parameter/state schema.
+3. Register a rule referencing the behavior.
+4. Add the rule handle to your fight's `rules` array.
 
 The complete [Third Strike Trial source](https://github.com/dawc17/ProjectEclipse/tree/main/Mods/example.battle-rules)
 includes the manifest, localization, map entry, opponent, and repeatable fight.

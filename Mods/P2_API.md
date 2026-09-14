@@ -1,4 +1,4 @@
-# Phase 2 — API 0.6
+# Phase 2
 
 User runtime-tested and accepted, including the corrected replayable Volcano raid. The integrated external
 sample is [example.phase2](example.phase2/README.md). Phase 1 remains accepted.

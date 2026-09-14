@@ -434,7 +434,7 @@ All pass with the documented controlled services; managed editor compilation
 passes. Public Lua binding, remaining effect cases and playable native acceptance
 remain unfinished.
 
-## Public experimental request and visual encounter (API 0.53)
+## Public experimental request and visual encounter
 
 fighter:change_form accepts a warrior handle owned by the calling Lua context and
 requires combat.transform. Its live receipt distinguishes queued, applied and

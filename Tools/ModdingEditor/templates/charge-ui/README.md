@@ -12,7 +12,7 @@ the fighter capability to apply damage, so no expired fighter is retained. The
 meter updates ten times per active combat second. The `on_close` callback cancels charge and any armed bonus if the HUD closes,
 including native scene/view teardown. Round transitions also reset the view.
 
-Requires API 0.21 for close notification. The HUD uses pointer buttons. Menu/modal
+The HUD uses pointer buttons. Menu/modal
 mounts also support keyboard/controller navigation, but HUD focus controls,
 additional layout controls and custom images remain future work.
 The view does not pause combat. This is an engine example, not a DE perk port.
