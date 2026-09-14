@@ -1121,6 +1121,16 @@ namespace Nekki.SF2.GUI
 			}
 		}
 
+#if UNITY_6000_0_OR_NEWER
+		public virtual float maxWidth
+		{
+			get
+			{
+				return LayoutUtility.DefaultMaxSize;
+			}
+		}
+
+#endif
 		public virtual float preferredWidth
 		{
 			get
@@ -1150,6 +1160,16 @@ namespace Nekki.SF2.GUI
 			}
 		}
 
+#if UNITY_6000_0_OR_NEWER
+		public virtual float maxHeight
+		{
+			get
+			{
+				return LayoutUtility.DefaultMaxSize;
+			}
+		}
+
+#endif
 		public virtual float preferredHeight
 		{
 			get

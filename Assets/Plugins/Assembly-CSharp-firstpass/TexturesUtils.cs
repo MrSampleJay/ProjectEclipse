@@ -7,7 +7,11 @@ public class TexturesUtils
 
 	private static readonly Dictionary<string, string> AtlasesNames = new Dictionary<string, string>();
 
+#if UNITY_6000_0_OR_NEWER
+	private static readonly Dictionary<EntityId, int> NJHEFKILICK = new Dictionary<EntityId, int>();
+#else
 	private static readonly Dictionary<int, int> NJHEFKILICK = new Dictionary<int, int>();
+#endif
 
 	private static readonly List<Texture> NHNONLFMFDC = new List<Texture>();
 
@@ -25,7 +29,11 @@ public class TexturesUtils
 	{
 		if (texture != null)
 		{
+#if UNITY_6000_0_OR_NEWER
+			EntityId instanceID = texture.GetEntityId();
+#else
 			int instanceID = texture.GetInstanceID();
+#endif
 			if (NJHEFKILICK.ContainsKey(instanceID))
 			{
 				return NJHEFKILICK[instanceID];
@@ -44,7 +52,11 @@ public class TexturesUtils
 		{
 			return;
 		}
+#if UNITY_6000_0_OR_NEWER
+		EntityId instanceID = texture.GetEntityId();
+#else
 		int instanceID = texture.GetInstanceID();
+#endif
 		if (NJHEFKILICK.ContainsKey(instanceID))
 		{
 			NJHEFKILICK[instanceID]++;
@@ -66,7 +78,11 @@ public class TexturesUtils
 		{
 			return;
 		}
+#if UNITY_6000_0_OR_NEWER
+		EntityId instanceID = texture.GetEntityId();
+#else
 		int instanceID = texture.GetInstanceID();
+#endif
 		if (NJHEFKILICK.ContainsKey(instanceID))
 		{
 			if (NJHEFKILICK[instanceID] > 1)

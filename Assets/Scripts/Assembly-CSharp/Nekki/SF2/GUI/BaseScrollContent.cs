@@ -38,7 +38,6 @@ namespace Nekki.SF2.GUI
 
 		private List<BaseScrollItem> _Items = new List<BaseScrollItem>();
 
-		[SerializeField]
 		public int TopSpacing
 		{
 			get
@@ -51,7 +50,6 @@ namespace Nekki.SF2.GUI
 			}
 		}
 
-		[SerializeField]
 		public int BottomSpacing
 		{
 			get

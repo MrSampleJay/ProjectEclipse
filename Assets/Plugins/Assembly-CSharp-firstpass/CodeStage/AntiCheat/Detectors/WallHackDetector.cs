@@ -746,7 +746,11 @@ namespace CodeStage.AntiCheat.Detectors
 			rigidPlayer.rotation = Quaternion.identity;
 			rigidPlayer.angularVelocity = Vector3.zero;
 			rigidPlayer.transform.localPosition = new Vector3(0.75f, 0f, -1f);
+#if UNITY_6000_0_OR_NEWER
+			rigidPlayer.linearVelocity = PKIHJKCDMHD;
+#else
 			rigidPlayer.velocity = PKIHJKCDMHD;
+#endif
 			Invoke("StartRigidModule", 4f);
 		}
 
@@ -866,7 +870,11 @@ namespace CodeStage.AntiCheat.Detectors
 		{
 			if ((bool)rigidPlayer)
 			{
+#if UNITY_6000_0_OR_NEWER
+				rigidPlayer.linearVelocity = Vector3.zero;
+#else
 				rigidPlayer.velocity = Vector3.zero;
+#endif
 			}
 			CancelInvoke("StartRigidModule");
 		}

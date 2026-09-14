@@ -259,7 +259,12 @@ public class GlobalLoad : GlobalPath
 	{
 		if (!(AOMLCBHAJJH == null))
 		{
+#if UNITY_6000_0_OR_NEWER
+			// Same value Object.GetInstanceID() returns in Unity 6: the low 32 bits of the EntityId. The legacy sign test still holds.
+			if (unchecked((int)EntityId.ToULong(AOMLCBHAJJH.GetEntityId())) <= 0)
+#else
 			if (AOMLCBHAJJH.GetInstanceID() <= 0)
+#endif
 			{
 				CHILAIJNEHG(AOMLCBHAJJH, OJCKACIMFEJ);
 			}
