@@ -2,15 +2,22 @@
 
 This document records evidence relevant to restoring standalone local versus in Eclipse. It separates Switch IL2CPP layout/signature evidence, behavior visible in current Eclipse source, and new design proposed for the local implementation.
 
-The implementation now uses these notes as architectural evidence, but the Switch
-material still does not provide recovered PvP method bodies. Runtime behavior must
-be validated independently; signatures and layouts alone do not establish it.
+Native recovery was verified on September 16, 2026. The extracted Switch executable
+contains the actual ARM64 method bodies, and IDA Professional 9.1 with Hex-Rays
+successfully decompiled 14 targeted PvP routines. The original local implementation
+was written before this native analysis. Runtime behavior must still be validated
+independently; a successful decompilation is not a tested port.
+
+See [Switch PvP native recovery with IDA](SwitchPvpRecovery/README.md) for the
+reproducible tools, exact function list, reviewed findings, and interpretation
+limits. The final native exports and IDA database are in
+`Temp/SwitchPvpIDA-20260916-final/`.
 
 ## Evidence limits
 
-The Switch material inspected here is IL2CPP Dumper metadata in `ResearchSources/reversingsf2/decompilation/generated/switch_il2cpp/il2cppdumper/dump.cs` and matching signatures in `script.json`. It provides type layouts, fields, method signatures, and RVAs. The inspected repository does **not** contain recovered C# bodies, native pseudocode, or instruction-level disassembly for the PvP methods below. Method names and signatures establish architecture and callable shape, not the statements executed inside those methods.
+The initial inspection used IL2CPP Dumper metadata in `ResearchSources/reversingsf2/decompilation/generated/switch_il2cpp/il2cppdumper/dump.cs` and matching signatures in `script.json`. Those text dumps provide type layouts, fields, method signatures, and RVAs, but no implementation bodies. The later native analysis used `reference_builds/switch_v1.1.0/program/exefs/main`, verified all three decompressed segment hashes, and produced actual disassembly and pseudocode. Absence of bodies in a metadata dump does not imply they cannot be recovered from the executable.
 
-`ResearchSources/reversingsf2/decompilation/generated/switch_il2cpp/cpp2il/` contains reconstructed assemblies, including `Assembly-CSharp.dll`, but the repository search performed for this recovery did not locate decompiled PvP method bodies derived from them.
+`ResearchSources/reversingsf2/decompilation/generated/switch_il2cpp/cpp2il/` contains reconstructed assemblies, including `Assembly-CSharp.dll`. The retained Cpp2IL log says no processing layers were requested for that compatibility-DLL run. It was not evidence of an unsuccessful exhaustive native recovery attempt.
 
 ## Switch PvP data model
 
@@ -40,9 +47,9 @@ The Switch `GameUtils` surface at `dump.cs:364468-364490` includes:
 - `CreateFight(FightList, ModelParameters, List<ModelParameters>, PreFight)`, RVA `0xD45230`
 - `CreateFightPVP(FightList, List<ModelParameters>, ref ModelParameters)`, `dump.cs:364486-364487`, RVA `0xD44F00`
 
-The dedicated `CreateFightPVP` entry point is structural evidence for a PvP-specific preparation seam alongside ordinary fight preparation/construction. Its body is absent, so the exact fields it changed and the way it attached player-two input are unknown.
+The native `CreateFightPVP` body has now been recovered. It prepares the first player, registers both input assignments with `InputSelector`, and enables user control while disabling AI for the first enemy when at least two gamepads are present. That branch also sets the enemy's `IsPlayer` flag to true. The reviewed instruction addresses and implications are recorded in the IDA recovery guide.
 
-`PvpRule` is declared at `dump.cs:339088-339100`, TypeDefIndex 7116. It derives from `InFightRule` and exposes `PvpRule(XmlNode, RuleAppliance)` at RVA `0xEB6EB0`, `CompareSingle(object)` at RVA `0xEB6EF0`, and `Copy()` at RVA `0xEB6F00`. Its comparison semantics are not recovered.
+`PvpRule` is declared at `dump.cs:339088-339100`, TypeDefIndex 7116. It derives from `InFightRule` and exposes `PvpRule(XmlNode, RuleAppliance)` at RVA `0xEB6EB0`, `CompareSingle(object)` at RVA `0xEB6EF0`, and `Copy()` at RVA `0xEB6F00`. Native analysis confirms that `CompareSingle` unconditionally returns false (`MOV W0, WZR; RET`) in this build.
 
 Current Eclipse still defines `FightPVP = 18` in `Assets/Scripts/Assembly-CSharp/BattleType.cs:1-26`. Vanilla move data in `Assets/vanillaXml/animations/moves.xml` contains `FightPVP` conditions and PvP-specific moves. A restored local mode should retain `FightPVP` so those existing conditions see the intended battle type.
 
@@ -65,7 +72,7 @@ Relevant signatures are:
 - `SwitchToNextNotOwnedDevice(InputData, InputData)`, `dump.cs:402544-402545`, RVA `0xD97260`
 - `SwitchInputToNextDevice(InputData)`, `dump.cs:402547-402548`, RVA `0xD97430`
 
-These signatures establish two distinct `InputData` slots, explicit device ownership/cycling APIs, two character selections, and location selection before fight start. They do not recover the device-selection algorithm or how `InputData` was wired into a `Model`.
+These signatures establish two distinct `InputData` slots, explicit device ownership/cycling APIs, two character selections, and location selection before fight start. The later native analysis additionally recovered cycling and model routing: ownership equality compares input type and control index, while `InputSelector` resolves the assigned team and corresponding fighter. The cycle includes two keyboard indices before gamepads.
 
 The English localization in `Assets/vanillaXml/localizations/eng.xml` describes sparring and asks the player to prepare Joy-Con controllers for two players, supporting the local two-player intent.
 
@@ -73,7 +80,7 @@ The English localization in `Assets/vanillaXml/localizations/eng.xml` describes 
 
 `EndPvpFightScreen` is declared at `dump.cs:393295-393365`, TypeDefIndex 8465. It contains a `FightResult`, player label/avatar, PvP result content, and presentation state. Relevant signatures are `Init(FightResult)` at `dump.cs:393338-393339`, RVA `0xE51220`; `ReplayHandler()` at `dump.cs:393341-393342`, RVA `0xE51A20`; `CloseHandler()` at `dump.cs:393344-393345`, RVA `0xE51760`; and `OnAnimationFinishButton()` at `dump.cs:393350-393351`, RVA `0xE51AD0`.
 
-Replay and close handlers are signature evidence for a local post-match rematch/return surface. Their exact behavior is not recovered.
+Both replay and close handlers have native pseudocode exports. The reviewed replay handler calls `Fight.RestartFight` and destroys the result-screen object. The close handler also contains conditional resistance/lottery presentation paths, so it must be interpreted in context before reusing its behavior.
 
 ## Current Eclipse side, input, and AI seams
 
@@ -145,4 +152,5 @@ The first implementation passed 46 native Unity checks recorded in
 `Temp/LocalVersusNative/result.txt`, including title boot, fighter input and movement,
 rounds, draws, rematches, results, teardown, and unchanged primary/backup save
 contents and write times. Those checks establish the tested Eclipse behavior;
-they do not recover the missing Switch method bodies or exercise physical buttons.
+they do not exercise physical buttons. Switch native recovery is established
+separately by the later IDA exports described at the top of this document.
