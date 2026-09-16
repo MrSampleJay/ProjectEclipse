@@ -1,19 +1,19 @@
 $ErrorActionPreference='Stop'
 $root=Split-Path -Parent $PSScriptRoot
 $source=Get-Content -Raw -LiteralPath (Join-Path $root 'Assets/Scripts/Assembly-CSharp/DistancePoint.cs')
-$fields=[regex]::Match($source,'(?s)public class DistancePoint\s*\{(.*?)\tpublic DistancePoint\(\)').Groups[1].Value
-$methods=foreach($name in @('UpdateNode','MHIDGNCKHON','PAPCNMHMBOO')){
- $match=[regex]::Match($source,"(?ms)^\t(?:public|protected|private) (?:void|PointNode) $name\(.*?^\t\}")
- if(!$match.Success){throw "Native cache method missing: $name"};$match.Value
-}
-if(!$fields){throw 'Native cache fields missing.'}
+$fields=[regex]::Match($source,'(?s)public class DistancePoint\s*\{.*?(?=\tpublic DistancePoint\(\))').Value
+$fields=[regex]::Replace($fields,'^public class DistancePoint\s*\{','')
+$methods=[regex]::Match($source,'(?ms)^\tpublic void UpdateNode\(.*?^\t\}').Value
+$methods+=[regex]::Match($source,'(?ms)^\tprotected PointNode MHIDGNCKHON\(.*?^\t\}').Value
+$methods+=[regex]::Match($source,'(?ms)^\tprivate PointNode PAPCNMHMBOO\(.*?^\t\}').Value
+if(!$fields -or !$methods){throw 'Native cache fields/methods missing.'}
 $fixture=Join-Path $root ('Temp/AnimationNodeRebind-'+[Guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Path $fixture | Out-Null
 $code=@'
 using System;
 using System.Collections.Generic;
 class ModelNode{}
-class ModelObject{public bool RequireCompleteNodeBindings;public ModelNode Node=new ModelNode();public ModelNode EGHIDHMENEF(string name)=>name=="foot"?Node:null;}
+class ModelObject{public ModelNode Node=new ModelNode(),Ranged;public ModelNode EGHIDHMENEF(string name)=>name=="foot"?Node:name=="Ranged-Node2_1"?Ranged:null;}
 class ModelType{public enum KEIDBIOIFGA{MODEL_NULL,MODEL_THIS,MODEL_OTHER,MODEL_OTHER_CHILD,MODEL_PARENT}}
 class ModelConditions{public bool FDELMAHAAJD,IsPlayer;public Position IHJJBIDMEMB=new Position();public class Position{public ModelObject CBAECAAKAIA;}}
 static class LLLOJBFMONN{public static void Error(string s,params object[] args){throw new Exception(s);}}
@@ -39,15 +39,25 @@ class DistancePoint{
   Check(p.MHIDGNCKHON(l).Node==child1.Node,"child identity 1");l.IHJJBIDMEMB.CBAECAAKAIA=child2;Check(p.MHIDGNCKHON(l).Node==child2.Node,"child identity 2");
   p.UpdateNode(next,true,null,false,next);Check(p.MHIDGNCKHON(l).Node==child2.Node,"main form change does not replace child cache");
   l.FDELMAHAAJD=false;
+  var ranged=new DistancePoint{HLGJJGHDEAP=JJIAEPLMBFF.OBJECT_NODES,Part="Ranged-Node2_1",OOFFOILONLO=ModelType.KEIDBIOIFGA.MODEL_THIS};
+  left.Ranged=new ModelNode();right.Ranged=new ModelNode();
+  ranged.UpdateNode(left,true,pivot,false,left);ranged.UpdateNode(right,false,null,false,right);
+  ranged.UpdateNode(child1,true,pivot,true,child1);
+  ranged.UpdateNode(next,true,null,false,next);
+  Check(ranged.MHIDGNCKHON(l).Node==null&&ranged.MHIDGNCKHON(l).CHEKEGGJDBL==null,"absent optional weapon point clears retired node and pivot instead of rejecting the form");
+  Check(ranged.MHIDGNCKHON(r).Node==right.Ranged&&p.MHIDGNCKHON(l).Node==next.Node,"optional node absence leaves opponent and present body node bindings intact");
+  ranged.UpdateNode(left,true,pivot,false,left);
+  Check(ranged.MHIDGNCKHON(l).Node==left.Ranged&&ranged.MHIDGNCKHON(l).CHEKEGGJDBL==pivot,"rollback restores an optional weapon binding");
+  l.FDELMAHAAJD=true;l.IHJJBIDMEMB.CBAECAAKAIA=child1;
+  Check(ranged.MHIDGNCKHON(l).Node==null&&ranged.MHIDGNCKHON(l).CHEKEGGJDBL==pivot,"missing optional child point stays isolated from main form and opponent");
+  l.FDELMAHAAJD=false;
   p.UpdateNode(new ModelObject{Node=null},true,null,false,null);Check(p.MHIDGNCKHON(l).Node==null,"native missing-node update is silent");
   p.UpdateNode(left,true,pivot,false,left);Check(p.MHIDGNCKHON(l).Node==left.Node,"restore after missing node");
-  bool rejected=false;try{p.UpdateNode(new ModelObject{Node=null,RequireCompleteNodeBindings=true},true,null,false,null);}catch(InvalidOperationException e){rejected=e.Message.Contains("foot");}
-  Check(rejected&&p.MHIDGNCKHON(l).Node==left.Node&&p.MHIDGNCKHON(l).CHEKEGGJDBL==pivot,"strict missing node rejects before replacing cached node/pivot");
-  Console.WriteLine("PASS: production DistancePoint cache fields/update/lookup; player/opponent rebinding, reverse restoration, pivot and child identity isolation. Missing native nodes silently bind null; complete rig validation remains required.");
+  Console.WriteLine("PASS: production DistancePoint cache fields/update/lookup; optional ranged-node absence clears retired caches, present body/opponent/child bindings stay isolated, reverse restoration and pivot identity. Named points may be absent for unused/shared moves; validation of a selected animation's required rig remains separate.");
  }
 }
 '@
-$code=$code.Replace('FIELDS',$fields).Replace('METHODS',($methods -join "`n"))
+$code=$code.Replace('FIELDS',$fields).Replace('METHODS',$methods)
 [IO.File]::WriteAllText((Join-Path $fixture 'Program.cs'),$code)
 [IO.File]::WriteAllText((Join-Path $fixture 'Test.csproj'),'<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><NoWarn>CS0649</NoWarn></PropertyGroup></Project>')
 dotnet run --project (Join-Path $fixture 'Test.csproj') --verbosity quiet

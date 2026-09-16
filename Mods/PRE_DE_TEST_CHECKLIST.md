@@ -647,11 +647,29 @@ Tools/TestVisualExamples.ps1 and Tools/TestModUiUnity.ps1 (-WithPreview renders
 standalone menu/HUD screenshots in the fixture directory). Controlled combat and
 isolated UI checks do not replace the full-game acceptance above.
 
-## Shifting Guardian (native acceptance pending)
+## Shifting Guardian (baseline native acceptance passed; broader cases pending)
+
+On 2026-09-16, `python3 Tools/TestCharacterForms.py --native` ran the real game
+in an independent Unity 6000.6.0f1 fixture. The registered Lua encounter changed
+`WEAPON_STAFF` to `WEAPON_STEEL_BATONS` at frame 180, retained 75% health and
+numeric/text variables, kept participant input/AI flags, reported Applied in the
+Lua HUD state, and stayed active/animated for 120 more combat frames. No captured
+combat exception or timer reset occurred. Evidence:
+`Temp/FormNative-oedb5l4p/NativeRuns/Run-q5834g5a/validation.log`.
+The remaining checklist covers additional user interaction and effect combinations.
+
 - Enable example.shifting-guardian, Apply & Restart; choose Shifting Guardian on map zone dots.
 - FIGHT: after three seconds, require both BATON FORM HUD and actual changed weapon/name.
 - Check combat continues, timer does not reset, and damaged health percentage is retained.
 - Pause before application: no paused-time swap; resume and check completion.
 - End round early or leave fight: pending request fails/cancels; HUD closes without errors.
 - Replay: countdown and transformation reset. Record any Failed message as a failed case.
+- With a native perk cooldown flag or variable modifier active, change forms repeatedly;
+  require the original remaining duration, current numeric/text values and exactly one
+  expiry on the active fighter. Check that retired-body cleanup does not erase variables.
 - Repeat with active modifiers; stolen magic/unresolved effects remain known unsupported cases.
+
+Automated form checks: `python3 Tools/TestCharacterForms.py` reuses the PowerShell
+fixtures' production method extractions and C# assertions with the installed Unity
+compiler and .NET 10 runtime. Evidence is retained under a unique `Temp/CharacterForms-*`
+directory. These controlled services are separate from the native run above.

@@ -11,8 +11,7 @@ using System.Collections.Generic;
 class Vector3f{public float X;public Vector3f(float x){X=x;}public Vector3f(Vector3f other){X=other.X;}}
 class Parameters{public bool IsPlayer,IsWinner;public int FCOALLOHJNP;public float CIDCNCDFONA=100,Health=100;public void GFNCMLFKBGP(float value){Health=value;}}
 class Model{public Parameters KMMJCHDKBDO=new Parameters();public List<Model> _Enemies=new List<Model>();public Model Owner;public Vector3f Position=new Vector3f(0);public int NFOOGKCGFAB=1;public object KDAHHIMLJGG=new object();public float KKMCHCNOHMB()=>KMMJCHDKBDO.Health;public Vector3f PLBNCDCFPML()=>Position;public int KFCNPADAMHA()=>NFOOGKCGFAB;public void SetModelPosition(Vector3f value){Position=value;}public Model BDJBNOPNCNB()=>Owner??this;public void CJNGMIMHFCC(Model enemy){_Enemies.Add(enemy);}}
-class EventAnimation{public enum EECEJKADLCK{EVENT_BIRTH}}
-class Selector{public object Pending;public void CheckEvent(EventAnimation.EECEJKADLCK kind,object data){Pending=data;}}
+class Selector{public object Pending;public void PrepareFormAnimation(Model model){Pending=model.KDAHHIMLJGG;}}
 class Fight{
 METHOD
 internal class PreparedFormModel:IDisposable{public Model Model;public int Disposals;public void Dispose(){if(Model!=null){Disposals++;Model=null;}}}
@@ -32,16 +31,16 @@ static void Main(){
  f.Drain();
  Check(callbacks==1&&result==null&&f.Commits==1&&p.Disposals==0,"committed body survives request completion");
  Check(next.KMMJCHDKBDO.Health==50&&next.KMMJCHDKBDO.FCOALLOHJNP==2&&next.Position.X==73&&next.Position!=old.Position&&next.NFOOGKCGFAB==-1,"boundary health fraction, round wins, position and facing");
- Check(next._Enemies.Count==1&&next._Enemies[0]==enemy&&f._SelectAnimation.Pending==next.KDAHHIMLJGG,"root enemy deduplication and deferred birth");
+ Check(next._Enemies.Count==1&&next._Enemies[0]==enemy&&f._SelectAnimation.Pending==next.KDAHHIMLJGG,"root enemy deduplication and deferred animation entry");
  f=new Fight{Reject=true};p=new PreparedFormModel{Model=new Model()};callbacks=0;
  Check(!f.QueuePreparedFighterForm(old,p,e=>callbacks++)&&p.Model!=null&&p.Disposals==0&&callbacks==0,"queue rejection leaves caller ownership");
  f=new Fight{FailCommit=true};p=new PreparedFormModel{Model=new Model()};result=null;
  f.QueuePreparedFighterForm(old,p,e=>result=e);f.Drain();
- Check(result is InvalidOperationException&&p.Disposals==1&&!f.Bound&&f._SelectAnimation.Pending==null,"failed commit restores registrations and drops birth before disposal");
+ Check(result is InvalidOperationException&&p.Disposals==1&&!f.Bound&&f._SelectAnimation.Pending==null,"failed commit restores registrations and drops animation entry before disposal");
  f=new Fight();p=new PreparedFormModel{Model=new Model()};result=null;
  f.QueuePreparedFighterForm(old,p,e=>result=e);f.Complete(new OperationCanceledException());
  Check(result is OperationCanceledException&&p.Disposals==1&&f.Commits==0,"boundary cancellation releases unclaimed body");
- Console.WriteLine("PASS: production prepared form request; deferred live-state capture, health ratio/wins/position, enemy links, birth queue, ownership, rejection, rollback and cancellation. Boundary/registration services controlled.");
+ Console.WriteLine("PASS: production prepared form request; deferred live-state capture, health ratio/wins/position, enemy links, animation entry, ownership, rejection, rollback and cancellation. Boundary/registration/animation services controlled.");
 }
 }
 '@

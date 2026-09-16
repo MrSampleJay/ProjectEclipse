@@ -5,6 +5,8 @@ learn Steady Guard at level 2, then upgrade it at levels 3, 4 and 5. Incoming da
 reduction changes from 10% to 20%, 30% and 40%, with matching descriptions.
 Other normal combat modifiers still apply. The generic icon is reused from the
 existing Phase 1 showcase; no DE art is required.
+The icon is defined by `assets/sprites/guard_icon.asset`, which references
+`sprites/guard.png` as its texture. Lua uses the descriptor's `sprites/guard_icon` ID.
 
 The example demonstrates ordinary Lua behavior with static upgrade parameters.
 The base saved parameter remains 0.9. The selected learned UpgradeLevel overlays

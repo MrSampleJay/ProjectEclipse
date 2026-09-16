@@ -196,9 +196,10 @@ public class DistancePoint
         ModelNode resolved = null;
         if (HLGJJGHDEAP == JJIAEPLMBFF.OBJECT_NODES)
         {
+            // Binding visits both fighters' candidate moves before selection.
+            // Equipment/child nodes can be absent on this body. Preserve the
+            // native nullable lookup and replace any retired body's cached node.
             resolved = OECPEDPMKCD.EGHIDHMENEF(Part);
-            if (resolved == null && OECPEDPMKCD.RequireCompleteNodeBindings)
-                throw new System.InvalidOperationException("Prepared form is missing animation node: " + Part);
         }
 		PointNode bKHJJICJODB = null;
 		if (PHADJMAONJG)

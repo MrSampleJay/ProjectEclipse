@@ -229,6 +229,12 @@ public class PerksStage : global::EventDispatcher<PerksStage.PerkEventStruct>
             case ActionType.ACTION_CHANGE_MODEL_COLOR:
             case ActionType.ACTION_SLOW_MODEL:
             case ActionType.ACTION_TURN_OFF_COLLISION:
+            // Flags live in the existing action/name/namespace records. Retain
+            // their timer and pending removal while moving the expiry target.
+            case ActionType.ACTION_FLAG:
+            // The applied variable dictionaries move with combat-state ownership.
+            // Keep this record without evaluating or writing its value again.
+            case ActionType.ACTION_VARIABLE:
             // These presentations belong to the fight/side; keep their existing
             // objects and timers. Expiry receives the replacement participant.
             case ActionType.ACTION_SHOW_ICONS:

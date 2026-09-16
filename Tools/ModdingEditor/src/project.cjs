@@ -1,6 +1,7 @@
 const fs=require('node:fs/promises'),path=require('node:path'),lua=require('luaparse');
 const api=require('../data/api.json');
 const MAX_FILES=10000;
+const MANIFEST_FIELDS=['schema','id','name','version','authors','entrypoint','capabilities'];
 const slash=s=>s.replaceAll('\\','/');
 const safe=s=>typeof s==='string'&&s.length>0&&!path.isAbsolute(s)&&!s.includes(':')&&!slash(s).split('/').some(p=>!p||p==='.'||p==='..');
 function stripComment(line){let quoted=false,escape=false;for(let i=0;i<line.length;i++){const c=line[i];if(escape){escape=false;continue;}if(c==='\\'&&quoted){escape=true;continue;}if(c==='"')quoted=!quoted;if(c==='#'&&!quoted)return line.slice(0,i);}return line;}
@@ -19,13 +20,13 @@ function manifest(text){
         const match=/^([a-z_]+)\s*=\s*(.+)$/.exec(clean);
         if(!match){issues.push({line:lineNo,message:'Expected a supported key = value or [[dependencies]] section.'});return;}
         const [,key,raw]=match;positions[key]??=lineNo;
-        const allowed=target===data?['schema','id','name','version','api','authors','entrypoint','capabilities']:['id','version'];
+        const allowed=target===data?MANIFEST_FIELDS:['id','version'];
         if(!allowed.includes(key)){issues.push({line:lineNo,message:`Unknown ${target===data?'manifest':'dependency'} field: ${key}.`});return;}
         if(Object.hasOwn(target,key)){issues.push({line:lineNo,message:`Duplicate field: ${key}.`});return;}
         try{target[key]=parseValue(raw);}catch(e){issues.push({line:lineNo,message:e.message});}
     });
     const issue=(key,message)=>issues.push({line:positions[key]??0,message});
-    for(const key of ['schema','id','name','version','api','authors','entrypoint','capabilities'])if(data[key]===undefined)issue(key,`Missing required manifest field: ${key}.`);
+    for(const key of MANIFEST_FIELDS)if(data[key]===undefined)issue(key,`Missing required manifest field: ${key}.`);
     if(data.schema!==1)issue('schema','schema must be 1.');
     if(typeof data.id!=='string'||!/^[-a-z0-9_.]+$/.test(data.id)||['core','sf2de'].includes(data.id))issue('id','Choose a unique lowercase mod ID; core and sf2de are reserved.');
     if(typeof data.name!=='string'||!data.name.trim())issue('name','name must be a nonempty string.');

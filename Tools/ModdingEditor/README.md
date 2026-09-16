@@ -288,3 +288,9 @@ and a warrior handle registered by the requesting mod. Native form acceptance
 and remaining effect cases are still under verification; see the combat callback
 reference before relying on this experimental workflow.
 The complete Shifting Guardian starter is in `templates/shifting-guardian/`; copy it to your Mods directory to inspect the result-driven transformation HUD.
+
+Form handover preserves perk cooldown flags and numeric/text variables, including
+their current values and remaining modifier timers. The request signature and
+result fields are unchanged. `python3 Tools/TestCharacterForms.py` runs the
+existing production-method form fixtures on Linux using the installed Unity
+compiler and .NET 10 runtime; it does not require PowerShell or start the game.

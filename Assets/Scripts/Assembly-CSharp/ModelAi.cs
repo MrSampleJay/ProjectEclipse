@@ -327,10 +327,17 @@ public class ModelAi
 
 	public InfoAnimation Render(Model FNKFIMEDNLP, int JLLPJLEDBPG)
 	{
-		if (!get_IsEnabled())
+		if (!get_IsEnabled() || FNKFIMEDNLP == null || _ModelAnimation.NNMAFFCCMHC() == null)
 		{
 			return null;
 		}
+        // A newly created controller can join while its opponent is already
+        // animating, before another animation-start notification arrives.
+        if (COKFBIJAFLH == null)
+        {
+            StartAnimationEnemy(FNKFIMEDNLP);
+            if (COKFBIJAFLH == null) return null;
+        }
 		ModelAnimation oJIEPADIEDE = FNKFIMEDNLP.OCPMJKIEPIG();
 		TacticFactors fJCBLOKOBBD = SetFactors(FNKFIMEDNLP);
 		if (oJIEPADIEDE.NMEEPBDJHMG())

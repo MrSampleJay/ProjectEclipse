@@ -707,6 +707,10 @@ namespace Nekki.SF2.GUI.Shop
 				bool active = PDHEEIPFFME.Count == 0;
 				_noItemsMessage.gameObject.SetActive(active);
 			}
+			if (_tryItemButton != null && PDHEEIPFFME.Count == 0)
+			{
+				_tryItemButton.gameObject.SetActive(false);
+			}
 			ShowSidePanels(PDHEEIPFFME.Count > 0);
 		}
 

@@ -1,8 +1,9 @@
 # Character forms: runtime integration requirements
 
-Inspected 2026-09-12. This is an implementation design based on current source,
-not a supported API or a completed E5 requirement. DE content conversion remains
-excluded. Retarget/export support does not imply runtime form switching.
+Originally inspected 2026-09-12; native checkpoint updated 2026-09-16. The experimental
+public request now passes the baseline Shifting Guardian native fight test.
+The sections below retain the integration history and its evidence; this does not
+close the broader E5 requirements. DE content conversion remains excluded.
 
 ## Verified native boundaries
 
@@ -120,13 +121,15 @@ iteration, using the established frame boundary.
 `Tools/TestAnimationNodeRebind.ps1` now exercises the actual DistancePoint cache
 fields, update and lookup methods with controlled node lookup. It confirms main
 player/opponent rebinding, reverse restoration including pivots, and independent
-child identities. Native missing-node lookup normally writes null silently.
-Prepared forms enable RequireCompleteNodeBindings, carried from Model to its
-ModelObject; DistancePoint now rejects a missing named node before altering its
-cache in that mode. Ordinary models retain their prior behavior. Tests verify
-the strict failure retains the previous node/pivot, and preparation/managed
-compilation pass. This covers DistancePoint bindings, not every animation, attack
-edge or physics reference; complete native replacement acceptance remains open.
+child identities. Native missing-node lookup writes null silently. The former
+form-only `RequireCompleteNodeBindings` check was removed on 2026-09-16 after a
+real fight rejected `Ranged-Node2_1` on a valid baton form. `Model.KMKOHGBJNBK` binds
+both participants' candidate animation/trigger sets before selection, so a point
+can belong to equipment or a child absent on the current body. Rebinding must clear
+the retired node/pivot instead of rejecting or retaining that stale reference.
+The regression now covers absent ranged points, present body nodes, other-side
+and child isolation, and reverse restoration. Required model-document preflight
+is retained. Validation of a selected animation's complete rig remains separate.
 
 `SelectAnimation.ReplaceModel` now also preserves the selection slot and refreshes
 the replacement's condition snapshot and eight subscriptions. It uses the removal
@@ -390,7 +393,7 @@ remaining action/history references and resource retirement still require work.
 QueuePreparedFighterForm now composes the existing preparation, frame boundary,
 registration/state/HUD transfer and commit. It captures health fraction, round
 wins, position and facing at application time, builds replacement enemy links,
-and queues native Birth selection for the next selector step. Accepted requests
+and prepares native idle/transition selection for the next model step. Accepted requests
 own their prepared body; rejection leaves ownership with the caller. Cancellation
 or application failure releases the unused preparation after registration rollback.
 
@@ -404,7 +407,7 @@ that the swap failed and disposing the active replacement.
 
 TestPreparedFormRequest and TestFormCommit pass extracted production orchestration
 with controlled native/boundary services. They cover live state capture, ownership,
-queued birth, rejection, cancellation, rollback, nested helper retirement and
+deferred entry animation, rejection, cancellation, rollback, nested helper retirement and
 post-commit cleanup failure. TestFormModifierTransfer now also checks the actual
 retirement-reference gate for active, queued, recent and namespace-only references.
 Form registration, boundary regressions and managed editor compilation pass.
@@ -459,3 +462,53 @@ These checks do not execute the body swap in a complete native fight. Active
 stolen magic and unresolved effect cases still require implementation/acceptance.
 The E5 milestone remains open; the Lua request/example is now a usable test entry
 point, not evidence of full character-form or overall roadmap completion.
+
+## Magic charge and parameter copy verification (2026-09-16)
+
+`Model.ExchangeFormCombatState` transfers the partial magic charge and ready-cast
+count with the ongoing fighter. The reversible exchange does not normalize charge,
+consume a cast or emit a magic-button event. `TestFormCombatState` reproduced the
+lost charge before the fix at `Temp/CharacterForms-d85gx04c`; the updated fixture
+executes native charge clamping, accumulation, readiness, cast consumption and UI
+event production. Charging and casting match an uninterrupted fighter through two
+swaps; rollback and retired-body clearing preserve both owners' state. The event
+sink is controlled, so these checks do not establish rendered magic-button behavior.
+
+`ModelParameters` copies now retain independently owned animation and perk exclusion
+lists. `TestFormParameterCopy` executes the production constructor, native rule
+application, animation filtering and equipment-perk aggregation for both sides.
+Six of eighteen checks failed before the copy fix; all eighteen pass afterward,
+including repeated copies and isolation from clearing the detached lists.
+
+This establishes copy integrity, not complete fight-rule inheritance. Fresh form
+projection still needs the current side's move/perk restrictions and rule-provided
+perks applied before native preparation and registration. The ordinary fight paths
+are `Fight`'s initial rule application and `GGJJDLNDFLF`; the new regression does not
+claim those steps run through `TryQueueCharacterForm`.
+
+## Baseline native form acceptance (2026-09-16)
+
+The isolated Unity 6000.6.0f1 game now passes `Tools/ValidateFormNative.cs`:
+registered Lua content starts the encounter, changes the enemy from staff to steel
+batons at frame 180, retains health ratio 0.75 and numeric/text perk variables,
+preserves participant control/AI eligibility, reports Applied in the Lua HUD state,
+and remains active with a selected animation for 120 later combat frames. The
+timer does not reset. The validator records any combat exception after initial
+body readiness and fails from its next update, so an advancing clock cannot hide
+aborted simulation. Run with `python3 Tools/TestCharacterForms.py --native`.
+
+This required three repairs demonstrated by failed native runs: normal fighter
+initialization for health/moves/default body; nullable rebinding of candidate move
+nodes absent from the new equipment; and entry-animation/AI observation startup.
+`PrepareFormAnimation` evaluates only the new body's animation-end candidates
+through the existing conditions, priority and transition machinery. It schedules
+the first frame before commit, without dispatching a round or trigger event.
+`ModelAi.Render` initializes its missing enemy observation through the recovered
+animation observer before reading statistics. The first frame executes normally
+after ownership commits.
+
+Passing evidence: `Temp/FormNative-oedb5l4p/NativeRuns/Run-q5834g5a/validation.log`
+(exit 0), with the exact command/input hashes beside it. Earlier failing runs
+remain in the same fixture. Native acceptance is limited to this enemy-form
+encounter and interval; pause/replay/round teardown, player forms, broader rigs,
+active stolen magic and current-side restriction/rule-perk inheritance remain open.

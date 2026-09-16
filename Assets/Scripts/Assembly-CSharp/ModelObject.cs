@@ -2,7 +2,6 @@ using System.Collections.Generic;
 
 public class ModelObject
 {
-    internal bool RequireCompleteNodeBindings;
 	private class ModelNodes
 	{
 		public ModelNode CHEKEGGJDBL;

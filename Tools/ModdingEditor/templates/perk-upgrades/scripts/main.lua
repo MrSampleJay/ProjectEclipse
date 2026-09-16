@@ -10,7 +10,7 @@ local perk = sf2.perks.register {
     id = "guard", behavior = guard, kind = sf2.perks.SINGLE,
     display_name = sf2.localization.key("name"),
     description = sf2.localization.key("base"),
-    icon = sf2.assets.sprite("sprites/guard"),
+    icon = sf2.assets.sprite("sprites/guard_icon"),
     upgrades = {
         { level = 1, description = sf2.localization.key("first"), parameters = { scale = 0.8 } },
         { level = 2, description = sf2.localization.key("second"), parameters = { scale = 0.7 } },

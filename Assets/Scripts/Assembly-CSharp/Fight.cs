@@ -23,7 +23,6 @@ public class Fight
             parameters.IBBALIJOJMC = SceneTypes.SceneFight;
             ModelLoader.RequireModelDocuments(parameters.MNPAALCFAKL);
             var model = new Model(parameters);
-            model.RequireCompleteNodeBindings = true;
             try
             {
                 model.MJNPBMOAFML().SetActive(false);
@@ -3664,6 +3663,7 @@ public class Fight
         try
         {
             var parameters = ModRuntime.BuildFormParameters(character, expected == _playerModel);
+            GameUtils.InitializeFormParameters(parameters, expected.KMMJCHDKBDO);
             var itemRules = expected == _playerModel ? _rulesInspector.GetPlayerItemRules() : _rulesInspector.GetEnemyItemRules();
             _rulesInspector.PrepareItemRules(itemRules);
             parameters.KMPACCIOOLE(itemRules, false, Math.Max(1, round.round));
@@ -3705,9 +3705,7 @@ public class Fight
                     replacement.CJNGMIMHFCC(enemy);
             using (var bindings = new FormRenderBindings(this, expected, replacement))
             {
-                // CheckEvent only queues selection. Its first-frame actions run
-                // in the next selector step, after ownership has committed.
-                _SelectAnimation.CheckEvent(EventAnimation.EECEJKADLCK.EVENT_BIRTH, replacement.KDAHHIMLJGG);
+                _SelectAnimation.PrepareFormAnimation(replacement);
                 CommitPreparedForm(expected, prepared, bindings);
             }
         }, failure =>

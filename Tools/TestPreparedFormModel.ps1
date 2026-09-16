@@ -26,7 +26,6 @@ static class ModelLoader{
 class Service{public bool Active=true;public void RemoveAllEventListener(){}public void Clear(){}public void Reset(){}public void SetActive(bool value){Active=value;}}
 static class Object{public static int Destroyed;public static void Destroy(Service s){Destroyed++;}}
 class Model{
- public bool RequireCompleteNodeBindings;
  public static Model Last;public static bool Fail;public ModelParameters Parameters;
  Service BNFCCKBIIDB=new Service(),_UnityObject=new Service(),_ModelConditions=new Service(),FEHOHLMIEBP=new Service();
  Service _ModelObject,_Collision,_Animation,_Physics,_Strike,HJOGNGDMAKJ,KDAHHIMLJGG;

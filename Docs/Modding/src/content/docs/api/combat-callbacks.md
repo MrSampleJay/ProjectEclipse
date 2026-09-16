@@ -393,15 +393,32 @@ end of their callback; retaining this result does not extend their lifetime.
 Only one request can be pending per fighter.
 
 The new character supplies the body, equipment and native tactic. The swap
-preserves health percentage, round wins, position, input timing, cooldowns,
-combat statistics and supported ongoing effects. It queues native birth
-selection, without restarting the fight/round or editing saved player equipment.
+preserves health percentage, round wins, position, input timing, cooldowns, magic charge and a ready cast,
+combat statistics, numeric/text perk variables and supported ongoing effects. It selects
+an eligible native idle or transition animation for the current round, without
+restarting the fight/round or editing saved player equipment. The first animation
+frame runs after the replacement commits.
 It does not resume an in-progress attack across different rigs.
 
-**Verification limit:** Lua/managed fixtures cover request lifetime and host
-handover; full-game form acceptance remains pending. Untransferred effects,
-including active stolen magic, can currently fail the request before retirement.
-Check the result rather than treating `queued` as success.
+Perk cooldown flags and variable modifiers keep their existing action and timer.
+Variables retain their current values, including changes made since the effect
+started; the swap does not evaluate their initial expressions again. Clearing
+the retired body cannot erase these values. The destination keeps its own
+rig and animation conditions. Failed handover restores both forms' prior state.
+
+Magic keeps both its partial charge and ready-cast state when equipment changes.
+The handover does not grant or consume a cast. Charging and cast consumption
+continue through the normal combat rules; failed handover restores the previous
+charge on each body.
+
+**Verified native case:** the Shifting Guardian encounter swaps its staff fighter
+to steel batons at frame 180, retains 75% health and numeric/text variables, reports
+`applied`, and continues animating for 120 further combat frames without restarting
+the timer. The isolated Unity check fails on combat exceptions as well as missing
+or inactive models. Other effect/loadout combinations still need native acceptance;
+active stolen magic can fail the request before retirement. Current-side move/perk
+restriction inheritance also remains unfinished. Check the result rather than
+treating `queued` as success.
 
 ```lua
 -- second_form is a warrior handle registered before these callbacks run.

@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Model : global::EventDispatcher<object>
 {
-    internal bool RequireCompleteNodeBindings;
 	private readonly Dictionary<string, int> _transientPerkFlags = new Dictionary<string, int>();
 
 	public void AddTransientPerkFlag(string name, int frames)
@@ -1566,7 +1565,13 @@ public class Model : global::EventDispatcher<object>
     // returned action before another simulation step restores both owners.
     internal System.Action TransferFormCombatState(Model replacement)
     {
-        if (replacement == null || replacement == this || DKFGOHCNIKL == null || replacement.DKFGOHCNIKL == null)
+        if (replacement == null || replacement == this || DKFGOHCNIKL == null || replacement.DKFGOHCNIKL == null ||
+            _ModelConditions == null || replacement._ModelConditions == null ||
+            ReferenceEquals(_ModelConditions, replacement._ModelConditions) ||
+            _ModelConditions.PerkVariables == null || replacement._ModelConditions.PerkVariables == null ||
+            _ModelConditions.PerkStringVariables == null || replacement._ModelConditions.PerkStringVariables == null ||
+            ReferenceEquals(_ModelConditions.PerkVariables, replacement._ModelConditions.PerkVariables) ||
+            ReferenceEquals(_ModelConditions.PerkStringVariables, replacement._ModelConditions.PerkStringVariables))
             throw new System.ArgumentException("Form combat state requires initialized distinct models.");
         ExchangeFormCombatState(replacement);
         bool restored = false;
@@ -1581,11 +1586,22 @@ public class Model : global::EventDispatcher<object>
     private void ExchangeFormCombatState(Model other)
     {
         FEHOHLMIEBP.ExchangeFormInput(other.FEHOHLMIEBP);
+        // Variables belong to the ongoing fighter. Exchange their ownership so
+        // retiring this body's conditions cannot clear the active form's state.
+        // Rig nodes, equipment and animation conditions stay with their bodies.
+        (_ModelConditions.PerkVariables, other._ModelConditions.PerkVariables) =
+            (other._ModelConditions.PerkVariables, _ModelConditions.PerkVariables);
+        (_ModelConditions.PerkStringVariables, other._ModelConditions.PerkStringVariables) =
+            (other._ModelConditions.PerkStringVariables, _ModelConditions.PerkStringVariables);
         (_Statistics, other._Statistics) = (other._Statistics, _Statistics);
         (DKFGOHCNIKL, other.DKFGOHCNIKL) = (other.DKFGOHCNIKL, DKFGOHCNIKL);
         DKFGOHCNIKL.RebindFormOwner(this);
         other.DKFGOHCNIKL.RebindFormOwner(other);
         (MDFEHKBOHEL, other.MDFEHKBOHEL) = (other.MDFEHKBOHEL, MDFEHKBOHEL);
+        // Charge and the ready cast belong to the fighter, independently of the
+        // new magic item. Do not normalize or emit cast/UI events during binding.
+        (NJDNNFJAFBG, other.NJDNNFJAFBG) = (other.NJDNNFJAFBG, NJDNNFJAFBG);
+        (MJEJFBHOJKB, other.MJEJFBHOJKB) = (other.MJEJFBHOJKB, MJEJFBHOJKB);
         (HCPHOJKFIDM, other.HCPHOJKFIDM) = (other.HCPHOJKFIDM, HCPHOJKFIDM);
         (JMHJDHLBHLK, other.JMHJDHLBHLK) = (other.JMHJDHLBHLK, JMHJDHLBHLK);
         (LGLIHLJPDIO, other.LGLIHLJPDIO) = (other.LGLIHLJPDIO, LGLIHLJPDIO);
@@ -2480,7 +2496,6 @@ public class Model : global::EventDispatcher<object>
 	{
 		Clear();
 		_ModelObject = new ModelObject();
-        _ModelObject.RequireCompleteNodeBindings = RequireCompleteNodeBindings;
 		_ModelObject.set_Model(this);
 		ModelLoader.Load(_ModelObject, NIKHAICFGNM);
 		_Physics = new ModelPhysics(_ModelObject);

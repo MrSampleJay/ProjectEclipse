@@ -62,6 +62,13 @@ test('manifest checks unsupported fields, unsafe paths, duplicates, and missing 
     for (const bad of ['../x', '/x', 'C:\\x', 'a/../x', 'a//x']) assert.equal(p.safe(bad), false);
     assert.equal(p.parseValue('["a", "b",]')[1], 'b');
 });
+test('current manifests validate and removed api metadata is rejected', async () => {
+    const text = await fs.readFile(path.join(template, 'mod.toml'), 'utf8');
+    assert.deepEqual(p.manifest(text).issues, []);
+    assert.deepEqual(p.manifest('api="1.0.0"\n' + text).issues, [
+        { line: 0, message: 'Unknown manifest field: api.' },
+    ]);
+});
 test('scaffold creates a valid mod, refuses overwrite, and prevents path escape', async t => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), 'eclipse-editor-'));
     t.after(() => fs.rm(root, { recursive: true, force: true }));
@@ -98,11 +105,13 @@ test('core fight patch example validates with registered rule handles', async ()
     assert(api.types.RewardDropPatch.fields.reward);
 });
 
-test('perk upgrade example validates its assets, localization and branch definitions', async () => {
-    const directory = path.resolve(__dirname, '../../../Mods/example.perk-upgrades');
-    const mod = await p.indexMod(directory);
-    assert.deepEqual(mod.issues, []);
-    assert.deepEqual(p.analyze(await fs.readFile(path.join(directory, 'scripts/main.lua'), 'utf8'), mod).issues, []);
+test('perk upgrade example and starter validate assets, localization and branch definitions', async () => {
+    for (const relative of ['../../../Mods/example.perk-upgrades', '../templates/perk-upgrades']) {
+        const directory = path.resolve(__dirname, relative);
+        const mod = await p.indexMod(directory);
+        assert.deepEqual(mod.issues, [], relative);
+        assert.deepEqual(p.analyze(await fs.readFile(path.join(directory, 'scripts/main.lua'), 'utf8'), mod).issues, [], relative);
+    }
 });
 
 test('outgoing rule example validates its callback and capability', async () => {

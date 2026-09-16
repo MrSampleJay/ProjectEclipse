@@ -2586,3 +2586,96 @@ Connected active health-effect transfer alongside attribute effects via Transfer
   27 editor tests, LuaLS, VS Code, managed compile and wiki build/link checks.
 - Full native fight/body-swap acceptance and remaining effects are still open.
   No overall milestone/percentage completion claim; DE port remains deferred.
+
+### 2026-09-16: resume native character forms on Linux
+
+- `Model.ExchangeFormCombatState` now transfers ownership of numeric/text perk
+  variable dictionaries. The prepared body retains its own rig/animation conditions;
+  retired-body reset cannot clear the live variables. Rollback restores both owners.
+- `PerksStage` transfers active `ModFlag` and variable modifier references while
+  retaining action, container and namespace identity, original timers, current values
+  and expiry attribution. Expressions are not evaluated again. Stolen magic and
+  unresolved namespace-only references remain guarded.
+- New regressions failed before the fixes: variable lookup after form transfer
+  (`Temp/CharacterForms-ph67w0s2`), active flag retirement
+  (`Temp/PerkFlagBaseline-5osattih`), and active variable retirement
+  (`Temp/CharacterForms-7ssnevrp`). The final flag/variable fixture passes 160 checks.
+- Added `Tools/TestCharacterForms.py` to run the existing PowerShell fixtures'
+  extracted production C# with the installed Unity compiler and .NET 10 runtime.
+  It also launches the native acceptance fixture in an independent project copy
+  and supports explicit source synchronization into a retained fixture with separate
+  evidence for each rerun. No original-project Unity launch is needed.
+- The first real Unity 6000.6.0f1 playtest reached Shifting Guardian, then failed
+  with `Form health pools must be positive` in `Temp/FormNative-oedb5l4p/validation.log`.
+  Raw warrior projection skipped the normal fighter initialization. The form path
+  now reuses `GameUtils.CDCAOHHFNPL` through `InitializeFormParameters` before applying
+  round item rules, preparing health, moves and body defaults while preserving the
+  current participant's player/control/AI role.
+- Editor validation exposed two remaining compatibility-cleanup regressions:
+  `project.cjs` still required the removed manifest `api` field, and
+  `example.perk-upgrades` passed a raw PNG to `sf2.assets.sprite`. The validator now
+  follows `ModManifestReader`; the example uses an explicit `guard_icon.asset`
+  descriptor referencing the unchanged texture. All 28 editor contract tests pass.
+- The next native run passed health initialization and exposed a second blocker:
+  a form-only blanket node check rejected `Ranged-Node2_1` from candidate moves.
+  `DistancePoint` now retains the recovered nullable-cache semantics, including
+  clearing retired references for absent equipment/child nodes. Removed the unused
+  strict-mode plumbing; required model documents remain checked. The same failure
+  was reproduced by `TestAnimationNodeRebind` before the fix at
+  `Temp/CharacterForms-c21sntx0`. Native failure evidence is retained separately at
+  `Temp/FormNative-oedb5l4p/NativeRuns/Run-uyoh1vdk/validation.log`.
+- `TestFormInitialization` executes the production initializer, health fill/clamp,
+  model-path/move preparation, role accessors and actual request orchestration.
+  It passes 258 checks; the same fixture using the previous request fails before
+  item-rule preparation. Projection, body construction and queue services are
+  controlled, so the native fight fixture remains a separate acceptance check.
+
+### 2026-09-16: retain magic state, copy restrictions and repair editor starter
+
+- `Model.ExchangeFormCombatState` now retains partial magic charge and a ready cast.
+  Its existing rollback restores both states without casting or emitting UI events.
+  `TestFormCombatState` failed before the fix in `Temp/CharacterForms-d85gx04c`;
+  native charge/cast methods now match uninterrupted combat through repeated swaps,
+  normal charge completion, one cast consumption, retirement and rollback.
+- `ModelParameters` now copies its animation/perk exclusion lists independently.
+  `TestFormParameterCopy` failed six checks before the fix and passes all eighteen
+  afterward. It runs the actual copy, rule application and animation/perk consumers.
+  Applying current side restrictions and rule-provided perks to a fresh form remains
+  separate work; preserving an already populated list does not implement that step.
+- The Perk Upgrades editor starter now uses `sprites/guard_icon` with an explicit
+  sprite descriptor, matching the shipped example. The editor regression validates
+  both locations so the starter cannot silently drift back to a texture-only asset.
+- Validation: all 14 extracted form fixtures pass in `Temp/CharacterForms-jj4nuvu2`;
+  managed editor build passes with 0 errors (142 warnings) in
+  `Temp/FormStateBuild-h4wdy_gt`; editor contract check and all 28 tests pass.
+  Real LuaLS and VS Code integration checks also passed during this session.
+  The wiki build checks 138 public members and 3,968 local links/assets across 47
+  pages. These fixture results do not claim a complete native effect/form playtest.
+
+### 2026-09-16: native form animation entry
+
+- After the health and optional-node fixes, the isolated game switched from
+  `WEAPON_STAFF` to `WEAPON_STEEL_BATONS` at frame 180 with health ratio 0.75.
+  Continued simulation then threw from `ModelAi.SetFactors` because its newly
+  created observer had no enemy animation. The old Birth queue could not establish
+  ordinary fighter entry either. Failure evidence is retained in
+  `Temp/FormNative-oedb5l4p/NativeRuns/Run-vdfbkjmx/validation.log`.
+- `SelectAnimation.PrepareFormAnimation` now uses the replacement's native
+  animation-end candidates, conditions, priorities and transitions to schedule
+  entry into the ongoing round. Only that body's animations are selected; no
+  trigger or round-stage event is dispatched. Missing eligible entry rejects
+  before commit. First-frame actions run during the next normal model update.
+- `ModelAi.Render` waits for its own first animation and initializes the current
+  opponent observation when no animation-start event has reached the new controller.
+  This uses the recovered observation path before factor/statistics lookup.
+- Native validation now captures combat exceptions after initial body readiness
+  and reports them from its next editor update. Advancing the frame counter while
+  simulation throws can no longer satisfy the continued-combat acceptance check.
+- The corrected native run passed with exit 0:
+  `Temp/FormNative-oedb5l4p/NativeRuns/Run-q5834g5a/validation.log`.
+  It verifies actual staff-to-steel-baton replacement at frame 180, health ratio
+  0.75, numeric/text variables, input/AI eligibility, Applied Lua HUD state and
+  active animation for 120 later combat frames without timer reset. The combat
+  exception guard was active. This closes the baseline Shifting Guardian case;
+  active stolen magic, current-side rule inheritance, player-form and broader
+  effect/rig acceptance remain separate work.

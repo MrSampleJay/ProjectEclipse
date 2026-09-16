@@ -1740,6 +1740,20 @@ public static class GameUtils
 		return kIKOGDEPGHB;
 	}
 
+    internal static ModelParameters InitializeFormParameters(ModelParameters parameters, ModelParameters current)
+    {
+        if (parameters == null || current == null || ReferenceEquals(parameters, current))
+            throw new ArgumentException("Form initialization requires distinct prepared and current parameters.");
+        // Raw warrior projection has no fight health pool or move selection. Use
+        // the same preparation as ordinary fighters before applying round rules.
+        CDCAOHHFNPL(parameters);
+        // Participant ownership and input eligibility belong to the live slot;
+        // a warrior template may otherwise turn a player form into an AI fighter.
+        parameters.IsPlayer = current.IsPlayer;
+        parameters.ABAPAIEBNGK = current.ABAPAIEBNGK;
+        parameters.EEGMBGBLLIF = current.EEGMBGBLLIF;
+        return parameters;
+    }
 	private static ModelParameters CDCAOHHFNPL(ModelParameters JCICKLIMBEF)
 	{
 		if (JCICKLIMBEF.PILJCAOFAED == null)

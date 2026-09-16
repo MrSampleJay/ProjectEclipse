@@ -141,6 +141,33 @@ public class SelectAnimation
         return true;
     }
 
+    internal void PrepareFormAnimation(Model model)
+    {
+        int index = BPIFJBJBKHA.IndexOf(model);
+        if (model == null || index < 0 || model.FHBLLPCEAHG() != null || model.IBIDGACDJNF())
+            throw new System.InvalidOperationException("Form animation requires an unstarted registered body.");
+        UpdateConditions();
+        var selections = new List<List<SelectInfo>>();
+        foreach (var participant in BPIFJBJBKHA) selections.Add(new List<SelectInfo>());
+        // A main fighter enters the ongoing round through the same eligible
+        // idle/transition moves used after animation end. Birth belongs to helper
+        // models. Select only this body, without dispatching triggers or a round event.
+        var entry = new EventModelDelayed
+        {
+            Type = EventAnimation.EECEJKADLCK.EVENT_ANIMATION_END,
+            KJDFJPBIGJC = model,
+            GAIBPAGPEGK = model.EGGEACCDAEK()
+        };
+        CheckAnimations(entry, model, model.CEOOLFLLIMC.NCNDKFCPLEH(entry.Type), index, selections);
+        if (selections[index].Count == 0)
+            throw new System.InvalidOperationException("Form has no eligible animation for entering the current round.");
+        // Native priority/transition selection only schedules the owned body's
+        // animation. Its first-frame actions run in Model.Render after commit.
+        PlayAnimation(model, selections[index]);
+        if (!model.IBIDGACDJNF())
+            throw new System.InvalidOperationException("Form entry did not schedule an animation.");
+    }
+
     // Only for a synchronous form exchange between simulation steps. The event
     // records themselves are not mutated by ReplaceModel, so retain their identity.
     internal System.Action CapturePendingEvents()
