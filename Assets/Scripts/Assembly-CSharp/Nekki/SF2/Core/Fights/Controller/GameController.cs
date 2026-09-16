@@ -54,7 +54,11 @@ namespace Nekki.SF2.Core.Fights.Controller
 
 		private bool JKDKBHNKCPH;
 
-		private FightGamepadInput _gamepadInput;
+			private FightGamepadInput _gamepadInput;
+			private FightGamepadInput _localVersusPlayerTwoInput;
+			private bool _localVersusInputEnabled;
+			private bool _localVersusKeyboardPlayerOne;
+			private bool _hasFocus = true;
         private readonly Eclipse.Modding.ModUiControlGate<(FightCID, int)> _modUiControls =
             new Eclipse.Modding.ModUiControlGate<(FightCID, int)>();
 
@@ -80,21 +84,62 @@ namespace Nekki.SF2.Core.Fights.Controller
 
 		private void OnDestroy()
 		{
+			ReleaseLocalVersusInputs();
 			_Current = null;
 		}
+
+			private void OnApplicationFocus(bool hasFocus)
+			{
+				_hasFocus = hasFocus;
+				if (!hasFocus)
+				{
+					ReleaseLocalVersusInputs();
+				}
+			}
+
+			private void OnDisable()
+			{
+				ReleaseLocalVersusInputs();
+			}
 
 		private void Start()
 		{
 		}
 
-		private void Update()
-		{
-            SyncModUiCapture();
-			NBMONJPAMHI.Render();
-			if (JKDKBHNKCPH)
+			private void Update()
 			{
-				GetGamepadInput().Poll(!AssemblyController.JONCCPLEIBE().DBJOHGNPDDO());
+            SyncModUiCapture();
+				if (!_localVersusInputEnabled) NBMONJPAMHI.Render();
+				if (JKDKBHNKCPH)
+			{
+				if (_localVersusInputEnabled)
+				{
+						if (!_hasFocus) return;
+						GetGamepadInput().Poll(_localVersusKeyboardPlayerOne,
+							_localVersusKeyboardPlayerOne, !_localVersusKeyboardPlayerOne);
+					GetLocalVersusPlayerTwoInput().Poll(false);
+				}
+				else
+				{
+					GetGamepadInput().Poll(!AssemblyController.JONCCPLEIBE().DBJOHGNPDDO());
+				}
 			}
+		}
+
+		public void ConfigureLocalVersusInput(bool enabled, bool keyboardPlayerOne)
+		{
+			if (_localVersusInputEnabled == enabled && _localVersusKeyboardPlayerOne == (enabled && keyboardPlayerOne))
+			{
+				return;
+			}
+			ReleaseLocalVersusInputs();
+			_localVersusInputEnabled = enabled;
+				_localVersusKeyboardPlayerOne = enabled && keyboardPlayerOne;
+				_localVersusPlayerTwoInput = null;
+				_hasFocus = Application.isFocused;
+				// Local input owns complete keyboard snapshots, including key releases.
+				// The campaign's legacy keyboard/debug dispatcher remains separate.
+				NBMONJPAMHI.DCHJDPCEODD = JKDKBHNKCPH && !enabled;
 		}
 
 		public void Init(bool DFDCOMCCEEP = true, bool GJHOPBBMHDA = true, bool BIMHGOMADEJ = true)
@@ -337,17 +382,34 @@ namespace Nekki.SF2.Core.Fights.Controller
 				GetGamepadInput().ReleaseAll();
 			}
 			JKDKBHNKCPH = value;
-			NBMONJPAMHI.DCHJDPCEODD = value;
+				NBMONJPAMHI.DCHJDPCEODD = value && !_localVersusInputEnabled;
+			if (!value)
+			{
+				ReleaseLocalVersusInputs();
+			}
 		}
 
-		private FightGamepadInput GetGamepadInput()
-		{
-			if (_gamepadInput == null)
+			private FightGamepadInput GetGamepadInput()
 			{
-				_gamepadInput = new FightGamepadInput(IsQuadrantEnabled, SendGamepadControlEvent);
+				if (_gamepadInput == null)
+					_gamepadInput = new FightGamepadInput(IsQuadrantEnabled, SendGamepadControlEvent);
+				return _gamepadInput;
 			}
-			return _gamepadInput;
-		}
+
+			private FightGamepadInput GetLocalVersusPlayerTwoInput()
+			{
+				if (_localVersusPlayerTwoInput == null)
+					_localVersusPlayerTwoInput = new FightGamepadInput(control => true,
+						(eventType, control) => EmitControl(eventType, new CBBEIGACPPD { Index = 1, KMOPCKPBHIA = control }),
+						_localVersusKeyboardPlayerOne ? GamePad.GGAKHLLMPMM.One : GamePad.GGAKHLLMPMM.Two);
+				return _localVersusPlayerTwoInput;
+			}
+
+			private void ReleaseLocalVersusInputs()
+			{
+				_gamepadInput?.ReleaseAll();
+				_localVersusPlayerTwoInput?.ReleaseAll();
+			}
 
 		private void SendGamepadControlEvent(int eventType, FightCID control)
         {

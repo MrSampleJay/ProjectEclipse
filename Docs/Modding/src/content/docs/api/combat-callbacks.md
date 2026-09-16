@@ -42,6 +42,17 @@ A failing callback is logged and isolated; successful gameplay operations that
 ran before the error are not undone. A callback's return value is not a way to
 change damage; use the explicit [fighter methods](../fighter/).
 
+Local Versus uses detached standard loadouts and does not dispatch these combat
+behavior callbacks. Mod content projection remains loaded, but the first local
+multiplayer version keeps its match lifecycle isolated from campaign/mod combat
+events. This is a documented implementation boundary, not a claim that all mods
+are disabled during Local Versus.
+
+Local bootstrap also uses a temporary cloned profile document. Any profile changes
+or mod-state migrations made against that local profile are discarded and are not
+written into the campaign save. Content mods and their projected definitions remain
+loaded for the runtime.
+
 ## on_fight_begin
 
 Once when the first round begins, after ordinary perk initialization.

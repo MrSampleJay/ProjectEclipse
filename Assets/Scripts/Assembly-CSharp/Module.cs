@@ -108,6 +108,21 @@ public class Module : global::EventDispatcher<object>
 		return true;
 	}
 
+    internal void OpenLocalVersus(Eclipse.Multiplayer.LocalVersusMatch match)
+    {
+        if (match == null || !Eclipse.Multiplayer.LocalVersusSession.IsActive)
+            throw new InvalidOperationException("Local versus must own the scene transition.");
+        DMCJGOMOJEF.HKJFKDEEIDJ = DMCJGOMOJEF.ScreenType;
+        DMCJGOMOJEF.ScreenType = ScreenType.ModuleFight;
+        DMCJGOMOJEF.Data = match;
+        DMCJGOMOJEF.Dlg = null;
+        CallEvent(3, DMCJGOMOJEF.HKJFKDEEIDJ);
+        DialogsManager.HNEGECPBALO();
+        SceneManagerSF.Load(ScreenType.ModuleFight);
+        CallEvent(4, ScreenType.ModuleFight);
+        CallEvent(0, DMCJGOMOJEF);
+    }
+
 	public void OAAFAINKKMI()
 	{
 		CallEvent(3, DMCJGOMOJEF.HKJFKDEEIDJ);
@@ -210,6 +225,12 @@ public class Module : global::EventDispatcher<object>
 
 	public void OJFNMDGIDJN()
 	{
+		if (Eclipse.Multiplayer.LocalVersusSession.IsActive)
+		{
+			CallEvent(1, DMCJGOMOJEF.ScreenType);
+			CallEvent(2, 0);
+			return;
+		}
 		if (DMCJGOMOJEF.ScreenType != ScreenType.ModulePreloader)
 		{
 			if (DMCJGOMOJEF.Dlg != null)

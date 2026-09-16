@@ -1754,7 +1754,16 @@ public static class GameUtils
         parameters.EEGMBGBLLIF = current.EEGMBGBLLIF;
         return parameters;
     }
-	private static ModelParameters CDCAOHHFNPL(ModelParameters JCICKLIMBEF)
+    internal static void InitializeLocalVersusParameters(ModelParameters parameters, bool playerOne)
+    {
+        if (parameters == null) throw new ArgumentNullException(nameof(parameters));
+        CDCAOHHFNPL(parameters);
+        parameters.IsPlayer = playerOne;
+        parameters.ABAPAIEBNGK = true;
+        parameters.EEGMBGBLLIF = false;
+    }
+
+		private static ModelParameters CDCAOHHFNPL(ModelParameters JCICKLIMBEF)
 	{
 		if (JCICKLIMBEF.PILJCAOFAED == null)
 		{
@@ -1835,8 +1844,10 @@ public static class GameUtils
 		return null;
 	}
 
-	public static Fight ABAIHGFPHMO(object data, PreFight preFight = null, GameController LPGANKOAPJL = null)
-	{
+		public static Fight ABAIHGFPHMO(object data, PreFight preFight = null, GameController LPGANKOAPJL = null)
+		{
+			if (data is Eclipse.Multiplayer.LocalVersusMatch localMatch)
+				return localMatch.CreateFight(preFight, LPGANKOAPJL);
 		FightList jDIPBIHBGPF = (FightList)data;
 		ModelParameters kIKOGDEPGHB = null;
 		kIKOGDEPGHB = LBMPHBNJMGG().Clone();

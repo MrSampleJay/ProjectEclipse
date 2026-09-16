@@ -9,6 +9,7 @@ namespace Eclipse.Input
 
 		private readonly Func<FightCID, bool> _isControlEnabled;
 		private readonly Action<int, FightCID> _emitControlEvent;
+		private readonly GamePad.GGAKHLLMPMM _player;
 
 		private FightCID _direction = FightCID.QuadrantZero;
 		private bool _punchPressed;
@@ -17,10 +18,12 @@ namespace Eclipse.Input
 		private bool _magicPressed;
 		private bool _chargePressed;
 
-		public FightGamepadInput(Func<FightCID, bool> isControlEnabled, Action<int, FightCID> emitControlEvent)
+		public FightGamepadInput(Func<FightCID, bool> isControlEnabled, Action<int, FightCID> emitControlEvent,
+			GamePad.GGAKHLLMPMM player = GamePad.GGAKHLLMPMM.One)
 		{
 			_isControlEnabled = isControlEnabled;
 			_emitControlEvent = emitControlEvent;
+			_player = player;
 		}
 
 		public void Reset()
@@ -33,10 +36,11 @@ namespace Eclipse.Input
 			_chargePressed = false;
 		}
 
-		public void Poll(bool keyboardMovement = true)
-		{
-			Vector2 dpad = GamePad.CNNMBBLLGNE(GamePad.LCNPGEANNDP.Dpad, GamePad.GGAKHLLMPMM.One, true);
-			Vector2 leftStick = GamePad.CNNMBBLLGNE(FightControllerBindings.MovementStick, GamePad.GGAKHLLMPMM.One, true);
+			public void Poll(bool keyboardMovement = true, bool keyboardActions = false, bool gamepadEnabled = true)
+			{
+				gamepadEnabled = gamepadEnabled && IsConnected(_player);
+				Vector2 dpad = gamepadEnabled ? GamePad.CNNMBBLLGNE(GamePad.LCNPGEANNDP.Dpad, _player, true) : Vector2.zero;
+				Vector2 leftStick = gamepadEnabled ? GamePad.CNNMBBLLGNE(FightControllerBindings.MovementStick, _player, true) : Vector2.zero;
 			Vector2 movement = dpad.sqrMagnitude >= DeadZone * DeadZone ? dpad : leftStick;
 			// Resolve both axes together; opposite keys cancel, and releasing one
             // half of a diagonal immediately restores the remaining direction.
@@ -49,16 +53,25 @@ namespace Eclipse.Input
             }
             SetDirection(GetDirection(movement));
 
-			SetButton(ref _punchPressed,
-				FightControllerBindings.IsPressed(FightControllerBindings.Get(0)), FightCID.Punch);
-			SetButton(ref _kickPressed,
-				FightControllerBindings.IsPressed(FightControllerBindings.Get(1)), FightCID.Kick);
-			SetButton(ref _rangedPressed,
-				FightControllerBindings.IsPressed(FightControllerBindings.Get(2)), FightCID.MissileButton);
-			SetButton(ref _magicPressed,
-				FightControllerBindings.IsPressed(FightControllerBindings.Get(3)), FightCID.MagicButton);
-            SetButton(ref _chargePressed, FightControllerBindings.IsPressed(FightControllerBindings.Get(4)), FightCID.RaidChargeButton);
-		}
+				SetButton(ref _punchPressed, ReadButton(0, KeyCode.O, keyboardActions, gamepadEnabled), FightCID.Punch);
+				SetButton(ref _kickPressed, ReadButton(1, KeyCode.P, keyboardActions, gamepadEnabled), FightCID.Kick);
+				SetButton(ref _rangedPressed, ReadButton(2, KeyCode.K, keyboardActions, gamepadEnabled), FightCID.MissileButton);
+				SetButton(ref _magicPressed, ReadButton(3, KeyCode.L, keyboardActions, gamepadEnabled), FightCID.MagicButton);
+				SetButton(ref _chargePressed, ReadButton(4, KeyCode.J, keyboardActions, gamepadEnabled), FightCID.RaidChargeButton);
+			}
+
+			public static bool IsConnected(GamePad.GGAKHLLMPMM player)
+			{
+				var devices = UnityEngine.Input.GetJoystickNames();
+				int index = (int)player - 1;
+				return index >= 0 && index < devices.Length && !string.IsNullOrEmpty(devices[index]);
+			}
+
+			private bool ReadButton(int action, KeyCode key, bool keyboard, bool gamepad)
+			{
+				return (keyboard && UnityEngine.Input.GetKey(FightKeyBindings.Get(key))) ||
+					(gamepad && FightControllerBindings.IsPressed(FightControllerBindings.Get(action), _player));
+			}
 
 		public void ReleaseAll()
 		{

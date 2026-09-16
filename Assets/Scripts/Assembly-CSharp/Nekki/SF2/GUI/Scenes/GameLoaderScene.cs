@@ -73,6 +73,7 @@ namespace Nekki.SF2.GUI.Scenes
 			HOCNNFGOMHL = PIHEPFHMJHJ;
             if (HOCNNFGOMHL) { Stop(); HOCNNFGOMHL = false; }
             Eclipse.UI.GameSessionRestart.ArrivedAtTitle();
+            Eclipse.Multiplayer.LocalVersusSession.ArrivedAtTitle();
 			EOKFGFADIIH = false;
 			PIHEPFHMJHJ = true;
 			get_Logo().SetActive(false);
@@ -143,7 +144,8 @@ namespace Nekki.SF2.GUI.Scenes
 			FCFFELHCEEA.AddModule(new AntichitingModule());
 			FCFFELHCEEA.AddModule(new AttachFileModule());
 			FCFFELHCEEA.AddModule(new InitializationModule());
-			FCFFELHCEEA.AddModule(new IntroModule(this));
+			if (!Eclipse.Multiplayer.LocalVersusSession.IsActive)
+				FCFFELHCEEA.AddModule(new IntroModule(this));
 			FCFFELHCEEA.AddModule(new ParseModule());
 			FCFFELHCEEA.AddModule(new LoginModule());
 		}

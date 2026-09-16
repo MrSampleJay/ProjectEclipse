@@ -7,6 +7,15 @@ Declare `story.events` in your manifest.
 Other operations performed by your callback still require their own capabilities.
 See Battle results below for the `battle_result` event.
 
+Local Versus does not dispatch campaign story callbacks, including battle-result
+progression, and does not award campaign rewards. Its fighters use detached
+standard loadouts. Mod content projection is still loaded, so this should not be
+read as a general mod-disable mode. The public story API itself is unchanged.
+Local bootstrap uses a temporary cloned profile document. Profile changes and mod
+state migrations made while that local profile is active are discarded rather
+than persisted to the campaign save, including delayed save/authentication work
+that arrives after returning to the title screen.
+
 `purchase` observes native purchase processing, not every grant or inventory change.
 `enchantment` observes native forge completion. Callbacks run after native quest
 evaluation returns. They cannot veto the action or replace its result; returning

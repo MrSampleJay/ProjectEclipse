@@ -225,10 +225,12 @@ namespace Eclipse.UI
                 new Rect(0, 368f / 1024, 610f / 1024, 489f / 1024));
             Label(page, "PROJECT ECLIPSE", 405, 211, 470, 28, 16, Paper, TextAnchor.MiddleCenter);
             Button(page, "CAMPAIGN", 405, 280, 470, 60, BeginCampaign);
-            var multiplayer = Button(page, "MULTIPLAYER", 405, 355, 470, 60, null);
-            multiplayer.interactable = false;
-            controls.Remove(multiplayer);
-            Label(page, "COMING SOON", 405, 408, 470, 20, 12, Ink, TextAnchor.MiddleCenter);
+            Button(page, "MULTIPLAYER", 405, 355, 470, 60, () =>
+            {
+                Eclipse.Multiplayer.LocalVersusSession.RequestEntry();
+                BeginCampaign();
+            });
+            Label(page, "LOCAL VERSUS", 405, 408, 470, 20, 12, Ink, TextAnchor.MiddleCenter);
             Button(page, "MODS", 405, 433, 470, 56, OpenMods);
             Button(page, "OPTIONS", 405, 494, 470, 56, () => Settings("Display"));
             Button(page, "QUIT GAME", 405, 555, 470, 56, QuitPrompt);

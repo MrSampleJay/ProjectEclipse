@@ -96,7 +96,8 @@ namespace Nekki.SF2.GUI
 				{
 					_WideScreenController.Run();
 				}
-				Eclipse.Modding.ModSceneEntry.Schedule(this, get_SceneId(), storyProfile);
+					if (!Eclipse.Multiplayer.LocalVersusSession.IsActive)
+						Eclipse.Modding.ModSceneEntry.Schedule(this, get_SceneId(), storyProfile);
 			}
 		}
 

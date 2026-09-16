@@ -138,7 +138,11 @@ public class ListSF
 
 	private static bool IHNFKALCJGJ;
 
-	private XmlDocument IEDEFCBFJAD;
+		private XmlDocument IEDEFCBFJAD;
+
+    // Lifetime ownership of the loaded document, retained even after returning
+    // to the title so a delayed callback cannot persist a discarded local profile.
+    private bool _localVersusProfile;
 
 	private XmlNode _CurrentUserNode;
 
@@ -1328,9 +1332,10 @@ public class ListSF
 		}
 	}
 
-	public void OnAuthenticate(bool BOFABDEJGFL = false)
-	{
-		if (Eclipse.Modding.ModRuntime.DeferProfileSave())
+		public void OnAuthenticate(bool BOFABDEJGFL = false)
+		{
+            if (_localVersusProfile || Eclipse.Multiplayer.LocalVersusSession.IsActive) return;
+			if (Eclipse.Modding.ModRuntime.DeferProfileSave())
 		{
 			GJEJCLBAPMP = true;
 			return;
@@ -2539,16 +2544,20 @@ public class ListSF
 		_items.NMMBHENGDJO(SF2Paths.KKIDGPBOBNI());
 	}
 
-	private void PBNNPBEDOOJ()
-	{
-		Eclipse.Modding.ModRuntime.UnbindProfile();
+		private void PBNNPBEDOOJ()
+		{
+            _localVersusProfile = Eclipse.Multiplayer.LocalVersusSession.IsActive;
+			Eclipse.Modding.ModRuntime.UnbindProfile();
 		IEDEFCBFJAD = XmlUtils.AIFIAKNJMHG(SF2Paths.APHDBIBDMDG(), Constants.OJMIJINKBPJ);
 		if (IEDEFCBFJAD == null)
 		{
 			ANEHEDFAPCH = new Roster(null, null);
 			return;
 		}
-		int num = HFPJDOEEDCA();
+            // Roster normalization and mod-state migrations may update this
+            // document during boot. Local play owns a disposable copy.
+            if (_localVersusProfile) IEDEFCBFJAD = (XmlDocument)IEDEFCBFJAD.CloneNode(true);
+			int num = HFPJDOEEDCA();
 		XmlNode xmlNode = IEDEFCBFJAD["Root"]["Warriors"];
 		bool flag = false;
 		foreach (XmlNode childNode in xmlNode.ChildNodes)

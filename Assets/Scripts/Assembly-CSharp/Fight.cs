@@ -10,6 +10,7 @@ using UnityEngine;
 
 public class Fight
 {
+    public bool IsLocalVersus => KGKDKENMAOA is Eclipse.Multiplayer.LocalVersusMatch;
     internal sealed class PreparedFormModel : IDisposable
     {
         private Model _model;
@@ -953,7 +954,7 @@ public class Fight
 		GameUtils.MJAPCKDDAMK(_location.JMLAKAKDBBL - _location.MFAPMDDJBBL);
 		if (!flag)
 		{
-			MOBFFOHPCOE.Init(GameUtils.OJNHPHEPFLI.ECMIANLOLHM(KGKDKENMAOA), NMNCKBPFCCP, KGKDKENMAOA.get_Type(), GameUtils.MPNBGBIMEIP(KGKDKENMAOA));
+			MOBFFOHPCOE.Init(IsLocalVersus ? new Dictionary<string, Counter>() : GameUtils.OJNHPHEPFLI.ECMIANLOLHM(KGKDKENMAOA), NMNCKBPFCCP, KGKDKENMAOA.get_Type(), GameUtils.MPNBGBIMEIP(KGKDKENMAOA));
 			MOBFFOHPCOE.AddEventListener(0, GJJLEFLCOFL);
 		}
 		_Camera = new Camera(_UnityObject.transform);
@@ -1005,6 +1006,12 @@ public class Fight
 
 	public void JOJIDODPDLA(bool value)
 	{
+		if (IsLocalVersus && KCJNBFLAMCC != null)
+		{
+			if (value) KCJNBFLAMCC.StopController();
+			else if (!isGameOver && stageType == StageType.FDBBPEGEGMK.STAGE_FIGHT)
+				KCJNBFLAMCC.StartController();
+		}
 		GAOPEBOEEGB = value;
 	}
 
@@ -1227,6 +1234,7 @@ public class Fight
 
 	public void ReleaseAnyKey(FightCID PBFPKFPMFCI)
 	{
+		if (IsLocalVersus) return;
 		if ((stageType != StageType.FDBBPEGEGMK.STAGE_FIGHT && PBFPKFPMFCI != FightCID.NextFrameButton && PBFPKFPMFCI != FightCID.PauseButton) || (!Application.isEditor && !SystemProperties.DBBOCENKMGD() && !UnityEngine.Debug.isDebugBuild))
 		{
 			return;
@@ -2418,6 +2426,8 @@ public class Fight
 			KCJNBFLAMCC.AddEventListener(0, ControlPress);
 			KCJNBFLAMCC.AddEventListener(1, ControlRelease);
 			KCJNBFLAMCC.ResetController();
+			if (KGKDKENMAOA is Eclipse.Multiplayer.LocalVersusMatch localMatch)
+				KCJNBFLAMCC.ConfigureLocalVersusInput(true, localMatch.Settings.KeyboardPlayerOne);
 			KCJNBFLAMCC.Init();
 			_Camera.HDFAOMAONJI(KCJNBFLAMCC);
 			KCJNBFLAMCC.IsShowController(AssemblyController.PGFJMOGKEID());
@@ -2844,6 +2854,7 @@ public class Fight
     private bool _eclipseOpponentDispatching;
     private void DispatchEclipseOpponent(ModEffectEvent effectEvent, ModDamageEvent damage = null, ModIncomingHit incoming = null, ModCombatActivityEvent activity = null)
     {
+        if (IsLocalVersus) return;
         if (_eclipseOpponentDispatching || _eclipseCombatDispatching || CKNCPOABFBO == null || ModRuntime.Scripts == null) return;
         if (effectEvent == ModEffectEvent.FightBegin && round.round != 1) return;
         _eclipseOpponentDispatching = true;
@@ -2883,6 +2894,7 @@ public class Fight
 	private bool _eclipseCombatDispatching;
 	private void DispatchEclipseCombatEvent(ModEffectEvent effectEvent = ModEffectEvent.FightBegin, ModDamageEvent damageEvent = null, ModIncomingHit incomingHit = null, ModCombatActivityEvent activity = null)
 	{
+		if (IsLocalVersus) return;
 		if (_eclipseCombatDispatching || _eclipseOpponentDispatching) return;
 		if (effectEvent == ModEffectEvent.FightBegin)
 		{
@@ -3251,7 +3263,19 @@ public class Fight
 	{
 		_rulesInspector.RulesActive = false;
 		_rulesInspector.StopRules();
-		if (LFLGCDNKNJI == EndRoundType.EndRoundTypeTimeOut || LFLGCDNKNJI == EndRoundType.EndRoundTypeRingOut || LFLGCDNKNJI == EndRoundType.EndRoundTypeLose)
+		if (IsLocalVersus && Eclipse.Multiplayer.LocalVersusRoundRules.ResolveWinner(
+			NMNCKBPFCCP.HABJPOFCIHA(), AKBNKDBHCEO.HABJPOFCIHA()) < 0)
+		{
+			KCJNBFLAMCC.StopController();
+			_Camera.DFKKNMDAFDC(false);
+			ResetModels(false);
+			OMBDLIKCNIP = false;
+			ResetParameters();
+			NextRound();
+			UnityEngine.Debug.Log("[Local Versus] Draw. Scores unchanged.");
+			return;
+		}
+		if (!IsLocalVersus && (LFLGCDNKNJI == EndRoundType.EndRoundTypeTimeOut || LFLGCDNKNJI == EndRoundType.EndRoundTypeRingOut || LFLGCDNKNJI == EndRoundType.EndRoundTypeLose))
 		{
 			bool flag = false;
 			if (_endFightRule != null)
@@ -3324,6 +3348,12 @@ public class Fight
 
 	private ModelParameters GetWinner(bool PLGGPKEJPPJ)
 	{
+		if (IsLocalVersus)
+		{
+			int winner = Eclipse.Multiplayer.LocalVersusRoundRules.ResolveWinner(
+				NMNCKBPFCCP.HABJPOFCIHA(), AKBNKDBHCEO.HABJPOFCIHA());
+			return (winner == 0) == PLGGPKEJPPJ ? NMNCKBPFCCP : AKBNKDBHCEO;
+		}
 		// Offline raids are won by exhausting the boss pool, never by having a
 		// higher remaining health percentage when the long timer expires.
 		if (Eclipse.Modding.ModModeRuntime.IsRaid(KGKDKENMAOA))
@@ -3890,6 +3920,7 @@ public class Fight
 
 	private void CheckCountersStopFight(ModelParameters ABKBEJBICOA, ModelParameters LEBLJJCFKOP)
 	{
+		if (IsLocalVersus) return;
 		BattleType pJMEMGHKKBM = KGKDKENMAOA.get_Type();
 		Battle cNAOMDMIGLJ = KGKDKENMAOA.CNAOMDMIGLJ;
 		int num = cNAOMDMIGLJ.ANNHMNIHKCC().Count - 1;
@@ -3943,6 +3974,7 @@ public class Fight
 
 	private void CheckCountersEndRound(ModelParameters ABKBEJBICOA, ModelParameters LEBLJJCFKOP)
 	{
+		if (IsLocalVersus) return;
 		Model nPPONCJECLA = _playerModel;
 		if (ABKBEJBICOA.IsPlayer)
 		{
@@ -4151,6 +4183,11 @@ public class Fight
 
 	private void HCNDAFDHACI(GameOverTypes MHNEKAEGNBO)
 	{
+		if (IsLocalVersus)
+		{
+			Eclipse.Multiplayer.LocalVersusSession.Complete(this, true);
+			return;
+		}
         _eclipsePlayerResult = MHNEKAEGNBO == GameOverTypes.GAME_OVER_SURRENDER ? "surrender" : "loss";
         FinishRound();
         if (_eclipseFightBeginDispatched && !_eclipseFightEndDispatched)
@@ -4184,6 +4221,11 @@ public class Fight
 
 	private void OpenPauseScreen()
 	{
+		if (IsLocalVersus)
+		{
+			Eclipse.Multiplayer.LocalVersusSession.Pause("Paused");
+			return;
+		}
 		if (preFight != null)
 		{
 			JOJIDODPDLA(true);
@@ -4292,7 +4334,7 @@ public class Fight
 
 	private void ControlPress(object data)
 	{
-		if (!IOPJDMCBIMM)
+		if (!IOPJDMCBIMM || (IsLocalVersus && PDINEPNPDFI()))
 		{
 			return;
 		}
@@ -4400,6 +4442,11 @@ public class Fight
 
 	private void EndFight()
 	{
+		if (IsLocalVersus)
+		{
+			Eclipse.Multiplayer.LocalVersusSession.Complete(this);
+			return;
+		}
         _eclipsePlayerResult = LBKDADMLJOE.MHNEKAEGNBO == GameOverTypes.GAME_OVER_WIN ? "win" : LBKDADMLJOE.MHNEKAEGNBO == GameOverTypes.GAME_OVER_LOSS ? "loss" : "timeout";
 		if (_eclipseFightBeginDispatched && !_eclipseFightEndDispatched)
 		{
@@ -4452,7 +4499,7 @@ public class Fight
 		case 1:
 			return CKNCPOABFBO;
 		default:
-			if (index < LNDLFINJHDB.Count)
+			if (index >= 0 && index < LNDLFINJHDB.Count)
 			{
 				return LNDLFINJHDB[index];
 			}

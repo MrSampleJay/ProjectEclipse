@@ -19,8 +19,12 @@ namespace Eclipse.Input
         public static string Display(int value) { return Labels[value]; }
         public static bool IsPressed(int value)
         {
-            return value < 10 ? GamePad.NFCGBMHPKMA((GamePad.PFENLAPGKFM)value, GamePad.GGAKHLLMPMM.One)
-                : GamePad.MAJINGINCHM((GamePad.HKKPDLMCPIF)(value - 10), GamePad.GGAKHLLMPMM.One, true) > .5f;
+            return IsPressed(value, GamePad.GGAKHLLMPMM.One);
+        }
+        public static bool IsPressed(int value, GamePad.GGAKHLLMPMM player)
+        {
+            return value < 10 ? GamePad.NFCGBMHPKMA((GamePad.PFENLAPGKFM)value, player)
+                : GamePad.MAJINGINCHM((GamePad.HKKPDLMCPIF)(value - 10), player, true) > .5f;
         }
         public static bool TrySet(int action, int value, out string message)
         {

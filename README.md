@@ -67,5 +67,6 @@ before distributing a production release.
 See `AGENTS.md` for project conventions and validation guidance.
 See `CONTENT.md` for the content layout and validation. Use **SF2 > Content Browser** to search assets across the project from one window.
 See [Mods/README.md](Mods/README.md) for loose mod assets, sprite descriptors, and the Lua API.
+See [Local Multiplayer](Docs/LOCAL_MULTIPLAYER.md) for the current two-player Local Versus controls and limitations.
 See `DE_SCOPE_AUDIT.md` for the current separation between reusable Eclipse work
 and behavior that overlaps with the Definitive Edition feature set.

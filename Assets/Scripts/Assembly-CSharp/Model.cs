@@ -2139,6 +2139,9 @@ public class Model : global::EventDispatcher<object>
 
 	public void RenderAi()
 	{
+		var fight = Fight.OHNKFOHIAKG();
+		if (fight != null && fight.IsLocalVersus &&
+			(this == fight.BBGAFGNHFEA() || this == fight.FHHHIEPAKLP())) return;
 		if ((!FGKAFKFBFEM() && !AiData.get_BothBotEnabled()) || JMHJDHLBHLK != 2)
 		{
 			return;
