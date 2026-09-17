@@ -17,8 +17,8 @@ public class QuestActionStoryTutorialMove : QuestAction
 	{
 		base.DEJMHFMLKIC(GFIHPBCEEOB);
 		MainMenu.get_Instance().SetEnabled(false);
-		Fight gDBOMJODDEA = Fight.OHNKFOHIAKG();
-		Stick joystick = gDBOMJODDEA.KCJNBFLAMCC.GetJoystick();
+		Fight gDBOMJODDEA = Fight.GetCurrentFight();
+		Stick joystick = gDBOMJODDEA.Controller.GetJoystick();
 		joystick.SetIsFlashing(true);
 		Model fGCODGKLHED = gDBOMJODDEA.LNDLFINJHDB[0];
 		fGCODGKLHED.AddEventListener(2, OnAnimationStart);
@@ -37,7 +37,7 @@ public class QuestActionStoryTutorialMove : QuestAction
 				DPAAINCBKBF();
 			}
 		}
-		Fight gDBOMJODDEA = Fight.OHNKFOHIAKG();
+		Fight gDBOMJODDEA = Fight.GetCurrentFight();
 		Model fGCODGKLHED = gDBOMJODDEA.LNDLFINJHDB[0];
 		InfoAnimation.MGHNBEPCKIF dFLPNNBIFFN = fGCODGKLHED.DFLPNNBIFFN;
 		if (dFLPNNBIFFN == InfoAnimation.MGHNBEPCKIF.AnimationMove)
@@ -59,8 +59,8 @@ public class QuestActionStoryTutorialMove : QuestAction
 			CoroutineManager.get_Current().StopRoutine(_WaitTimeCoroutine);
 		}
 		MainMenu.get_Instance().SetEnabled(true);
-		Fight gDBOMJODDEA = Fight.OHNKFOHIAKG();
-		Stick joystick = gDBOMJODDEA.KCJNBFLAMCC.GetJoystick();
+		Fight gDBOMJODDEA = Fight.GetCurrentFight();
+		Stick joystick = gDBOMJODDEA.Controller.GetJoystick();
 		joystick.SetIsFlashing(false);
 		Model fGCODGKLHED = gDBOMJODDEA.LNDLFINJHDB[0];
 		fGCODGKLHED.RemoveEventListener(2, OnAnimationStart);

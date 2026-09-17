@@ -762,7 +762,7 @@ public class SelectAnimation
 
 	private void UpdateConditions(ModelConditions conditions, Model ACENLMONNPA)
 	{
-		Fight gDBOMJODDEA = Fight.OHNKFOHIAKG();
+		Fight gDBOMJODDEA = Fight.GetCurrentFight();
 		Model fGCODGKLHED = ACENLMONNPA.EGGEACCDAEK();
 		Model fGCODGKLHED2 = ACENLMONNPA.NMGNPBMFJKP(ModelType.KEIDBIOIFGA.MODEL_PARENT);
 		Model fGCODGKLHED3 = ACENLMONNPA.NMGNPBMFJKP(ModelType.KEIDBIOIFGA.MODEL_CHILD);
@@ -781,8 +781,8 @@ public class SelectAnimation
 				conditions.ENBHOAKMCIG.Clear();
 			}
 		}
-		conditions.POBNMMADAJJ = ACENLMONNPA.KMMJCHDKBDO.NHBIJEEKALC;
-		conditions.CFPLPALGCMK = ((fGCODGKLHED == null) ? null : fGCODGKLHED.KMMJCHDKBDO.NHBIJEEKALC);
+		conditions.POBNMMADAJJ = ACENLMONNPA.Parameters.Perks;
+		conditions.CFPLPALGCMK = ((fGCODGKLHED == null) ? null : fGCODGKLHED.Parameters.Perks);
 		conditions.StrikeResult = ACENLMONNPA.GHHCDAFIKJE;
 		conditions.FAHHBNIFAMB = ((fGCODGKLHED != null) ? true : false);
 		conditions.GFHOIKMBNHF = ACENLMONNPA.KFCNPADAMHA();
@@ -800,13 +800,13 @@ public class SelectAnimation
 		conditions.EKFCILFBDPO = fGCODGKLHED != null && fGCODGKLHED.COBOFMDFLJO().EGNOOKHNFLK();
 		conditions.LFLDHGKEDEH = fGCODGKLHED2 != null && fGCODGKLHED2.COBOFMDFLJO().EGNOOKHNFLK();
 		conditions.KAKMANLHJOA = ACENLMONNPA.COBOFMDFLJO().PGOFHCBPLOE();
-		conditions.BHHLEBHLBLH = ACENLMONNPA.KMMJCHDKBDO.BHHLEBHLBLH;
-		conditions.IsWinner = ACENLMONNPA.KMMJCHDKBDO.IsWinner;
-		conditions.EndRoundType = ACENLMONNPA.KMMJCHDKBDO.EndRoundType;
+		conditions.BHHLEBHLBLH = ACENLMONNPA.Parameters.BHHLEBHLBLH;
+		conditions.IsWinner = ACENLMONNPA.Parameters.IsWinner;
+		conditions.EndRoundType = ACENLMONNPA.Parameters.EndRoundType;
 		conditions.IDCHHGHAENM = ACENLMONNPA.IDCHHGHAENM;
 		conditions.BOECCPNHAII = (int)ACENLMONNPA.GHHCDAFIKJE.IIIDIKABLOJ.GILCBJJPKBK();
-		conditions.BFLPOMAHPJD = (ObscuredFloat)(ACENLMONNPA.KMMJCHDKBDO.KKMCHCNOHMB());
-		conditions.KGCJIBCACBH = ACENLMONNPA.KMMJCHDKBDO.CIDCNCDFONA;
+		conditions.BFLPOMAHPJD = (ObscuredFloat)(ACENLMONNPA.Parameters.KKMCHCNOHMB());
+		conditions.KGCJIBCACBH = ACENLMONNPA.Parameters.CIDCNCDFONA;
 		conditions.PKMHOICGDIM = ACENLMONNPA.GLEKCPCMINJ();
 		conditions.JJDNDOLCMMN = ACENLMONNPA.LPOJKGLFMAL();
 		conditions.KHDBLNPFDPE = ACENLMONNPA.CKAKLHDLHJO();
@@ -906,7 +906,7 @@ public class SelectAnimation
 		bool hasSubtypeLockedBirthMove = false;
 		if (PEADINOKLKN.Type == EventAnimation.EECEJKADLCK.EVENT_BIRTH && ACENLMONNPA is WeaponModel)
 		{
-			ItemInfo helperWeapon = ACENLMONNPA.KMMJCHDKBDO.KDABEFBJMOD("Weapon");
+			ItemInfo helperWeapon = ACENLMONNPA.Parameters.KDABEFBJMOD("Weapon");
 			if (helperWeapon != null)
 			{
 				helperWeaponSubtype = helperWeapon.MDPPNGIEJGD;
@@ -969,10 +969,10 @@ public class SelectAnimation
 					if (PEADINOKLKN.IsRandom && pJAHIOELGGD.Type == InfoAnimation.MGHNBEPCKIF.AnimationAttack)
 					{
 						Model fGCODGKLHED = ACENLMONNPA.EGGEACCDAEK();
-						if (ACENLMONNPA.FGKAFKFBFEM() && ACENLMONNPA.KMMJCHDKBDO.KMNLACDHAFE && fGCODGKLHED != null)
+						if (ACENLMONNPA.FGKAFKFBFEM() && ACENLMONNPA.Parameters.KMNLACDHAFE && fGCODGKLHED != null)
 						{
-							float num = (ObscuredFloat)(fGCODGKLHED.KMMJCHDKBDO.KKMCHCNOHMB());
-							float cIDCNCDFONA = fGCODGKLHED.KMMJCHDKBDO.CIDCNCDFONA;
+							float num = (ObscuredFloat)(fGCODGKLHED.Parameters.KKMCHCNOHMB());
+							float cIDCNCDFONA = fGCODGKLHED.Parameters.CIDCNCDFONA;
 							float num2 = num / cIDCNCDFONA;
 							if (num2 <= GameUtils.BJACOFCAHPD.BeginnerCheat)
 							{

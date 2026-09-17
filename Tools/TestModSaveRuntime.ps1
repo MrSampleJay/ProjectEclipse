@@ -38,7 +38,7 @@ public sealed class Items
 {
     public readonly Dictionary<string, ItemInfo> Definitions = new Dictionary<string, ItemInfo>();
     public readonly Dictionary<string, string> Aliases = new Dictionary<string, string>();
-    public ItemInfo KCCDBEEKBCG(string name)
+    public ItemInfo GetItemByName(string name)
     {
         ItemInfo item;
         if (Definitions.TryGetValue(name, out item)) return item;
@@ -46,7 +46,7 @@ public sealed class Items
         return Aliases.TryGetValue(name, out target) && Definitions.TryGetValue(target, out item) ? item : null;
     }
 }
-public static class ListSF { public static readonly Items Items = new Items(); public static Items DJBOFEEKJMP() { return Items; } }
+public static class ListSF { public static readonly Items Items = new Items(); public static Items GetItems() { return Items; } }
 public sealed class UserItem
 {
     public static int Constructions;

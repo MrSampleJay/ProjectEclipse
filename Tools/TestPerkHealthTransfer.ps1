@@ -12,7 +12,7 @@ enum ActionType{ACTION_MOD_HEALTH_CHANGE}
 class Model{public double Health=100;}
 class ModHealthChange{public double Amount;public ActionType get_Type()=>ActionType.ACTION_MOD_HEALTH_CHANGE;public double JMPIBKKAHJP()=>Amount;}
 class PerksStage{public class ActionPerk{public ModHealthChange AMKJNPOCODK;public Model KJDFJPBIGJC,BIKLKJMNGKP;public int KGNDJOLBBJF,FLNLMIHEDCI;public bool PLNNKKBPDJK;}}
-class Fight{public static Fight Current=new Fight();public static Fight OHNKFOHIAKG()=>Current;public void UpdateLife(Model model,double delta){model.Health+=delta;}}
+class Fight{public static Fight Current=new Fight();public static Fight GetCurrentFight()=>Current;public void UpdateLife(Model model,double delta){model.Health+=delta;}}
 class InfoPerk{
  List<PerksStage.ActionPerk> NBFBBDHELEJ=new List<PerksStage.ActionPerk>();int Expired;
  void ACKKGAAPLDG(PerksStage.ActionPerk action){Expired++;NBFBBDHELEJ.Remove(action);}

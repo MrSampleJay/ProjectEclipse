@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Xml;
 using DefinitionId = System.String;
 class ModelParameters { public bool IsPlayer; public object HBFMBOHLKPJ=new object(); }
-class Model { public ModelParameters KMMJCHDKBDO=new ModelParameters(); }
+class Model { public ModelParameters Parameters=new ModelParameters(); }
 class Fight {
 STAGE
 Model _playerModel=new Model(),CKNCPOABFBO=new Model();
@@ -24,8 +24,8 @@ Dictionary<Model,object> _eclipseShields=new Dictionary<Model,object>();
 Dictionary<(Model,DefinitionId),XmlNode> _eclipseOpponentInstances=new Dictionary<(Model,DefinitionId),XmlNode>();
 Dictionary<(Model,DefinitionId),XmlNode> _eclipseInnateInstances=new Dictionary<(Model,DefinitionId),XmlNode>();
 Fight() {
- _playerModel.KMMJCHDKBDO.IsPlayer=true;
- NMNCKBPFCCP=_playerModel.KMMJCHDKBDO; AKBNKDBHCEO=CKNCPOABFBO.KMMJCHDKBDO;
+ _playerModel.Parameters.IsPlayer=true;
+ NMNCKBPFCCP=_playerModel.Parameters; AKBNKDBHCEO=CKNCPOABFBO.Parameters;
  IDAAONBIBJM.Add(AKBNKDBHCEO); LNDLFINJHDB.Add(_playerModel); LNDLFINJHDB.Add(CKNCPOABFBO);
  GINNOLEJDFM=AKBNKDBHCEO.HBFMBOHLKPJ;
 }
@@ -33,7 +33,7 @@ static void Check(bool value,string message){if(!value)throw new Exception(messa
 static void Reject(Action action){bool failed=false;try{action();}catch(InvalidOperationException){failed=true;}Check(failed,"expected rejection");}
 static void Main(){
  foreach(bool player in new[]{true,false}) {
-  var f=new Fight();var old=player?f._playerModel:f.CKNCPOABFBO;var next=new Model();next.KMMJCHDKBDO.IsPlayer=player;
+  var f=new Fight();var old=player?f._playerModel:f.CKNCPOABFBO;var next=new Model();next.Parameters.IsPlayer=player;
   var doc=new XmlDocument();doc.LoadXml("<state counter='7'/>");var state=doc.DocumentElement;
   var shield=new object();f._eclipseShields.Add(old,shield);
   f._eclipseOpponentInstances.Add((old,"sample:perk"),state);f._eclipseInnateInstances.Add((old,"sample:innate"),state);
@@ -41,12 +41,12 @@ static void Main(){
   f._eclipseInnateInstances.Add((other,"sample:innate"),state);
   var undo=f.BindFormParticipant(old,next);
   Check((player?f._playerModel:f.CKNCPOABFBO)==next,"active participant");
-  Check((player?f.NMNCKBPFCCP:f.AKBNKDBHCEO)==next.KMMJCHDKBDO,"round parameters");
+  Check((player?f.NMNCKBPFCCP:f.AKBNKDBHCEO)==next.Parameters,"round parameters");
   Check(f.LNDLFINJHDB[player?0:1]==next,"simulation list slot");
   Check(f._eclipseShields[next]==shield&&!f._eclipseShields.ContainsKey(old),"shield identity");
   Check(f._eclipseOpponentInstances[(next,"sample:perk")]==state,"behavior state identity");
   Check(f._eclipseInnateInstances[(next,"sample:innate")]==state&&f._eclipseInnateInstances.ContainsKey((other,"sample:innate")),"innate and unrelated state");
-  if(!player)Check(f.IDAAONBIBJM[0]==next.KMMJCHDKBDO&&f.GINNOLEJDFM==next.KMMJCHDKBDO.HBFMBOHLKPJ,"opponent sequence and tactic");
+  if(!player)Check(f.IDAAONBIBJM[0]==next.Parameters&&f.GINNOLEJDFM==next.Parameters.HBFMBOHLKPJ,"opponent sequence and tactic");
   undo();undo();
   Check((player?f._playerModel:f.CKNCPOABFBO)==old&&f.LNDLFINJHDB[player?0:1]==old,"idempotent rollback");
   Check(f._eclipseShields[old]==shield&&f._eclipseOpponentInstances[(old,"sample:perk")]==state,"state rollback");
@@ -55,9 +55,9 @@ static void Main(){
  fight._eclipseInnateInstances.Add((replacement,"conflict"),new XmlDocument());
  Reject(()=>fight.BindFormParticipant(fight.CKNCPOABFBO,replacement));
  Check(fight.LNDLFINJHDB[1]==fight.CKNCPOABFBO,"collision rejected before mutation");
- fight._eclipseInnateInstances.Clear();replacement.KMMJCHDKBDO.IsPlayer=true;
+ fight._eclipseInnateInstances.Clear();replacement.Parameters.IsPlayer=true;
  Reject(()=>fight.BindFormParticipant(fight.CKNCPOABFBO,replacement));
- replacement.KMMJCHDKBDO.IsPlayer=false;fight.IDAAONBIBJM[0]=new ModelParameters();
+ replacement.Parameters.IsPlayer=false;fight.IDAAONBIBJM[0]=new ModelParameters();
  Reject(()=>fight.BindFormParticipant(fight.CKNCPOABFBO,replacement));
  Console.WriteLine("PASS: production participant binding for both sides, round/sequence/tactic identity, shield and Lua state continuity, rollback and preflight rejection. Controlled model data; no game playtest.");
 }

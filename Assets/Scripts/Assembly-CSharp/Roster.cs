@@ -1028,7 +1028,7 @@ public class Roster : MELBIBHDPCE
 			KHCNHPCPFII().NHJAHNDOLAE();
 			KHCNHPCPFII().UpdateLockItems(PINDEKDNCNL());
 			GameUtils.PIHNKCIDDJB();
-			ListSF.ELEBLBJKDBI().PLNBHLPHDJG(PINDEKDNCNL());
+			ListSF.GetInstance().PLNBHLPHDJG(PINDEKDNCNL());
 			StatisticsCollector.BPDGOKGHDHB(StatisticsEvent.JDNFFHILFAF.Level_Up);
 			GameUtils.OFOKPNFGDMD("Level Up");
 		}
@@ -1045,7 +1045,7 @@ public class Roster : MELBIBHDPCE
 	public void BBHFFLJGDDL()
 	{
 		bool flag = DBPBGBNHAIP((ObscuredUInt)(_experience));
-		QuestParameters hHKLFIIBIFF = ListSF.ELEBLBJKDBI().BNMLDPNCMLB();
+		QuestParameters hHKLFIIBIFF = ListSF.GetInstance().BNMLDPNCMLB();
 		hHKLFIIBIFF.BJIDALJIKNC = (flag ? 1 : 0);
 	}
 
@@ -1628,7 +1628,7 @@ public class Roster : MELBIBHDPCE
 			return;
 		}
 		MEJJNKMPMFE(DIAIIPCBMFL);
-		ListSF.ELEBLBJKDBI().OnAuthenticate();
+		ListSF.GetInstance().OnAuthenticate();
 		if (EFCPLDABOIF)
 		{
 			foreach (RosterBattle item in HLHEFIKFBHH)
@@ -1688,7 +1688,7 @@ public class Roster : MELBIBHDPCE
 				break;
 			}
 		}
-		ListSF.ELEBLBJKDBI().EJANJEEGOOE();
+		ListSF.GetInstance().EJANJEEGOOE();
 		foreach (RosterBattle item in HLHEFIKFBHH)
 		{
 			if (ELBLEPOEKIL == item)
@@ -1893,17 +1893,17 @@ public class Roster : MELBIBHDPCE
 		List<QuestStage> list = new List<QuestStage>();
 		foreach (RosterQuest item in CNFCPCJPGLM)
 		{
-			if (ListSF.ELEBLBJKDBI().IsEclipseQuestSuppressed(item.Name, item.FileName)) continue;
+			if (ListSF.GetInstance().IsEclipseQuestSuppressed(item.Name, item.FileName)) continue;
 			if (item.get_Parameters() == null)
 			{
 				continue;
 			}
 			if (!JHHBKBENNNA(item.FileName))
 			{
-				ListSF.ELEBLBJKDBI().PDCHBPKOBFI(item.FileName);
+				ListSF.GetInstance().PDCHBPKOBFI(item.FileName);
 			}
-			QuestStage mLLKDGBEGJI = ListSF.ELEBLBJKDBI().FindEclipseSavedQuest(item.Name, item.FileName);
-			if (ListSF.ELEBLBJKDBI().IsEclipseQuestSuppressed(item.Name, item.FileName)) continue;
+			QuestStage mLLKDGBEGJI = ListSF.GetInstance().FindEclipseSavedQuest(item.Name, item.FileName);
+			if (ListSF.GetInstance().IsEclipseQuestSuppressed(item.Name, item.FileName)) continue;
 			if (mLLKDGBEGJI != null)
 			{
 				if (mLLKDGBEGJI.IDGAAJAFCHC())
@@ -1933,11 +1933,11 @@ public class Roster : MELBIBHDPCE
 		}
 		if (list.Count > 0)
 		{
-			ListSF.ELEBLBJKDBI().FGAEEJBEGEJ(list);
+			ListSF.GetInstance().FGAEEJBEGEJ(list);
 			if (dKBDLDGOFDN != null)
 			{
 				ScreenType iPKNDMINFMJ = (ScreenType)dKBDLDGOFDN.ELBKKOPHLHK();
-				ScreenType iPKNDMINFMJ2 = Module.ELEBLBJKDBI().NMCNDOPKFJD();
+				ScreenType iPKNDMINFMJ2 = Module.GetInstance().NMCNDOPKFJD();
 				if (iPKNDMINFMJ == ScreenType.ModuleFight && iPKNDMINFMJ != iPKNDMINFMJ2)
 				{
 					Module.DLOKJOHNDID(ScreenType.ModuleDojo);
@@ -1978,7 +1978,7 @@ public class Roster : MELBIBHDPCE
 		{
 			return;
 		}
-		List<ItemInfo> list = ListSF.DJBOFEEKJMP().ONFMAJEAACM("RealMoneyItem");
+		List<ItemInfo> list = ListSF.GetItems().ONFMAJEAACM("RealMoneyItem");
 		XmlNode xmlNode = _node["Billing"];
 		if (xmlNode == null)
 		{
@@ -2000,7 +2000,7 @@ public class Roster : MELBIBHDPCE
 			xmlAttribute = xmlNode2.LLIKNHNLGJJ("RealPriceCurrency");
 			xmlAttribute.Value = item.MIIJIMJDHFP;
 		}
-		ListSF.ELEBLBJKDBI().EJANJEEGOOE();
+		ListSF.GetInstance().EJANJEEGOOE();
 	}
 
 	public bool AddShopLock(string name, bool FLOAHAOBNAP = false)
@@ -2128,7 +2128,7 @@ public class Roster : MELBIBHDPCE
 		}
 		foreach (XmlNode childNode in xmlNode2.ChildNodes)
 		{
-			ItemInfo dJKEECEOCJB = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(childNode.Attributes["Name"].CIPOICEEIBK());
+			ItemInfo dJKEECEOCJB = ListSF.GetItems().GetItemByName(childNode.Attributes["Name"].CIPOICEEIBK());
 			if (dJKEECEOCJB != null && dJKEECEOCJB.GKODCKNAAHB == 0)
 			{
 				dJKEECEOCJB.BEBDMOEIEJN(true);
@@ -2139,7 +2139,7 @@ public class Roster : MELBIBHDPCE
 	public void KGFJPLKOABI()
 	{
 		List<string> PIDDFMECFAO = new List<string>();
-		List<ItemInfo> list = ListSF.DJBOFEEKJMP().HCDLKHKBEPF();
+		List<ItemInfo> list = ListSF.GetItems().HCDLKHKBEPF();
 		list.ForEach((ItemInfo DHDMNHCIPEH) =>
 		{
 			if (DHDMNHCIPEH.DBHJGAGOLOB())

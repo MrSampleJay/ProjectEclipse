@@ -93,8 +93,8 @@ namespace Eclipse.UI.Modding
             if (!now) { capturing = false; direction = horizontalDirection = 0; return; }
             consumedFrame = Time.frameCount;
             if (!capturing) { capturing = true; waitForNeutral = true; direction = horizontalDirection = 0; }
-            var pad = GamePad.CNNMBBLLGNE(GamePad.LCNPGEANNDP.Dpad, GamePad.GGAKHLLMPMM.One, true);
-            var stick = GamePad.CNNMBBLLGNE(GamePad.LCNPGEANNDP.LeftStick, GamePad.GGAKHLLMPMM.One, true);
+            var pad = GamePad.GetStick(GamePad.Stick.Dpad, GamePad.Player.One, true);
+            var stick = GamePad.GetStick(GamePad.Stick.LeftStick, GamePad.Player.One, true);
             float vertical = Mathf.Abs(pad.y) > .5f ? pad.y : stick.y;
             float horizontal = Mathf.Abs(pad.x) > .5f ? pad.x : stick.x;
             int nextHorizontal = UnityEngine.Input.GetKey(KeyCode.LeftArrow) ? -1 : UnityEngine.Input.GetKey(KeyCode.RightArrow) ? 1 :
@@ -105,18 +105,18 @@ namespace Eclipse.UI.Modding
             bool up = UnityEngine.Input.GetKey(KeyCode.UpArrow);
             int next = tab ? (reverseTab ? -1 : 1) : down ? 1 : up ? -1 : vertical > .5f ? -1 : vertical < -.5f ? 1 : 0;
             bool submitHeld = UnityEngine.Input.GetKey(KeyCode.Return) || UnityEngine.Input.GetKey(KeyCode.Space) ||
-                GamePad.NFCGBMHPKMA(GamePad.PFENLAPGKFM.A, GamePad.GGAKHLLMPMM.One);
+                GamePad.GetButton(GamePad.Button.A, GamePad.Player.One);
             bool backHeld = UnityEngine.Input.GetKey(KeyCode.Escape) ||
-                GamePad.NFCGBMHPKMA(GamePad.PFENLAPGKFM.B, GamePad.GGAKHLLMPMM.One);
+                GamePad.GetButton(GamePad.Button.B, GamePad.Player.One);
             if (waitForNeutral)
             {
                 if (next == 0 && nextHorizontal == 0 && !submitHeld && !backHeld) waitForNeutral = false;
                 return;
             }
             bool submit = UnityEngine.Input.GetKeyDown(KeyCode.Return) || UnityEngine.Input.GetKeyDown(KeyCode.Space) ||
-                GamePad.JAHEECFCLHN(GamePad.PFENLAPGKFM.A, GamePad.GGAKHLLMPMM.One);
+                GamePad.GetButtonDown(GamePad.Button.A, GamePad.Player.One);
             bool back = UnityEngine.Input.GetKeyDown(KeyCode.Escape) ||
-                GamePad.JAHEECFCLHN(GamePad.PFENLAPGKFM.B, GamePad.GGAKHLLMPMM.One);
+                GamePad.GetButtonDown(GamePad.Button.B, GamePad.Player.One);
             int move = 0;
             if (next != 0 && (next != direction || Time.unscaledTime >= repeatAt))
             { move = next; repeatAt = Time.unscaledTime + (next != direction ? .35f : .1f); }

@@ -140,7 +140,7 @@ namespace Nekki.SF2.GUI.Common
 
 		private void CNIEJAKAIFG(QuestEvent.PMDPDMFLCIJ p_event, ItemInfo FAKOMBAIFPP, string HEMPKKHDINJ = null)
 		{
-			QuestParameters hHKLFIIBIFF = ListSF.ELEBLBJKDBI().BNMLDPNCMLB();
+			QuestParameters hHKLFIIBIFF = ListSF.GetInstance().BNMLDPNCMLB();
 			FightIDS jLGLBLDPAAF = hHKLFIIBIFF.JLGLBLDPAAF;
 			hHKLFIIBIFF.JLGLBLDPAAF = FightIDS.Empty();
 			hHKLFIIBIFF.HEIADONEACH = string.Empty;
@@ -152,9 +152,9 @@ namespace Nekki.SF2.GUI.Common
 			{
 				hHKLFIIBIFF.OOFHDANMCJB = HEMPKKHDINJ;
 			}
-			if (ListSF.ELEBLBJKDBI().FFBAJNGHGGD(p_event))
+			if (ListSF.GetInstance().FFBAJNGHGGD(p_event))
 			{
-				ListSF.ELEBLBJKDBI().MHHNIPBJNAD();
+				ListSF.GetInstance().MHHNIPBJNAD();
 			}
 			hHKLFIIBIFF.JLGLBLDPAAF = jLGLBLDPAAF;
 		}

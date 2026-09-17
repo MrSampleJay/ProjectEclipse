@@ -211,7 +211,7 @@ public static class ItemBuyHelper
 
 	public static bool BuyImmediatelyDelivery(string OHCGEEEKEJH)
 	{
-		ItemInfo mBIJKDIEFIF = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(OHCGEEEKEJH);
+		ItemInfo mBIJKDIEFIF = ListSF.GetItems().GetItemByName(OHCGEEEKEJH);
 		return BuyImmediatelyDelivery(mBIJKDIEFIF);
 	}
 
@@ -294,15 +294,15 @@ public static class ItemBuyHelper
 
 	private static void CBADCGAEPGA(ItemInfo item)
 	{
-		QuestParameters hHKLFIIBIFF = ListSF.ELEBLBJKDBI().BNMLDPNCMLB();
+		QuestParameters hHKLFIIBIFF = ListSF.GetInstance().BNMLDPNCMLB();
 		FightIDS jLGLBLDPAAF = hHKLFIIBIFF.JLGLBLDPAAF;
 		hHKLFIIBIFF.JLGLBLDPAAF = FightIDS.Empty();
 		hHKLFIIBIFF.HEIADONEACH = string.Empty;
 		hHKLFIIBIFF.AIEHNBBFNPF = string.Empty;
 		hHKLFIIBIFF.DLKPBAJDHBO = item;
-		if (ListSF.ELEBLBJKDBI().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_PURCHASE))
+		if (ListSF.GetInstance().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_PURCHASE))
 		{
-			ListSF.ELEBLBJKDBI().MHHNIPBJNAD();
+			ListSF.GetInstance().MHHNIPBJNAD();
 		}
 		hHKLFIIBIFF.JLGLBLDPAAF = jLGLBLDPAAF;
 	}

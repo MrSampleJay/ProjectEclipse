@@ -41,7 +41,7 @@ public class QuestActionGiveItem : QuestAction
 		{
 			num = list[1].ToInt();
 		}
-		dJKEECEOCJB = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(gOHIIMFFFJI);
+		dJKEECEOCJB = ListSF.GetItems().GetItemByName(gOHIIMFFFJI);
 		if (dJKEECEOCJB != null && num > 0)
 		{
 			dJKEECEOCJB2 = dJKEECEOCJB.HIOBANJPMKF(num);
@@ -56,7 +56,7 @@ public class QuestActionGiveItem : QuestAction
 		bool flag2 = lNIDLHOIHIM.resultNumber > 0.0;
 		kKDGLNECFHA.MCPIOGALBMK(ICAGIOIDCBL, lNIDLHOIHIM);
 		int num2 = (int)lNIDLHOIHIM.resultNumber;
-		ListSF oPLPFMFAGMN = ListSF.ELEBLBJKDBI();
+		ListSF oPLPFMFAGMN = ListSF.GetInstance();
 		if (flag2)
 		{
 			ListSF.FAAAGBACKAE(dJKEECEOCJB);
@@ -106,7 +106,7 @@ public class QuestActionGiveItem : QuestAction
 				ListSF.CCDKHLAMKKO().KGFJPLKOABI();
 			}
 		}
-		ListSF.ELEBLBJKDBI().JLCGOODFKAK(dJKEECEOCJB2);
+		ListSF.GetInstance().JLCGOODFKAK(dJKEECEOCJB2);
 		OGIJONMKABB();
 	}
 }

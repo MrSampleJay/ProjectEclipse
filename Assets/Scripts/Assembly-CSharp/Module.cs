@@ -35,7 +35,7 @@ public class Module : global::EventDispatcher<object>
 	{
 		get
 		{
-			return ELEBLBJKDBI();
+			return GetInstance();
 		}
 	}
 
@@ -51,7 +51,8 @@ public class Module : global::EventDispatcher<object>
 	{
 	}
 
-	public static Module ELEBLBJKDBI()
+	// best guess for name
+	public static Module GetInstance()
 	{
 		if (instance == null)
 		{
@@ -78,8 +79,8 @@ public class Module : global::EventDispatcher<object>
 
 	public static bool DLOKJOHNDID(ScreenType HBGBPDEGKFE, object data = null, Action<object> ODDEOFKLIAG = null, bool EOIDGPINLAH = true)
 	{
-		Module jLINNJGCFOG = ELEBLBJKDBI();
-		QuestParameters hHKLFIIBIFF = ListSF.ELEBLBJKDBI().BNMLDPNCMLB();
+		Module jLINNJGCFOG = GetInstance();
+		QuestParameters hHKLFIIBIFF = ListSF.GetInstance().BNMLDPNCMLB();
 		hHKLFIIBIFF.GAEPENBCCPB = hHKLFIIBIFF.BPPAPLLPBIJ;
 		hHKLFIIBIFF.GMDFCHJBJGO = INIOOEKJIDI(HBGBPDEGKFE);
 		SliderType oFEMKBGPNBH = GameUtils.NAMBCLFLNIN(hHKLFIIBIFF.OIKHBNOANPP);
@@ -129,11 +130,11 @@ public class Module : global::EventDispatcher<object>
 		DialogsManager.HNEGECPBALO();
 		SceneManagerSF.Load(DMCJGOMOJEF.ScreenType);
 		CallEvent(4, DMCJGOMOJEF.ScreenType);
-		QuestParameters hHKLFIIBIFF = ListSF.ELEBLBJKDBI().BNMLDPNCMLB();
+		QuestParameters hHKLFIIBIFF = ListSF.GetInstance().BNMLDPNCMLB();
 		hHKLFIIBIFF.BPPAPLLPBIJ = INIOOEKJIDI(DMCJGOMOJEF.ScreenType);
-		if (ListSF.ELEBLBJKDBI().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_SCENE_LOADED))
+		if (ListSF.GetInstance().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_SCENE_LOADED))
 		{
-			ListSF.ELEBLBJKDBI().MHHNIPBJNAD();
+			ListSF.GetInstance().MHHNIPBJNAD();
 		}
 	}
 
@@ -240,7 +241,7 @@ public class Module : global::EventDispatcher<object>
 			}
 			else
 			{
-				ListSF.ELEBLBJKDBI().MHHNIPBJNAD();
+				ListSF.GetInstance().MHHNIPBJNAD();
 			}
 		}
 		CallEvent(1, DMCJGOMOJEF.ScreenType);

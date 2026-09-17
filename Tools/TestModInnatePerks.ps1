@@ -19,37 +19,37 @@ function Apply($item,[string]$text) {
 $definition=[GameUtils]::FDEJIIDIPBI.AddExternalBasePerk($xml.DocumentElement)
 $weapon=[ItemInfo]::new($null); $weapon.Type='Weapon'
 $armor=[ItemInfo]::new($null); $armor.Type='Armor'
-$original=$weapon.NHBIJEEKALC
-$grants=$weapon.APMJCGBNEDI
-$preview=$weapon.LFIGBCDJHPG
+$original=$weapon.InnatePerks
+$grants=$weapon.DefaultEnchantments
+$preview=$weapon.DefaultEnchantmentPreviews
 $result=Apply $weapon '<Perks><Perk Name="fixture.innate"/></Perks>'
 Check $result.Success 'Valid innate perk rejected.'
-Check ($weapon.NHBIJEEKALC.Count -eq 1 -and $weapon.NHBIJEEKALC[0].Name -eq 'fixture.innate') 'Innate perk identity lost.'
-Check (![object]::ReferenceEquals($definition,$weapon.NHBIJEEKALC[0])) 'Registry perk was not cloned.'
+Check ($weapon.InnatePerks.Count -eq 1 -and $weapon.InnatePerks[0].Name -eq 'fixture.innate') 'Innate perk identity lost.'
+Check (![object]::ReferenceEquals($definition,$weapon.InnatePerks[0])) 'Registry perk was not cloned.'
 $other=Apply $armor '<Perks><Perk Name="fixture.innate"/></Perks>'
-Check (![object]::ReferenceEquals($armor.NHBIJEEKALC[0],$weapon.NHBIJEEKALC[0])) 'Equipment objects share mutable perk.'
-Check ([object]::ReferenceEquals($grants,$weapon.APMJCGBNEDI) -and [object]::ReferenceEquals($preview,$weapon.LFIGBCDJHPG)) 'Innate change affected acquisition enchantments.'
+Check (![object]::ReferenceEquals($armor.InnatePerks[0],$weapon.InnatePerks[0])) 'Equipment objects share mutable perk.'
+Check ([object]::ReferenceEquals($grants,$weapon.DefaultEnchantments) -and [object]::ReferenceEquals($preview,$weapon.DefaultEnchantmentPreviews)) 'Innate change affected acquisition enchantments.'
 $model=[ModelParameters]::new()
 $model.IsPlayer=$false
-$model.JGMLKIPCFII=$weapon
+$model.Weapon=$weapon
 Check ($model.JBIOECDAAKP().Exists([Predicate[PerkInfoItem]]{param($perk) $perk.Name -eq 'fixture.innate'})) 'Native model did not collect equipment perk.'
 $marker=[PerkInfoItem].GetField('PGECFFBLKJL',$flags)
-Check ($marker.GetValue($weapon.NHBIJEEKALC[0]) -and !$marker.GetValue($armor.NHBIJEEKALC[0]) -and !$marker.GetValue($definition)) 'Weapon marking leaked across item or registry boundaries.'
+Check ($marker.GetValue($weapon.InnatePerks[0]) -and !$marker.GetValue($armor.InnatePerks[0]) -and !$marker.GetValue($definition)) 'Weapon marking leaked across item or registry boundaries.'
 Check (!(Apply $weapon '<Perks/>').Success) 'Concurrent innate override accepted.'
 $first=$result.Lifetime
 $first.Dispose()
-Check ([object]::ReferenceEquals($original,$weapon.NHBIJEEKALC)) 'Original innate list identity not restored.'
+Check ([object]::ReferenceEquals($original,$weapon.InnatePerks)) 'Original innate list identity not restored.'
 Check ($model.JBIOECDAAKP().Count -eq 0) 'Model still collects removed equipment perk.'
-Check ($armor.NHBIJEEKALC.Count -eq 1) 'Weapon restoration affected armor.'
+Check ($armor.InnatePerks.Count -eq 1) 'Weapon restoration affected armor.'
 foreach ($invalid in @('<Wrong/>','<Perks><Perk Name="fixture.innate"/><Perk Name="missing"/></Perks>','<Perks><Perk Name="fixture.innate"/><Perk Name="fixture.innate"/></Perks>')) {
     $failed=Apply $weapon $invalid
-    Check (!$failed.Success -and [object]::ReferenceEquals($original,$weapon.NHBIJEEKALC)) 'Invalid innate override partially applied.'
+    Check (!$failed.Success -and [object]::ReferenceEquals($original,$weapon.InnatePerks)) 'Invalid innate override partially applied.'
 }
 $next=Apply $weapon '<Perks><Perk Name="fixture.innate"><Set Aspect="123"/></Perk></Perks>'
 $first.Dispose()
-Check ($weapon.NHBIJEEKALC.Count -eq 1) 'Stale lifetime removed newer innate override.'
+Check ($weapon.InnatePerks.Count -eq 1) 'Stale lifetime removed newer innate override.'
 $next.Lifetime.Dispose(); $next.Lifetime.Dispose(); $other.Lifetime.Dispose()
-Check ([object]::ReferenceEquals($original,$weapon.NHBIJEEKALC)) 'Repeated disposal changed restoration.'
+Check ([object]::ReferenceEquals($original,$weapon.InnatePerks)) 'Repeated disposal changed restoration.'
 $empty=Apply $weapon '<Perks/>'
 Check $empty.Success 'Explicit empty innate loadout rejected.'
 $empty.Lifetime.Dispose()
@@ -60,10 +60,10 @@ for ($index=0; $index -lt 65; $index++) {
     $rows.Add("<Perk Name='fixture.innate$index'/>")
 }
 $bounded=Apply $weapon ('<Perks>'+($rows.GetRange(0,64) -join '')+'</Perks>')
-Check ($bounded.Success -and $weapon.NHBIJEEKALC.Count -eq 64) 'Bounded innate list rejected.'
+Check ($bounded.Success -and $weapon.InnatePerks.Count -eq 64) 'Bounded innate list rejected.'
 $bounded.Lifetime.Dispose()
 $oversized=Apply $weapon ('<Perks>'+($rows -join '')+'</Perks>')
-Check (!$oversized.Success -and [object]::ReferenceEquals($original,$weapon.NHBIJEEKALC)) 'Oversized innate list changed equipment.'
+Check (!$oversized.Success -and [object]::ReferenceEquals($original,$weapon.InnatePerks)) 'Oversized innate list changed equipment.'
 $mod=[Eclipse.Modding.ModDiscovery]::DiscoverLoose((Join-Path $root 'Mods')).Mods | Where-Object { $_.Id.Value -eq 'example.charge-ui' }
 function Catalog([bool]$missing,[float]$aspect=123) {
     $catalog=[Eclipse.Modding.ModContentCatalog]::new()
@@ -97,17 +97,17 @@ $adapter=[Eclipse.Modding.LegacyContentAdapter]::new($content)
 $adapter.ApplyItems($items)
 $forge=[ForgeManager]::new()
 $adapter.ApplyPerksAndEnchantments([GameUtils]::FDEJIIDIPBI,$forge)
-Check ($weapon.NHBIJEEKALC.Count -eq 1 -and $weapon.APMJCGBNEDI.Count -eq 1) 'Innate/default loadouts failed to compose.'
+Check ($weapon.InnatePerks.Count -eq 1 -and $weapon.DefaultEnchantments.Count -eq 1) 'Innate/default loadouts failed to compose.'
 Check ($model.JBIOECDAAKP().Count -eq 1) 'Adapted innate perk absent from native model collection.'
 $remove=[Eclipse.Modding.LegacyContentAdapter].GetMethod('RemovePerksAndEnchantments',$flags)
 $null=$remove.Invoke($adapter,@())
-Check ([object]::ReferenceEquals($original,$weapon.NHBIJEEKALC) -and [object]::ReferenceEquals($grants,$weapon.APMJCGBNEDI)) 'Combined loadout teardown failed.'
+Check ([object]::ReferenceEquals($original,$weapon.InnatePerks) -and [object]::ReferenceEquals($grants,$weapon.DefaultEnchantments)) 'Combined loadout teardown failed.'
 $broken=[Eclipse.Modding.LegacyContentAdapter]::new((Catalog $true))
 $broken.ApplyItems($items)
 $failure=$null
 try { $broken.ApplyPerksAndEnchantments([GameUtils]::FDEJIIDIPBI,$forge) } catch { $failure=$_ }
 Check ($null -ne $failure -and $failure.ToString().Contains('innate_absent')) 'Missing later innate target accepted.'
-Check ([object]::ReferenceEquals($original,$weapon.NHBIJEEKALC) -and [object]::ReferenceEquals($grants,$weapon.APMJCGBNEDI)) 'Failed innate application left loadouts active.'
+Check ([object]::ReferenceEquals($original,$weapon.InnatePerks) -and [object]::ReferenceEquals($grants,$weapon.DefaultEnchantments)) 'Failed innate application left loadouts active.'
 foreach ($key in @('bad key','Aspect')) {
     $parameters=[Collections.Generic.Dictionary[string,float]]::new()
     $parameters.Add($key,$(if ($key -eq 'Aspect') { [float]::NaN } else { [float]1 }))

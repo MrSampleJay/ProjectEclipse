@@ -326,7 +326,7 @@ public class RulesInspector : global::EventDispatcher<object>
 			string item = item2.DMEDLGGNAIK();
 			IHEFAMAFBIA.KOELCOMEJMI.Add(item);
 		}
-		IHEFAMAFBIA.JEJPEJFLDJC(IHEFAMAFBIA.NHBIJEEKALC, IHEFAMAFBIA.KOELCOMEJMI);
+		IHEFAMAFBIA.JEJPEJFLDJC(IHEFAMAFBIA.Perks, IHEFAMAFBIA.KOELCOMEJMI);
 	}
 
 	public void ApplyNoAnimationRules(ModelParameters IHEFAMAFBIA)
@@ -415,7 +415,7 @@ public class RulesInspector : global::EventDispatcher<object>
 		int num = HNBFMAKFJAM.NNMOHPAAFGI();
 		if (num > 0)
 		{
-			KGKDKENMAOA.BDBBNECNMBP = num;
+			KGKDKENMAOA.RoundsToWin = num;
 		}
 		int num2 = HNBFMAKFJAM.IBHBDDFGEDN();
 		if (num2 > 0)

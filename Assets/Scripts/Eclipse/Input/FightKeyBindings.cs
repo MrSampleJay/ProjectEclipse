@@ -19,12 +19,12 @@ namespace Eclipse.Input
         public static string Display(int value) { return Labels[value]; }
         public static bool IsPressed(int value)
         {
-            return IsPressed(value, GamePad.GGAKHLLMPMM.One);
+            return IsPressed(value, GamePad.Player.One);
         }
-        public static bool IsPressed(int value, GamePad.GGAKHLLMPMM player)
+        public static bool IsPressed(int value, GamePad.Player player)
         {
-            return value < 10 ? GamePad.NFCGBMHPKMA((GamePad.PFENLAPGKFM)value, player)
-                : GamePad.MAJINGINCHM((GamePad.HKKPDLMCPIF)(value - 10), player, true) > .5f;
+            return value < 10 ? GamePad.GetButton((GamePad.Button)value, player)
+                : GamePad.GetTrigger((GamePad.Trigger)(value - 10), player, true) > .5f;
         }
         public static bool TrySet(int action, int value, out string message)
         {
@@ -38,11 +38,11 @@ namespace Eclipse.Input
             message = Names[action] + " saved.";
             return true;
         }
-        public static GamePad.LCNPGEANNDP MovementStick { get { return PlayerPrefs.GetInt(Prefix + "RightStick", 0) == 1
-            ? GamePad.LCNPGEANNDP.RightStick : GamePad.LCNPGEANNDP.LeftStick; } }
+        public static GamePad.Stick MovementStick { get { return PlayerPrefs.GetInt(Prefix + "RightStick", 0) == 1
+            ? GamePad.Stick.RightStick : GamePad.Stick.LeftStick; } }
         public static void ToggleStick()
         {
-            PlayerPrefs.SetInt(Prefix + "RightStick", MovementStick == GamePad.LCNPGEANNDP.LeftStick ? 1 : 0);
+            PlayerPrefs.SetInt(Prefix + "RightStick", MovementStick == GamePad.Stick.LeftStick ? 1 : 0);
             PlayerPrefs.Save();
         }
         public static void Reset()

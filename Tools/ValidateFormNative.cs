@@ -74,8 +74,8 @@ public static class ValidateFormNative
             if (!entered)
             {
                 var scripts = ModRuntime.Scripts;
-                if (scripts == null || ListSF.CCDKHLAMKKO() == null || Module.ELEBLBJKDBI() == null) return;
-                var screen = Module.ELEBLBJKDBI().NMCNDOPKFJD();
+                if (scripts == null || ListSF.CCDKHLAMKKO() == null || Module.GetInstance() == null) return;
+                var screen = Module.GetInstance().NMCNDOPKFJD();
                 if (screen != ScreenType.ModuleDojo && screen != ScreenType.ModuleMap) return;
                 var definition = scripts.Content.Fights.FirstOrDefault(f => f.Id.ToString() == "example.shifting-guardian:fights/guardian");
                 if (definition == null) throw new Exception("Shifting Guardian did not register.");
@@ -85,7 +85,7 @@ public static class ValidateFormNative
                 Debug.Log("[FormNative] StartFight=" + entered);
                 return;
             }
-            var fight = Fight.OHNKFOHIAKG();
+            var fight = Fight.GetCurrentFight();
             if (fight == null) return;
             var enemy = (Model)typeof(Fight).GetField("CKNCPOABFBO", Hidden).GetValue(fight);
             var player = (Model)typeof(Fight).GetField("_playerModel", Hidden).GetValue(fight);
@@ -94,36 +94,36 @@ public static class ValidateFormNative
             if (original != null && frame < previousFrame)
                 throw new Exception("Fight timer restarted during form replacement.");
             previousFrame = frame;
-            player.KMMJCHDKBDO.set_IsImmortalityEnabled(true);
+            player.Parameters.set_IsImmortalityEnabled(true);
             if (original == null)
             {
-                if (enemy.KMMJCHDKBDO.EclipseCharacterId != "example.shifting-guardian:warriors/staff")
-                    throw new Exception("Wrong initial native character: " + enemy.KMMJCHDKBDO.EclipseCharacterId);
+                if (enemy.Parameters.EclipseCharacterId != "example.shifting-guardian:warriors/staff")
+                    throw new Exception("Wrong initial native character: " + enemy.Parameters.EclipseCharacterId);
                 original = enemy;
                 originalWeapon = WeaponName(enemy);
                 if (string.IsNullOrEmpty(originalWeapon)) throw new Exception("Initial fighter has no weapon item.");
-                originalPlayer = enemy.KMMJCHDKBDO.IsPlayer;
-                originalControlled = enemy.KMMJCHDKBDO.ABAPAIEBNGK;
-                originalAi = enemy.KMMJCHDKBDO.EEGMBGBLLIF;
+                originalPlayer = enemy.Parameters.IsPlayer;
+                originalControlled = enemy.Parameters.UserControlled;
+                originalAi = enemy.Parameters.AiControlled;
                 enemy.EBABHGHPLFK().PerkVariables[Counter] = 17;
                 enemy.EBABHGHPLFK().PerkStringVariables[Phase] = "shifting";
-                enemy.GFNCMLFKBGP(enemy.KMMJCHDKBDO.CIDCNCDFONA * .75f);
-                originalRatio = enemy.KKMCHCNOHMB() / enemy.KMMJCHDKBDO.CIDCNCDFONA;
+                enemy.GFNCMLFKBGP(enemy.Parameters.CIDCNCDFONA * .75f);
+                originalRatio = enemy.KKMCHCNOHMB() / enemy.Parameters.CIDCNCDFONA;
                 Debug.Log("[FormNative] Initial body ready; health ratio=" + originalRatio);
             }
             if (enemy != original && switchedAt < 0)
             {
-                if (enemy.KMMJCHDKBDO.EclipseCharacterId != "example.shifting-guardian:warriors/baton")
+                if (enemy.Parameters.EclipseCharacterId != "example.shifting-guardian:warriors/baton")
                     throw new Exception("Unexpected replacement character.");
                 string weapon = WeaponName(enemy);
                 if (string.IsNullOrEmpty(weapon) || weapon == originalWeapon)
                     throw new Exception("Native weapon equipment did not change.");
-                if (enemy.KMMJCHDKBDO.IsPlayer != originalPlayer ||
-                    enemy.KMMJCHDKBDO.ABAPAIEBNGK != originalControlled ||
-                    enemy.KMMJCHDKBDO.EEGMBGBLLIF != originalAi)
+                if (enemy.Parameters.IsPlayer != originalPlayer ||
+                    enemy.Parameters.UserControlled != originalControlled ||
+                    enemy.Parameters.AiControlled != originalAi)
                     throw new Exception("Form replacement changed participant input/AI eligibility.");
                 CheckVariables(enemy);
-                float ratio = enemy.KKMCHCNOHMB() / enemy.KMMJCHDKBDO.CIDCNCDFONA;
+                float ratio = enemy.KKMCHCNOHMB() / enemy.Parameters.CIDCNCDFONA;
                 if (Math.Abs(ratio - originalRatio) > .001f) throw new Exception("Health ratio changed across form swap: " + ratio);
                 switchedAt = fight.get_FightTimeInFrames();
                 Debug.Log("[FormNative] Native body replaced at frame " + switchedAt + "; weapon=" +
@@ -179,7 +179,7 @@ public static class ValidateFormNative
 
     static string WeaponName(Model model)
     {
-        return model.KMMJCHDKBDO.DGMDEDKLGMB().FirstOrDefault(item => item != null && item.Type == "Weapon")?.Name;
+        return model.Parameters.DGMDEDKLGMB().FirstOrDefault(item => item != null && item.Type == "Weapon")?.Name;
     }
 
     static void CheckVariables(Model model)

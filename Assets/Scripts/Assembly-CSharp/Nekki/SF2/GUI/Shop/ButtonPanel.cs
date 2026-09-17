@@ -90,7 +90,7 @@ namespace Nekki.SF2.GUI.Shop
 				{
 					int kGDHCBNKLMF = _buttons.IndexOf(button);
 					string lFLGCDNKNJI = KHNCOFCHCCD((ShopSection)kGDHCBNKLMF);
-					button.set_NewItemsCount(ListSF.DJBOFEEKJMP().GetCountNewItemsByType(lFLGCDNKNJI));
+					button.set_NewItemsCount(ListSF.GetItems().GetCountNewItemsByType(lFLGCDNKNJI));
 				}
 			}
 		}

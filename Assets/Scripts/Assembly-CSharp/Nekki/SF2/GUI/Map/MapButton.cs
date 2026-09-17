@@ -113,16 +113,16 @@ namespace Nekki.SF2.GUI.Map
 			base.OnPointerClick(BHOLFGOGPCP);
 			if (get_MapButtonInfo() != null)
 			{
-				QuestParameters hHKLFIIBIFF = ListSF.ELEBLBJKDBI().BNMLDPNCMLB();
+				QuestParameters hHKLFIIBIFF = ListSF.GetInstance().BNMLDPNCMLB();
 				hHKLFIIBIFF.GCKANEECDHE = get_MapButtonInfo().Name;
-				bool handled = ListSF.ELEBLBJKDBI().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_MAP_BUTTON_PRESS);
+				bool handled = ListSF.GetInstance().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_MAP_BUTTON_PRESS);
 				if (get_MapButtonInfo().Name == "EclipseModeOn" || get_MapButtonInfo().Name == "EclipseModeOff")
 				{
 					UnityEngine.Debug.Log("[Eclipse] button=" + get_MapButtonInfo().Name + " questHandled=" + handled);
 				}
 				if (handled)
 				{
-					ListSF.ELEBLBJKDBI().MHHNIPBJNAD();
+					ListSF.GetInstance().MHHNIPBJNAD();
 				}
 			}
 		}

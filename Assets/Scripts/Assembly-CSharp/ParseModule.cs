@@ -8,7 +8,7 @@ public class ParseModule : LoadingModule
 			GameSettings.OCIPKAONMOP();
 			GameLoader.BJLLJHDFMOO();
 			GameLoader.POLKDKOOACO();
-			ListSF.ELEBLBJKDBI().IIKDNMBIHCM();
+			ListSF.GetInstance().IIKDNMBIHCM();
 			PerkTree.GBPBIPFIOJH().LJHPGKAOIAE();
 			GameSettings.LNNLDPLDABI();
 			GameLoader.SetSound();

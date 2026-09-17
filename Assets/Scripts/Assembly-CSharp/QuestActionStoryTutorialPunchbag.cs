@@ -16,12 +16,12 @@ public class QuestActionStoryTutorialPunchbag : QuestAction
 	{
 		base.DEJMHFMLKIC(GFIHPBCEEOB);
 		MainMenu.get_Instance().SetEnabled(false);
-		Fight gDBOMJODDEA = Fight.OHNKFOHIAKG();
-		SFButton buttonPunch = gDBOMJODDEA.KCJNBFLAMCC.GetButtonPunch();
+		Fight gDBOMJODDEA = Fight.GetCurrentFight();
+		SFButton buttonPunch = gDBOMJODDEA.Controller.GetButtonPunch();
 		buttonPunch.AddFlashImage("FightButtons.Kick_Highlight");
 		buttonPunch.FlashingImage.rectTransform.localScale = new Vector3(1.33f, 1.33f);
 		buttonPunch.set_IsFlashing(true);
-		SFButton buttonKick = gDBOMJODDEA.KCJNBFLAMCC.GetButtonKick();
+		SFButton buttonKick = gDBOMJODDEA.Controller.GetButtonKick();
 		buttonKick.AddFlashImage("FightButtons.Kick_Highlight");
 		buttonKick.FlashingImage.rectTransform.localScale = new Vector3(1.33f, 1.33f);
 		buttonKick.set_IsFlashing(true);
@@ -42,7 +42,7 @@ public class QuestActionStoryTutorialPunchbag : QuestAction
 				DPAAINCBKBF();
 			}
 		}
-		Fight gDBOMJODDEA = Fight.OHNKFOHIAKG();
+		Fight gDBOMJODDEA = Fight.GetCurrentFight();
 		Model fGCODGKLHED = gDBOMJODDEA.LNDLFINJHDB[0];
 		InfoAnimation.MGHNBEPCKIF dFLPNNBIFFN = fGCODGKLHED.DFLPNNBIFFN;
 		if (dFLPNNBIFFN == InfoAnimation.MGHNBEPCKIF.AnimationAttack)
@@ -64,10 +64,10 @@ public class QuestActionStoryTutorialPunchbag : QuestAction
 			CoroutineManager.get_Current().StopRoutine(_WaitTimeCoroutine);
 		}
 		MainMenu.get_Instance().SetEnabled(true);
-		Fight gDBOMJODDEA = Fight.OHNKFOHIAKG();
-		SFButton buttonPunch = gDBOMJODDEA.KCJNBFLAMCC.GetButtonPunch();
+		Fight gDBOMJODDEA = Fight.GetCurrentFight();
+		SFButton buttonPunch = gDBOMJODDEA.Controller.GetButtonPunch();
 		buttonPunch.set_IsFlashing(false);
-		SFButton buttonKick = gDBOMJODDEA.KCJNBFLAMCC.GetButtonKick();
+		SFButton buttonKick = gDBOMJODDEA.Controller.GetButtonKick();
 		buttonKick.set_IsFlashing(false);
 		Model fGCODGKLHED = gDBOMJODDEA.LNDLFINJHDB[0];
 		fGCODGKLHED.RemoveEventListener(2, OnAnimationStart);

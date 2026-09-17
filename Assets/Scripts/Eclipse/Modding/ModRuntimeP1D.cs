@@ -104,10 +104,10 @@ namespace Eclipse.Modding
 
         private static ModFighterSnapshot AiSnapshot(Model model)
         {
-            if (model == null || model.KMMJCHDKBDO == null || model.PLBNCDCFPML() == null) return null;
+            if (model == null || model.Parameters == null || model.PLBNCDCFPML() == null) return null;
             var position = model.PLBNCDCFPML();
-            return new ModFighterSnapshot(model.KKMCHCNOHMB(), model.KMMJCHDKBDO.CIDCNCDFONA,
-                model.KMMJCHDKBDO.HealthBarCount, position.GILCBJJPKBK(),position.OBIMBNIBEFG(),position.KMFEKANLCFO(),
+            return new ModFighterSnapshot(model.KKMCHCNOHMB(), model.Parameters.CIDCNCDFONA,
+                model.Parameters.HealthBarCount, position.GILCBJJPKBK(),position.OBIMBNIBEFG(),position.KMFEKANLCFO(),
                 CaptureAnimationSnapshot(model));
         }
 

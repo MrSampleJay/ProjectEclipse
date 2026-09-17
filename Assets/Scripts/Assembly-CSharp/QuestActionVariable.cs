@@ -36,6 +36,6 @@ public class QuestActionVariable : QuestAction
 		string gOHIIMFFFJI = lNIDLHOIHIM.ToString();
 		Roster nKGLHEGIKKP = ListSF.CCDKHLAMKKO();
 		nKGLHEGIKKP.SetQuestVariable(gOHIIMFFFJI, bAINMLLIKOL);
-		ListSF.ELEBLBJKDBI().EJANJEEGOOE();
+		ListSF.GetInstance().EJANJEEGOOE();
 	}
 }

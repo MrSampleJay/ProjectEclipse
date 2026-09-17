@@ -27,13 +27,13 @@ public class Roster {
     public Dictionary<string, ItemInfo> Items = new Dictionary<string, ItemInfo>();
     public Roster KHCNHPCPFII() => this;
     public UserItem CMGOCLGHNLH(string name) => Owned.Contains(name) ? new UserItem() : null;
-    public ItemInfo KCCDBEEKBCG(string name) => Items.TryGetValue(name, out var item) ? item : null;
+    public ItemInfo GetItemByName(string name) => Items.TryGetValue(name, out var item) ? item : null;
     public int PINDEKDNCNL() => 1;
 }
 public static class ListSF {
     public static Roster Value = new Roster();
     public static Roster CCDKHLAMKKO() => Value;
-    public static Roster DJBOFEEKJMP() => Value;
+    public static Roster GetItems() => Value;
 }
 public class Result {
     public class LJFFIBFBGID { public ItemInfo DLKPBAJDHBO; public RewardItem NAIEGGHELIH; public bool IDGKPLBKDIB; }

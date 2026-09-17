@@ -43,7 +43,7 @@ public class QuestActionToggleBattle : QuestAction
 		{
 			current.UpdateBattleButtonHidden(cGJCGEBPCAF);
 		}
-		ListSF.ELEBLBJKDBI().EJANJEEGOOE();
+		ListSF.GetInstance().EJANJEEGOOE();
 		OGIJONMKABB();
 	}
 }

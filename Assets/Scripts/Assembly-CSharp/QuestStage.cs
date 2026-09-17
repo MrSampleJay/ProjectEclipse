@@ -429,11 +429,11 @@ public class QuestStage : global::EventDispatcher<object>, IComparable<QuestStag
 		if (LBIPHHIJEFP() != null)
 		{
 			LBIPHHIJEFP().LCIHKPPGNPF();
-			ListSF.ELEBLBJKDBI().EJANJEEGOOE();
-			if (saveLotteryRun) ListSF.ELEBLBJKDBI().OnAuthenticate(true);
+			ListSF.GetInstance().EJANJEEGOOE();
+			if (saveLotteryRun) ListSF.GetInstance().OnAuthenticate(true);
 			return true;
 		}
-		if (saveLotteryRun) ListSF.ELEBLBJKDBI().OnAuthenticate(true);
+		if (saveLotteryRun) ListSF.GetInstance().OnAuthenticate(true);
 		return false;
 	}
 
@@ -456,8 +456,8 @@ public class QuestStage : global::EventDispatcher<object>, IComparable<QuestStag
 		QuestParameters hHKLFIIBIFF = new QuestParameters();
 		if (KKNOCIPBIIK != null)
 		{
-			FightList jDIPBIHBGPF = ListSF.ELEBLBJKDBI().AOEPHEPGLAK(KKNOCIPBIIK.HPELIEHPJCI());
-			hHKLFIIBIFF.JLGLBLDPAAF = ((jDIPBIHBGPF == null) ? FightIDS.Empty() : jDIPBIHBGPF.BCKFACGMOKC);
+			FightList jDIPBIHBGPF = ListSF.GetInstance().AOEPHEPGLAK(KKNOCIPBIIK.HPELIEHPJCI());
+			hHKLFIIBIFF.JLGLBLDPAAF = ((jDIPBIHBGPF == null) ? FightIDS.Empty() : jDIPBIHBGPF.FightId);
 			hHKLFIIBIFF.HEIADONEACH = KKNOCIPBIIK.LIPMCBHCLKN();
 			hHKLFIIBIFF.AIEHNBBFNPF = KKNOCIPBIIK.JOLAAOAFNFF();
 			hHKLFIIBIFF.BJIDALJIKNC = KKNOCIPBIIK.OGIPFNNJOPK();

@@ -18,7 +18,7 @@ public class QuestActionToggleGroup : QuestAction
 		base.DEJMHFMLKIC(GFIHPBCEEOB);
 		Roster nKGLHEGIKKP = ListSF.CCDKHLAMKKO();
 		nKGLHEGIKKP.AOBEHOILNOG(_name, _toggle.Equals("on"));
-		ListSF.ELEBLBJKDBI().OnAuthenticate(true);
+		ListSF.GetInstance().OnAuthenticate(true);
 		OGIJONMKABB();
 	}
 }

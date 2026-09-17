@@ -99,6 +99,15 @@ wait for or belong behind the modding/content API. See `DE_SCOPE_AUDIT.md`.
 - Deobfuscation mappings must be supported by recorded structural or behavioral
   evidence. Use the conservative scripts and their dry-run/idempotency checks;
   do not guess names from proximity or replace identifier substrings.
+- For obfuscated identifiers used by newly authored Eclipse code, make a
+  best-effort descriptive naming guess from the declaration, implementation and
+  callers. Limit this cleanup to symbols our new code actually uses, including
+  necessary updates to their existing callers. Mark each inferred declaration
+  with the exact comment `// best guess for name`. Reuse an existing descriptive
+  name when available. Check the owning type, name collisions, reflection and
+  serialized references before renaming; a shared obfuscated token does not
+  imply a shared meaning. Keep these guesses separate from confirmed recovery
+  mappings in `Deobfuscation/`.
 
 ## Build and verification
 

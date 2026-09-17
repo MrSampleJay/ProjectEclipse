@@ -42,7 +42,7 @@ namespace Eclipse.Modding
             {
                 if (!_configured || !gameObject.activeInHierarchy ||
                     gameObject.scene != SceneManager.GetActiveScene() ||
-                    Module.ELEBLBJKDBI().NMCNDOPKFJD() != _screen) yield break;
+                    Module.GetInstance().NMCNDOPKFJD() != _screen) yield break;
                 ModRuntime.PublishSceneEntry(Name(_screen), _profileGeneration);
             }
             finally { _configured = false; Destroy(this); }

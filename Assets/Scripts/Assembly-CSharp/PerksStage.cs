@@ -302,7 +302,7 @@ public class PerksStage : global::EventDispatcher<PerksStage.PerkEventStruct>
         if (model == null) throw new System.ArgumentNullException(nameof(model));
         var prepared = new PerkModelStruct();
         prepared.set_Model(model);
-        foreach (var perk in model.KMMJCHDKBDO.NHBIJEEKALC)
+        foreach (var perk in model.Parameters.Perks)
             OPACOCIKEOL(prepared, perk);
         return prepared;
     }

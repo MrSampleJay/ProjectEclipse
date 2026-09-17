@@ -3,7 +3,7 @@ using UnityEngine;
 
 public static class GamePad
 {
-	public enum PFENLAPGKFM
+	public enum Button // best guess for name
 	{
 		A = 0,
 		B = 1,
@@ -17,20 +17,20 @@ public static class GamePad
 		Start = 9
 	}
 
-	public enum HKKPDLMCPIF
+	public enum Trigger // best guess for name
 	{
 		LeftTrigger = 0,
 		RightTrigger = 1
 	}
 
-	public enum LCNPGEANNDP
+	public enum Stick // best guess for name
 	{
 		LeftStick = 0,
 		RightStick = 1,
 		Dpad = 2
 	}
 
-	public enum GGAKHLLMPMM
+	public enum Player // best guess for name
 	{
 		Any = 0,
 		One = 1,
@@ -39,39 +39,39 @@ public static class GamePad
 		Four = 4
 	}
 
-	public static bool JAHEECFCLHN(PFENLAPGKFM KLNKEPMAGKF, GGAKHLLMPMM EKFPHMLKDAP)
+	public static bool GetButtonDown(Button KLNKEPMAGKF, Player EKFPHMLKDAP) // best guess for name
 	{
 		KeyCode key = KNBAPAJMFIN(KLNKEPMAGKF, EKFPHMLKDAP);
 		return Input.GetKeyDown(key);
 	}
 
-	public static bool MGGDMBHADIP(PFENLAPGKFM KLNKEPMAGKF, GGAKHLLMPMM EKFPHMLKDAP)
+	public static bool GetButtonUp(Button KLNKEPMAGKF, Player EKFPHMLKDAP) // best guess for name
 	{
 		KeyCode key = KNBAPAJMFIN(KLNKEPMAGKF, EKFPHMLKDAP);
 		return Input.GetKeyUp(key);
 	}
 
-	public static bool NFCGBMHPKMA(PFENLAPGKFM KLNKEPMAGKF, GGAKHLLMPMM EKFPHMLKDAP)
+	public static bool GetButton(Button KLNKEPMAGKF, Player EKFPHMLKDAP) // best guess for name
 	{
 		KeyCode key = KNBAPAJMFIN(KLNKEPMAGKF, EKFPHMLKDAP);
 		return Input.GetKey(key);
 	}
 
-	public static Vector2 CNNMBBLLGNE(LCNPGEANNDP NMADGDHJBGB, GGAKHLLMPMM EKFPHMLKDAP, bool IMFLNPNECCO = false)
+	public static Vector2 GetStick(Stick NMADGDHJBGB, Player EKFPHMLKDAP, bool IMFLNPNECCO = false) // best guess for name
 	{
 		string axisName = string.Empty;
 		string axisName2 = string.Empty;
 		switch (NMADGDHJBGB)
 		{
-		case LCNPGEANNDP.Dpad:
+		case Stick.Dpad:
 			axisName = "DPad_XAxis_" + (int)EKFPHMLKDAP;
 			axisName2 = "DPad_YAxis_" + (int)EKFPHMLKDAP;
 			break;
-		case LCNPGEANNDP.LeftStick:
+		case Stick.LeftStick:
 			axisName = "L_XAxis_" + (int)EKFPHMLKDAP;
 			axisName2 = "L_YAxis_" + (int)EKFPHMLKDAP;
 			break;
-		case LCNPGEANNDP.RightStick:
+		case Stick.RightStick:
 			axisName = "R_XAxis_" + (int)EKFPHMLKDAP;
 			axisName2 = "R_YAxis_" + (int)EKFPHMLKDAP;
 			break;
@@ -98,15 +98,15 @@ public static class GamePad
 		return result;
 	}
 
-	public static float MAJINGINCHM(HKKPDLMCPIF CPBHKJFPFJB, GGAKHLLMPMM EKFPHMLKDAP, bool IMFLNPNECCO = false)
+	public static float GetTrigger(Trigger CPBHKJFPFJB, Player EKFPHMLKDAP, bool IMFLNPNECCO = false) // best guess for name
 	{
 		string axisName = string.Empty;
 		switch (CPBHKJFPFJB)
 		{
-		case HKKPDLMCPIF.LeftTrigger:
+		case Trigger.LeftTrigger:
 			axisName = "TriggersL_" + (int)EKFPHMLKDAP;
 			break;
-		case HKKPDLMCPIF.RightTrigger:
+		case Trigger.RightTrigger:
 			axisName = "TriggersR_" + (int)EKFPHMLKDAP;
 			break;
 		}
@@ -123,132 +123,132 @@ public static class GamePad
 		return result;
 	}
 
-	private static KeyCode KNBAPAJMFIN(PFENLAPGKFM KLNKEPMAGKF, GGAKHLLMPMM EKFPHMLKDAP)
+	private static KeyCode KNBAPAJMFIN(Button KLNKEPMAGKF, Player EKFPHMLKDAP)
 	{
 		switch (EKFPHMLKDAP)
 		{
-		case GGAKHLLMPMM.One:
+		case Player.One:
 			switch (KLNKEPMAGKF)
 			{
-			case PFENLAPGKFM.A:
+			case Button.A:
 				return KeyCode.Joystick1Button0;
-			case PFENLAPGKFM.B:
+			case Button.B:
 				return KeyCode.Joystick1Button1;
-			case PFENLAPGKFM.X:
+			case Button.X:
 				return KeyCode.Joystick1Button2;
-			case PFENLAPGKFM.Y:
+			case Button.Y:
 				return KeyCode.Joystick1Button3;
-			case PFENLAPGKFM.RightShoulder:
+			case Button.RightShoulder:
 				return KeyCode.Joystick1Button5;
-			case PFENLAPGKFM.LeftShoulder:
+			case Button.LeftShoulder:
 				return KeyCode.Joystick1Button4;
-			case PFENLAPGKFM.Back:
+			case Button.Back:
 				return KeyCode.Joystick1Button6;
-			case PFENLAPGKFM.Start:
+			case Button.Start:
 				return KeyCode.Joystick1Button7;
-			case PFENLAPGKFM.LeftStick:
+			case Button.LeftStick:
 				return KeyCode.Joystick1Button8;
-			case PFENLAPGKFM.RightStick:
+			case Button.RightStick:
 				return KeyCode.Joystick1Button9;
 			}
 			break;
-		case GGAKHLLMPMM.Two:
+		case Player.Two:
 			switch (KLNKEPMAGKF)
 			{
-			case PFENLAPGKFM.A:
+			case Button.A:
 				return KeyCode.Joystick2Button0;
-			case PFENLAPGKFM.B:
+			case Button.B:
 				return KeyCode.Joystick2Button1;
-			case PFENLAPGKFM.X:
+			case Button.X:
 				return KeyCode.Joystick2Button2;
-			case PFENLAPGKFM.Y:
+			case Button.Y:
 				return KeyCode.Joystick2Button3;
-			case PFENLAPGKFM.RightShoulder:
+			case Button.RightShoulder:
 				return KeyCode.Joystick2Button5;
-			case PFENLAPGKFM.LeftShoulder:
+			case Button.LeftShoulder:
 				return KeyCode.Joystick2Button4;
-			case PFENLAPGKFM.Back:
+			case Button.Back:
 				return KeyCode.Joystick2Button6;
-			case PFENLAPGKFM.Start:
+			case Button.Start:
 				return KeyCode.Joystick2Button7;
-			case PFENLAPGKFM.LeftStick:
+			case Button.LeftStick:
 				return KeyCode.Joystick2Button8;
-			case PFENLAPGKFM.RightStick:
+			case Button.RightStick:
 				return KeyCode.Joystick2Button9;
 			}
 			break;
-		case GGAKHLLMPMM.Three:
+		case Player.Three:
 			switch (KLNKEPMAGKF)
 			{
-			case PFENLAPGKFM.A:
+			case Button.A:
 				return KeyCode.Joystick3Button0;
-			case PFENLAPGKFM.B:
+			case Button.B:
 				return KeyCode.Joystick3Button1;
-			case PFENLAPGKFM.X:
+			case Button.X:
 				return KeyCode.Joystick3Button2;
-			case PFENLAPGKFM.Y:
+			case Button.Y:
 				return KeyCode.Joystick3Button3;
-			case PFENLAPGKFM.RightShoulder:
+			case Button.RightShoulder:
 				return KeyCode.Joystick3Button5;
-			case PFENLAPGKFM.LeftShoulder:
+			case Button.LeftShoulder:
 				return KeyCode.Joystick3Button4;
-			case PFENLAPGKFM.Back:
+			case Button.Back:
 				return KeyCode.Joystick3Button6;
-			case PFENLAPGKFM.Start:
+			case Button.Start:
 				return KeyCode.Joystick3Button7;
-			case PFENLAPGKFM.LeftStick:
+			case Button.LeftStick:
 				return KeyCode.Joystick3Button8;
-			case PFENLAPGKFM.RightStick:
+			case Button.RightStick:
 				return KeyCode.Joystick3Button9;
 			}
 			break;
-		case GGAKHLLMPMM.Four:
+		case Player.Four:
 			switch (KLNKEPMAGKF)
 			{
-			case PFENLAPGKFM.A:
+			case Button.A:
 				return KeyCode.Joystick4Button0;
-			case PFENLAPGKFM.B:
+			case Button.B:
 				return KeyCode.Joystick4Button1;
-			case PFENLAPGKFM.X:
+			case Button.X:
 				return KeyCode.Joystick4Button2;
-			case PFENLAPGKFM.Y:
+			case Button.Y:
 				return KeyCode.Joystick4Button3;
-			case PFENLAPGKFM.RightShoulder:
+			case Button.RightShoulder:
 				return KeyCode.Joystick4Button5;
-			case PFENLAPGKFM.LeftShoulder:
+			case Button.LeftShoulder:
 				return KeyCode.Joystick4Button4;
-			case PFENLAPGKFM.Back:
+			case Button.Back:
 				return KeyCode.Joystick4Button6;
-			case PFENLAPGKFM.Start:
+			case Button.Start:
 				return KeyCode.Joystick4Button7;
-			case PFENLAPGKFM.LeftStick:
+			case Button.LeftStick:
 				return KeyCode.Joystick4Button8;
-			case PFENLAPGKFM.RightStick:
+			case Button.RightStick:
 				return KeyCode.Joystick4Button9;
 			}
 			break;
-		case GGAKHLLMPMM.Any:
+		case Player.Any:
 			switch (KLNKEPMAGKF)
 			{
-			case PFENLAPGKFM.A:
+			case Button.A:
 				return KeyCode.JoystickButton0;
-			case PFENLAPGKFM.B:
+			case Button.B:
 				return KeyCode.JoystickButton1;
-			case PFENLAPGKFM.X:
+			case Button.X:
 				return KeyCode.JoystickButton2;
-			case PFENLAPGKFM.Y:
+			case Button.Y:
 				return KeyCode.JoystickButton3;
-			case PFENLAPGKFM.RightShoulder:
+			case Button.RightShoulder:
 				return KeyCode.JoystickButton5;
-			case PFENLAPGKFM.LeftShoulder:
+			case Button.LeftShoulder:
 				return KeyCode.JoystickButton4;
-			case PFENLAPGKFM.Back:
+			case Button.Back:
 				return KeyCode.JoystickButton6;
-			case PFENLAPGKFM.Start:
+			case Button.Start:
 				return KeyCode.JoystickButton7;
-			case PFENLAPGKFM.LeftStick:
+			case Button.LeftStick:
 				return KeyCode.JoystickButton8;
-			case PFENLAPGKFM.RightStick:
+			case Button.RightStick:
 				return KeyCode.JoystickButton9;
 			}
 			break;
@@ -256,28 +256,28 @@ public static class GamePad
 		return KeyCode.None;
 	}
 
-	public static GamepadState GetState(GGAKHLLMPMM EKFPHMLKDAP, bool IMFLNPNECCO = false)
+	public static GamepadState GetState(Player EKFPHMLKDAP, bool IMFLNPNECCO = false)
 	{
 		GamepadState iOIGCCPIJPN = new GamepadState();
-		iOIGCCPIJPN.IEKADOOKFKG = NFCGBMHPKMA(PFENLAPGKFM.A, EKFPHMLKDAP);
-		iOIGCCPIJPN.LDKCOIHONPG = NFCGBMHPKMA(PFENLAPGKFM.B, EKFPHMLKDAP);
-		iOIGCCPIJPN.IHAHIEHHNCG = NFCGBMHPKMA(PFENLAPGKFM.Y, EKFPHMLKDAP);
-		iOIGCCPIJPN.NPKMJMCLDAH = NFCGBMHPKMA(PFENLAPGKFM.X, EKFPHMLKDAP);
-		iOIGCCPIJPN.CLIBGHJKICF = NFCGBMHPKMA(PFENLAPGKFM.RightShoulder, EKFPHMLKDAP);
-		iOIGCCPIJPN.GGMOMECKAGP = NFCGBMHPKMA(PFENLAPGKFM.LeftShoulder, EKFPHMLKDAP);
-		iOIGCCPIJPN.KDPBFODDKOJ = NFCGBMHPKMA(PFENLAPGKFM.RightStick, EKFPHMLKDAP);
-		iOIGCCPIJPN.ELAPGGICPLB = NFCGBMHPKMA(PFENLAPGKFM.LeftStick, EKFPHMLKDAP);
-		iOIGCCPIJPN.Start = NFCGBMHPKMA(PFENLAPGKFM.Start, EKFPHMLKDAP);
-		iOIGCCPIJPN.AJLBHIHFFCE = NFCGBMHPKMA(PFENLAPGKFM.Back, EKFPHMLKDAP);
-		iOIGCCPIJPN.HNPGBMGKGEB = CNNMBBLLGNE(LCNPGEANNDP.LeftStick, EKFPHMLKDAP, IMFLNPNECCO);
-		iOIGCCPIJPN.IMMFMNIFNEH = CNNMBBLLGNE(LCNPGEANNDP.RightStick, EKFPHMLKDAP, IMFLNPNECCO);
-		iOIGCCPIJPN.PGHJPABHPLP = CNNMBBLLGNE(LCNPGEANNDP.Dpad, EKFPHMLKDAP, IMFLNPNECCO);
+		iOIGCCPIJPN.IEKADOOKFKG = GetButton(Button.A, EKFPHMLKDAP);
+		iOIGCCPIJPN.LDKCOIHONPG = GetButton(Button.B, EKFPHMLKDAP);
+		iOIGCCPIJPN.IHAHIEHHNCG = GetButton(Button.Y, EKFPHMLKDAP);
+		iOIGCCPIJPN.NPKMJMCLDAH = GetButton(Button.X, EKFPHMLKDAP);
+		iOIGCCPIJPN.CLIBGHJKICF = GetButton(Button.RightShoulder, EKFPHMLKDAP);
+		iOIGCCPIJPN.GGMOMECKAGP = GetButton(Button.LeftShoulder, EKFPHMLKDAP);
+		iOIGCCPIJPN.KDPBFODDKOJ = GetButton(Button.RightStick, EKFPHMLKDAP);
+		iOIGCCPIJPN.ELAPGGICPLB = GetButton(Button.LeftStick, EKFPHMLKDAP);
+		iOIGCCPIJPN.Start = GetButton(Button.Start, EKFPHMLKDAP);
+		iOIGCCPIJPN.AJLBHIHFFCE = GetButton(Button.Back, EKFPHMLKDAP);
+		iOIGCCPIJPN.HNPGBMGKGEB = GetStick(Stick.LeftStick, EKFPHMLKDAP, IMFLNPNECCO);
+		iOIGCCPIJPN.IMMFMNIFNEH = GetStick(Stick.RightStick, EKFPHMLKDAP, IMFLNPNECCO);
+		iOIGCCPIJPN.PGHJPABHPLP = GetStick(Stick.Dpad, EKFPHMLKDAP, IMFLNPNECCO);
 		iOIGCCPIJPN.EDCHBILGFLD = iOIGCCPIJPN.PGHJPABHPLP.x < 0f;
 		iOIGCCPIJPN.NNCHJCLKHHA = iOIGCCPIJPN.PGHJPABHPLP.x > 0f;
 		iOIGCCPIJPN.FJBHJIFKOMF = iOIGCCPIJPN.PGHJPABHPLP.y > 0f;
 		iOIGCCPIJPN.HHMEIEKKDAL = iOIGCCPIJPN.PGHJPABHPLP.y < 0f;
-		iOIGCCPIJPN.CHJIELPPCOE = MAJINGINCHM(HKKPDLMCPIF.LeftTrigger, EKFPHMLKDAP, IMFLNPNECCO);
-		iOIGCCPIJPN.ALEANDMIOJO = MAJINGINCHM(HKKPDLMCPIF.RightTrigger, EKFPHMLKDAP, IMFLNPNECCO);
+		iOIGCCPIJPN.CHJIELPPCOE = GetTrigger(Trigger.LeftTrigger, EKFPHMLKDAP, IMFLNPNECCO);
+		iOIGCCPIJPN.ALEANDMIOJO = GetTrigger(Trigger.RightTrigger, EKFPHMLKDAP, IMFLNPNECCO);
 		return iOIGCCPIJPN;
 	}
 }

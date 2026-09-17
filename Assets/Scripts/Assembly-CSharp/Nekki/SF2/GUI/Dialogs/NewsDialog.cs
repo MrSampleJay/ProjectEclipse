@@ -116,7 +116,7 @@ namespace Nekki.SF2.GUI.Dialogs
 			{
 				if ((!BuyItemAfterClose || !(RedirectShopAfterClose != string.Empty)) && GoShopAfterClose)
 				{
-					QuestParameters hHKLFIIBIFF = ListSF.ELEBLBJKDBI().BNMLDPNCMLB();
+					QuestParameters hHKLFIIBIFF = ListSF.GetInstance().BNMLDPNCMLB();
 					GameUtils.MKADBAEEMFA(GameUtils.NAMBCLFLNIN(hHKLFIIBIFF.OIKHBNOANPP), SliderType.SliderRuby);
 					DelayedStrike dDFFCNPELBC = new DelayedStrike(SliderType.SliderRuby);
 					if (RedirectShopAfterClose != string.Empty)

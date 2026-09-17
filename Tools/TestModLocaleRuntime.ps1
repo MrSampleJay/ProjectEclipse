@@ -53,7 +53,7 @@ public sealed class ListSF
 {
     public static int ParseCount;
     private static readonly ListSF Instance = new ListSF();
-    public static ListSF ELEBLBJKDBI() => Instance;
+    public static ListSF GetInstance() => Instance;
     public static ListSF CCDKHLAMKKO() => Instance;
     public void IIKDNMBIHCM() { ParseCount++; }
     public void AFAKCAMAACM() { }

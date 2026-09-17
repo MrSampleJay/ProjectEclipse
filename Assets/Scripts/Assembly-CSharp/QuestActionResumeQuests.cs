@@ -25,17 +25,17 @@ public class QuestActionResumeQuests : QuestAction
 		List<RosterQuest> list = nKGLHEGIKKP.JNHBGEDJBLJ();
 		foreach (RosterQuest item in list)
 		{
-			if (ListSF.ELEBLBJKDBI().IsEclipseQuestSuppressed(item.Name, item.FileName)) continue;
+			if (ListSF.GetInstance().IsEclipseQuestSuppressed(item.Name, item.FileName)) continue;
 			if (ONGHPGEIJEN != item.Name && item.get_Parameters() != null)
 			{
-				QuestStage mLLKDGBEGJI = ListSF.ELEBLBJKDBI().FindEclipseSavedQuest(item.Name, item.FileName);
+				QuestStage mLLKDGBEGJI = ListSF.GetInstance().FindEclipseSavedQuest(item.Name, item.FileName);
 				if (mLLKDGBEGJI != null && !mLLKDGBEGJI.IDGAAJAFCHC())
 				{
 					num++;
 				}
 			}
 		}
-		ScreenType iPKNDMINFMJ = Module.ELEBLBJKDBI().NMCNDOPKFJD();
+		ScreenType iPKNDMINFMJ = Module.GetInstance().NMCNDOPKFJD();
 		bool flag = false;
 		if (num == 0 && (iPKNDMINFMJ == ScreenType.ModulePreloader || iPKNDMINFMJ == ScreenType.ModuleNone || flag))
 		{

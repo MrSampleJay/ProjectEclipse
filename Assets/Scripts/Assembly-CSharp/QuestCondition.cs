@@ -130,7 +130,7 @@ public class QuestCondition : ConditionExtension
 			switch (value)
 			{
 			case "_$Fight":
-				BMDEBHIHIAJ.resultSTR = ((GFIHPBCEEOB.LBGOMJFFEPP() == null) ? string.Empty : GFIHPBCEEOB.LBGOMJFFEPP().BCKFACGMOKC.ToString());
+				BMDEBHIHIAJ.resultSTR = ((GFIHPBCEEOB.LBGOMJFFEPP() == null) ? string.Empty : GFIHPBCEEOB.LBGOMJFFEPP().FightId.ToString());
 				break;
 			case "_$Raid":
 				BMDEBHIHIAJ.resultSTR = GFIHPBCEEOB.OHPHPJBMNLH;
@@ -453,7 +453,7 @@ public class QuestCondition : ConditionExtension
 	private void COOHPPGOONL(QuestFunctions KJFKPMCPIBH, CompareResult BMDEBHIHIAJ)
 	{
 		string text = KJFKPMCPIBH.OMHIDHHNPEF();
-		FightList jDIPBIHBGPF = ListSF.ELEBLBJKDBI().AOEPHEPGLAK(text);
+		FightList jDIPBIHBGPF = ListSF.GetInstance().AOEPHEPGLAK(text);
 		if (jDIPBIHBGPF == null)
 		{
 			LLLOJBFMONN.Write(string.Format("{0},\"{1}\"", "ERROR: QuestCondition.FightFunction - cant fight fight: ", text));
@@ -463,16 +463,16 @@ public class QuestCondition : ConditionExtension
 		switch (hBDLDIKHFEG)
 		{
 		case "Name":
-			BMDEBHIHIAJ.resultSTR = jDIPBIHBGPF.BCKFACGMOKC.ToString();
+			BMDEBHIHIAJ.resultSTR = jDIPBIHBGPF.FightId.ToString();
 			break;
 		case "Zone":
-			BMDEBHIHIAJ.resultSTR = jDIPBIHBGPF.BCKFACGMOKC.PELHCAEAOFE();
+			BMDEBHIHIAJ.resultSTR = jDIPBIHBGPF.FightId.PELHCAEAOFE();
 			break;
 		case "Battle":
-			BMDEBHIHIAJ.resultSTR = jDIPBIHBGPF.BCKFACGMOKC.CPHDPCAECJN();
+			BMDEBHIHIAJ.resultSTR = jDIPBIHBGPF.FightId.CPHDPCAECJN();
 			break;
 		case "Fight":
-			BMDEBHIHIAJ.resultSTR = jDIPBIHBGPF.BCKFACGMOKC.EJPNIFANKDG();
+			BMDEBHIHIAJ.resultSTR = jDIPBIHBGPF.FightId.EJPNIFANKDG();
 			break;
 		case "Money":
 			BMDEBHIHIAJ.resultSTR = jDIPBIHBGPF.LDHOBIADNEC.ToString();
@@ -481,7 +481,7 @@ public class QuestCondition : ConditionExtension
 			BMDEBHIHIAJ.resultSTR = jDIPBIHBGPF.JBNAJPPNGFB.ToString();
 			break;
 		case "Type":
-			BMDEBHIHIAJ.resultSTR = ListSF.ELEBLBJKDBI().ADHNLNFEOKN(jDIPBIHBGPF.get_Type());
+			BMDEBHIHIAJ.resultSTR = ListSF.GetInstance().ADHNLNFEOKN(jDIPBIHBGPF.get_Type());
 			break;
 		case "LossCount":
 			BMDEBHIHIAJ.resultNumber = ((jDIPBIHBGPF.FLKFFDLLBKA() != null) ? jDIPBIHBGPF.FLKFFDLLBKA().HCMBHIGGMDF() : 0);
@@ -669,7 +669,7 @@ public class QuestCondition : ConditionExtension
 	private void CDOPLOPGDGC(QuestFunctions KJFKPMCPIBH, CompareResult BMDEBHIHIAJ)
 	{
 		string gOHIIMFFFJI = KJFKPMCPIBH.OMHIDHHNPEF();
-		ItemInfo dJKEECEOCJB = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(gOHIIMFFFJI);
+		ItemInfo dJKEECEOCJB = ListSF.GetItems().GetItemByName(gOHIIMFFFJI);
 		if (dJKEECEOCJB == null)
 		{
 			return;
@@ -868,7 +868,7 @@ public class QuestCondition : ConditionExtension
 			string gOHIIMFFFJI = array[0];
 			string iBBAMMHHBFE = ((array.Length <= 1) ? string.Empty : array[1]);
 			UserItem dKCHDHMLKHN = ListSF.CMGOCLGHNLH(gOHIIMFFFJI);
-			ItemInfo dJKEECEOCJB = ((dKCHDHMLKHN == null) ? ListSF.DJBOFEEKJMP().KCCDBEEKBCG(gOHIIMFFFJI) : dKCHDHMLKHN.BHKHOJPANHE());
+			ItemInfo dJKEECEOCJB = ((dKCHDHMLKHN == null) ? ListSF.GetItems().GetItemByName(gOHIIMFFFJI) : dKCHDHMLKHN.BHKHOJPANHE());
 			switch (KJFKPMCPIBH.HBDLDIKHFEG)
 			{
 			case "Type":
@@ -972,7 +972,7 @@ public class QuestCondition : ConditionExtension
 			{
 				LLLOJBFMONN.Error(string.Format("{0},{1}", "Quest Error: no such battle in stages: ", mOCEDDJOAEB.ToString()));
 			}
-			BMDEBHIHIAJ.resultSTR = ListSF.ELEBLBJKDBI().ADHNLNFEOKN(lFLGCDNKNJI);
+			BMDEBHIHIAJ.resultSTR = ListSF.GetInstance().ADHNLNFEOKN(lFLGCDNKNJI);
 			break;
 		}
 		case "Zone":
@@ -1216,7 +1216,7 @@ public class QuestCondition : ConditionExtension
 	private void KCEHOKELKMK(QuestFunctions KJFKPMCPIBH, CompareResult BMDEBHIHIAJ)
 	{
 		string text = KJFKPMCPIBH.OMHIDHHNPEF();
-		ListSF oPLPFMFAGMN = ListSF.ELEBLBJKDBI();
+		ListSF oPLPFMFAGMN = ListSF.GetInstance();
 		Roster nKGLHEGIKKP = ListSF.CCDKHLAMKKO();
 		if (!KJFKPMCPIBH.HBDLDIKHFEG.Equals("Value"))
 		{
@@ -1366,7 +1366,7 @@ public class QuestCondition : ConditionExtension
 	{
 		string text = ((KJFKPMCPIBH.arguments.Count <= 0) ? string.Empty : KJFKPMCPIBH.arguments[0].DCJLKCFKCOM);
 		string text2 = ((KJFKPMCPIBH.arguments.Count <= 1) ? string.Empty : KJFKPMCPIBH.arguments[1].DCJLKCFKCOM);
-		FightList jDIPBIHBGPF = ListSF.ELEBLBJKDBI().AOEPHEPGLAK(text);
+		FightList jDIPBIHBGPF = ListSF.GetInstance().AOEPHEPGLAK(text);
 		if (jDIPBIHBGPF == null)
 		{
 			LLLOJBFMONN.Error(string.Format("{0},\"{1}\"", "ERROR: QuestCondition::fightCurrencyCostFunction - cant fight fight: ", text));

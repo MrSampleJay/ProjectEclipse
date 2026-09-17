@@ -75,24 +75,24 @@ namespace Eclipse.Multiplayer
                 nextDeviceCheck = Time.unscaledTime + .5f;
                 if (PadsReady(keyboardPlayerOne) != padsWereReady) RefreshDeviceStatus();
             }
-            var fight = Fight.OHNKFOHIAKG();
+            var fight = Fight.GetCurrentFight();
             if (fight == null || !fight.IsLocalVersus) return;
             bool pausePressed = UnityEngine.Input.GetKeyDown(KeyCode.Escape);
-            if (!pausePressed && (GamePad.JAHEECFCLHN(GamePad.PFENLAPGKFM.Start, GamePad.GGAKHLLMPMM.One) ||
-                (!CurrentKeyboardPlayerOne() && GamePad.JAHEECFCLHN(GamePad.PFENLAPGKFM.Start, GamePad.GGAKHLLMPMM.Two))))
+            if (!pausePressed && (GamePad.GetButtonDown(GamePad.Button.Start, GamePad.Player.One) ||
+                (!CurrentKeyboardPlayerOne() && GamePad.GetButtonDown(GamePad.Button.Start, GamePad.Player.Two))))
             {
                 pausePressed = true;
                 // A custom combat binding owns its button. Escape and the HUD's
                 // pause button remain available when Start is assigned to combat.
                 for (int action = 0; action < FightControllerBindings.Names.Length; action++)
-                    if (FightControllerBindings.Get(action) == (int)GamePad.PFENLAPGKFM.Start) pausePressed = false;
+                    if (FightControllerBindings.Get(action) == (int)GamePad.Button.Start) pausePressed = false;
             }
             if (!pausePressed) return;
             if (IsShowing)
             {
-                if (page == Page.Pause && fight.PDINEPNPDFI() && PadsReady(CurrentKeyboardPlayerOne())) Resume();
+                if (page == Page.Pause && fight.IsPaused() && PadsReady(CurrentKeyboardPlayerOne())) Resume();
             }
-            else if (!fight.PDINEPNPDFI()) Pause("Match paused.");
+            else if (!fight.IsPaused()) Pause("Match paused.");
         }
 
         public void ShowLobby()
@@ -182,11 +182,11 @@ namespace Eclipse.Multiplayer
 
         private bool CurrentKeyboardPlayerOne() { return LocalVersusSession.Settings != null ? LocalVersusSession.Settings.KeyboardPlayerOne : keyboardPlayerOne; }
         private string SchemeLabel() { return keyboardPlayerOne ? "KEYBOARD + GAMEPAD" : "2 GAMEPADS"; }
-        private static bool PadsReady(bool keyboard) { return FightGamepadInput.IsConnected(GamePad.GGAKHLLMPMM.One) && (keyboard || FightGamepadInput.IsConnected(GamePad.GGAKHLLMPMM.Two)); }
+        private static bool PadsReady(bool keyboard) { return FightGamepadInput.IsConnected(GamePad.Player.One) && (keyboard || FightGamepadInput.IsConnected(GamePad.Player.Two)); }
         private static string PadReason(bool keyboard)
         {
-            if (!FightGamepadInput.IsConnected(GamePad.GGAKHLLMPMM.One)) return "Connect Gamepad 1 to continue.";
-            return !keyboard && !FightGamepadInput.IsConnected(GamePad.GGAKHLLMPMM.Two) ? "Connect Gamepad 2 to continue." : "Ready.";
+            if (!FightGamepadInput.IsConnected(GamePad.Player.One)) return "Connect Gamepad 1 to continue.";
+            return !keyboard && !FightGamepadInput.IsConnected(GamePad.Player.Two) ? "Connect Gamepad 2 to continue." : "Ready.";
         }
 
         private static string InputHint(bool keyboard)

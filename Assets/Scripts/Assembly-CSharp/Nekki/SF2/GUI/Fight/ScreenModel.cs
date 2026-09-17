@@ -183,9 +183,9 @@ namespace Nekki.SF2.GUI.Fight
 		{
 			if (!(_name == null))
 			{
-				if (_parameters.CHFEHBNIGKA != null && !_parameters.CHFEHBNIGKA.Equals(string.Empty))
+				if (_parameters.DisplayName != null && !_parameters.DisplayName.Equals(string.Empty))
 				{
-					_name.set_text(_parameters.CHFEHBNIGKA);
+					_name.set_text(_parameters.DisplayName);
 				}
 				else
 				{
@@ -238,7 +238,7 @@ namespace Nekki.SF2.GUI.Fight
 		{
 			if (_showRounds && !(_roundsPanel == null))
 			{
-				_roundsPanel.UpdateVictories(_parameters.FCOALLOHJNP);
+				_roundsPanel.UpdateVictories(_parameters.RoundsWon);
 			}
 		}
 

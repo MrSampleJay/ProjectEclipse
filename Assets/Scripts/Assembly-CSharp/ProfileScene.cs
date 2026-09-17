@@ -381,7 +381,7 @@ public class ProfileScene : Scene<ProfileScene>
 
 	public void SetScreen(SliderType LFLGCDNKNJI)
 	{
-		QuestParameters hHKLFIIBIFF = ListSF.ELEBLBJKDBI().BNMLDPNCMLB();
+		QuestParameters hHKLFIIBIFF = ListSF.GetInstance().BNMLDPNCMLB();
 		if (MFCFAGFGEKJ != LFLGCDNKNJI && GameUtils.MKADBAEEMFA(GameUtils.NAMBCLFLNIN(hHKLFIIBIFF.OIKHBNOANPP), LFLGCDNKNJI))
 		{
 			return;

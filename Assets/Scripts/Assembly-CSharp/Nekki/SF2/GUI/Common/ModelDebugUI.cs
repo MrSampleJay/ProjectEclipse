@@ -30,7 +30,7 @@ namespace Nekki.SF2.GUI.Common
 
 		private void Update()
 		{
-			global::Fight gDBOMJODDEA = global::Fight.OHNKFOHIAKG();
+			global::Fight gDBOMJODDEA = global::Fight.GetCurrentFight();
 			if (gDBOMJODDEA == null)
 			{
 				return;
@@ -42,7 +42,7 @@ namespace Nekki.SF2.GUI.Common
 			{
 				Model fGCODGKLHED = lNDLFINJHDB[i];
 				StringBuilder stringBuilder = ((!fGCODGKLHED.EPCNJLEHJCB()) ? DKOMADOJIJG : KCMLKPKALHF);
-				if (fGCODGKLHED.KMMJCHDKBDO.HBFMBOHLKPJ != null && fGCODGKLHED.KMMJCHDKBDO.HBFMBOHLKPJ.get_Type() == Tactic.GKJKJFJALCA.TacticTabular)
+				if (fGCODGKLHED.Parameters.HBFMBOHLKPJ != null && fGCODGKLHED.Parameters.HBFMBOHLKPJ.get_Type() == Tactic.GKJKJFJALCA.TacticTabular)
 				{
 					stringBuilder.Append(AiData.GetTacticsTableName(fGCODGKLHED.EEIGOJBKFGE().get_ResultSource()));
 					stringBuilder.Append("\n");

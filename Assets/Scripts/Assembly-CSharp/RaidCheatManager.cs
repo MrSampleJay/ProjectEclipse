@@ -223,7 +223,7 @@ public static class RaidCheatManager
 
 	public static string AONNCCIMKJG(params string[] PCJAKPJMKGN)
 	{
-		if (MainMenu.get_Instance() != null && Module.ELEBLBJKDBI() != null && Module.ELEBLBJKDBI().OMDLOOFIJDF())
+		if (MainMenu.get_Instance() != null && Module.GetInstance() != null && Module.GetInstance().OMDLOOFIJDF())
 		{
 			MainMenu.get_Instance().SkipTutorial();
 		}
@@ -400,7 +400,7 @@ public static class RaidCheatManager
 
 	public static string MMDKNJAIPLJ(params string[] LKIOKGCNKHE)
 	{
-		Fight gDBOMJODDEA = Fight.OHNKFOHIAKG();
+		Fight gDBOMJODDEA = Fight.GetCurrentFight();
 		if (gDBOMJODDEA == null)
 		{
 			return "NOT IN FIGHT";

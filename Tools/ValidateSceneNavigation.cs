@@ -2,7 +2,7 @@ using System;
 using Eclipse.Modding;
 public enum SliderType {None}
 public class QuestParameters {public string GAEPENBCCPB,BPPAPLLPBIJ="Map",GMDFCHJBJGO;public object OIKHBNOANPP;}
-public class ListSF {public static readonly ListSF Value=new ListSF();public QuestParameters Parameters=new QuestParameters();public static ListSF ELEBLBJKDBI()=>Value;public QuestParameters BNMLDPNCMLB()=>Parameters;}
+public class ListSF {public static readonly ListSF Value=new ListSF();public QuestParameters Parameters=new QuestParameters();public static ListSF GetInstance()=>Value;public QuestParameters BNMLDPNCMLB()=>Parameters;}
 public static class GameUtils {
  public static bool SceneGate,TabGate,Throw;public static int Gates;
  public static SliderType NAMBCLFLNIN(object value)=>SliderType.None;
@@ -14,7 +14,7 @@ public class Module {
  public class ScreenInfo {public ScreenType ScreenType=ScreenType.ModuleMap,HKJFKDEEIDJ;public object Data;public Action<object> Dlg;}
  public static Module Value=new Module();public ScreenInfo DMCJGOMOJEF=new ScreenInfo();public object Holder=new object();
  public int Transitions;public Action OnTransition;
- public static Module ELEBLBJKDBI()=>Value;
+ public static Module GetInstance()=>Value;
  public object BOHBCFMJPCA()=>Holder;
  public ScreenType NMCNDOPKFJD()=>DMCJGOMOJEF.ScreenType;
  public static string INIOOEKJIDI(ScreenType type)=>type.ToString();

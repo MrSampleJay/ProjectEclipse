@@ -31,7 +31,7 @@ public class BattleReplayable : Battle
 		{
 			return false;
 		}
-		List<FightList> fights = ANNHMNIHKCC();
+		List<FightList> fights = GetFights();
 		if (fights.Count == 0)
 		{
 			return false;
@@ -70,11 +70,11 @@ public class BattleReplayable : Battle
 		{
 			if (pIGKOIFBOME.JAJNIKDMPPO() >= eJGGHHEOGPG * (num + 1))
 			{
-				KGKDKENMAOA.PGBKNLAEANJ = ConditionStatus.StatusComplete;
+				KGKDKENMAOA.Status = ConditionStatus.StatusComplete;
 			}
 			else
 			{
-				KGKDKENMAOA.PGBKNLAEANJ = ConditionStatus.StatusOpen;
+				KGKDKENMAOA.Status = ConditionStatus.StatusOpen;
 			}
 		}
 	}

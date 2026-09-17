@@ -187,7 +187,7 @@ public class VideoPlayerController : MonoBehaviour
 
 	private void AJKJNJDGBAM(bool value)
 	{
-		ModuleHolder moduleHolder = Module.ELEBLBJKDBI().BOHBCFMJPCA();
+		ModuleHolder moduleHolder = Module.GetInstance().BOHBCFMJPCA();
 		if (moduleHolder != null)
 		{
 			moduleHolder.GetCanvas().enabled = value;

@@ -308,7 +308,7 @@ namespace Nekki.SF2.GUI.Menu
 			Scroll.AddEventListener(4, NPPDCDCLJKN);
 			Scroll.Collapse(0f);
 			NIGAFHNNOPH();
-			ScreenType cCGJDFLIKFN = Module.ELEBLBJKDBI().NMCNDOPKFJD();
+			ScreenType cCGJDFLIKFN = Module.GetInstance().NMCNDOPKFJD();
 			UpdateCurrentButton(cCGJDFLIKFN);
 		}
 
@@ -410,7 +410,7 @@ namespace Nekki.SF2.GUI.Menu
 
 		private void OnDojoDiscipleChanged(bool value)
 		{
-			if (Module.ELEBLBJKDBI().NMCNDOPKFJD() == ScreenType.ModuleDojo)
+			if (Module.GetInstance().NMCNDOPKFJD() == ScreenType.ModuleDojo)
 			{
 				OnClickButton(BGGGJCMEGPH.MENU_DOJO_DISCIPLE);
 			}
@@ -438,7 +438,7 @@ namespace Nekki.SF2.GUI.Menu
 
 		private void AIJADDNEMIP()
 		{
-			bool flag = SystemProperties.DBBOCENKMGD() && Module.ELEBLBJKDBI().OMDLOOFIJDF();
+			bool flag = SystemProperties.DBBOCENKMGD() && Module.GetInstance().OMDLOOFIJDF();
 			_skipTutorialBtn.gameObject.SetActive(flag);
 			if (flag)
 			{
@@ -516,9 +516,9 @@ namespace Nekki.SF2.GUI.Menu
 
 		private void PDAINDBEFAH(object data)
 		{
-			if (!ListSF.CCDKHLAMKKO().ADKHNLAMDJP && ListSF.ELEBLBJKDBI().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_ENERGY_BAR_PRESS))
+			if (!ListSF.CCDKHLAMKKO().ADKHNLAMDJP && ListSF.GetInstance().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_ENERGY_BAR_PRESS))
 			{
-				ListSF.ELEBLBJKDBI().MHHNIPBJNAD();
+				ListSF.GetInstance().MHHNIPBJNAD();
 			}
 		}
 
@@ -636,7 +636,7 @@ namespace Nekki.SF2.GUI.Menu
 
 		public void SkipTutorial()
 		{
-			if (ListSF.ELEBLBJKDBI().OMDLOOFIJDF())
+			if (ListSF.GetInstance().OMDLOOFIJDF())
 			{
 				string currentQuestName = QuestsManager.get_Instance().CurrentQuestName;
 				QuestStage questByName = QuestsManager.get_Instance().GetQuestByName(currentQuestName);
@@ -696,7 +696,7 @@ namespace Nekki.SF2.GUI.Menu
 			ResolutionImage resolutionImage = btnDojoDisciple.targetGraphic as ResolutionImage;
 			resolutionImage.set_SpriteName((!flag) ? "MenuButtons.btn_disciple" : "MenuButtons.btn_punching_bag");
 			Roster roster = ListSF.CCDKHLAMKKO();
-			UpdateDojoDiscipleVisibility(Module.ELEBLBJKDBI().NMCNDOPKFJD());
+			UpdateDojoDiscipleVisibility(Module.GetInstance().NMCNDOPKFJD());
 		}
 
 		private void UpdateDojoDiscipleVisibility(ScreenType screen)
@@ -822,7 +822,7 @@ namespace Nekki.SF2.GUI.Menu
 			_newItemsCircle.gameObject.SetActive(false);
 			_newItemsEllipse.gameObject.SetActive(false);
 			_newItemsLabel.gameObject.SetActive(false);
-			int num = ListSF.DJBOFEEKJMP().EFEJPENECKN();
+			int num = ListSF.GetItems().EFEJPENECKN();
 			if (num > 0)
 			{
 				if (num < 10)
@@ -853,7 +853,7 @@ namespace Nekki.SF2.GUI.Menu
 
 		private void GAALGNEPKEF()
 		{
-			ScreenType cCGJDFLIKFN = Module.ELEBLBJKDBI().NMCNDOPKFJD();
+			ScreenType cCGJDFLIKFN = Module.GetInstance().NMCNDOPKFJD();
 			if (HNCLEDJDODK != GetButtonFromScreen(cCGJDFLIKFN))
 			{
 				CloseMenu(0.25f);

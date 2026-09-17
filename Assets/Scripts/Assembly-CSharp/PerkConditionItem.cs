@@ -29,7 +29,7 @@ public class PerkConditionItem : PerkCondition
 		{
 			return false;
 		}
-		List<ItemInfo> list = fGCODGKLHED.KMMJCHDKBDO.DGMDEDKLGMB();
+		List<ItemInfo> list = fGCODGKLHED.Parameters.DGMDEDKLGMB();
 		foreach (ItemInfo item in list)
 		{
 			if ((KCIIELDOBOM.Equals(string.Empty) || KCIIELDOBOM.Equals(item.Type)) && (MDPPNGIEJGD.Equals(string.Empty) || MDPPNGIEJGD.Equals(item.MDPPNGIEJGD)) && (Name.Equals(string.Empty) || Name.Equals(item.Name)))

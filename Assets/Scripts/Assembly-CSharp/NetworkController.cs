@@ -41,7 +41,7 @@ public class NetworkController
 		// licensing, or a fake successful server login.
 		if (CHAPOJPCOJI)
 		{
-			ListSF.ELEBLBJKDBI().MAOPKFNKHOI();
+			ListSF.GetInstance().MAOPKFNKHOI();
 			CHAPOJPCOJI = false;
 		}
 		ListSF.CCDKHLAMKKO().BIHELGAGPGO();
@@ -52,20 +52,20 @@ public class NetworkController
 	{
 		LLLOJBFMONN.INNGABABJPC("Login sequence: NetworkController.LoginComplete");
 		LBDHOLEICEG.PGAJKMOPDIJ();
-		QuestParameters hHKLFIIBIFF = ListSF.ELEBLBJKDBI().BNMLDPNCMLB();
+		QuestParameters hHKLFIIBIFF = ListSF.GetInstance().BNMLDPNCMLB();
 		if (hHKLFIIBIFF.LBGOMJFFEPP() == null)
 		{
 			hHKLFIIBIFF.JLGLBLDPAAF = FightIDS.Empty();
 			hHKLFIIBIFF.HEIADONEACH = string.Empty;
 		}
-		if (ListSF.ELEBLBJKDBI().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_LOGIN_END))
+		if (ListSF.GetInstance().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_LOGIN_END))
 		{
-			ListSF.ELEBLBJKDBI().MHHNIPBJNAD();
+			ListSF.GetInstance().MHHNIPBJNAD();
 		}
 		OnLoginComplete(null);
-		if (ListSF.ELEBLBJKDBI().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_SESSION))
+		if (ListSF.GetInstance().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_SESSION))
 		{
-			ListSF.ELEBLBJKDBI().MHHNIPBJNAD();
+			ListSF.GetInstance().MHHNIPBJNAD();
 		}
 	}
 

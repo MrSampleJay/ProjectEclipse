@@ -65,9 +65,9 @@ namespace Nekki.SF2.GUI.Map
 
 		private void INDMIAIIHDD()
 		{
-			if (ListSF.ELEBLBJKDBI().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_VIDEO_BUTTON_PRESS))
+			if (ListSF.GetInstance().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_VIDEO_BUTTON_PRESS))
 			{
-				ListSF.ELEBLBJKDBI().MHHNIPBJNAD();
+				ListSF.GetInstance().MHHNIPBJNAD();
 			}
 		}
 

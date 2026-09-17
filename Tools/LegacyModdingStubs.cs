@@ -194,7 +194,7 @@ public sealed class Items
         }
     }
 
-    public ItemInfo KCCDBEEKBCG(string name)
+    public ItemInfo GetItemByName(string name)
     {
         ItemInfo item = _all.Find(value => value.Name == name);
         if (item != null) return item;
@@ -218,7 +218,7 @@ public sealed class Items
     public ItemInfo AddExternalItem(XmlNode node)
     {
         string name = node.Attributes["Name"].Value;
-        if (KCCDBEEKBCG(name) != null) throw new InvalidOperationException("Item already exists: " + name);
+        if (GetItemByName(name) != null) throw new InvalidOperationException("Item already exists: " + name);
         ItemInfo item = CreateItem(node);
         List<ItemInfo> category = Category(item.Type);
         if (category == null) throw new InvalidOperationException("Unsupported external item type: " + item.Type);
@@ -248,7 +248,7 @@ public sealed class Items
 
     public bool RemoveExternalItem(string name)
     {
-        ItemInfo item = KCCDBEEKBCG(name);
+        ItemInfo item = GetItemByName(name);
         if (item == null) return false;
         List<ItemInfo> category = Category(item.Type);
         if (category == null) return false;
@@ -259,7 +259,7 @@ public sealed class Items
 
     public bool RemoveExternalWeapon(string name)
     {
-        ItemInfo item = KCCDBEEKBCG(name);
+        ItemInfo item = GetItemByName(name);
         return item != null && item.Type == "Weapon" && RemoveExternalItem(name);
     }
 
@@ -663,8 +663,8 @@ public sealed class ListSF
     private static readonly ListSF Instance = new ListSF();
     private readonly Dictionary<string, Battle> _battles = new Dictionary<string, Battle>(StringComparer.Ordinal);
     private readonly List<QuestStage> _quests = new List<QuestStage>();
-    public static Items DJBOFEEKJMP() { return _items; }
-    public static ListSF ELEBLBJKDBI() { return Instance; }
+    public static Items GetItems() { return _items; }
+    public static ListSF GetInstance() { return Instance; }
     public static void ResetModdingTestItems() { _items = new Items(); }
 
     public static void SeedModdingTestCoreItems()

@@ -87,10 +87,10 @@ namespace Nekki.SF2.GUI
 				SceneManagerSF.DJKMOGJMHLO(get_SceneId());
 				GIHJGHJJJGK();
 				base.Awake();
-				Init(Module.ELEBLBJKDBI().DMCJGOMOJEF.Data);
+				Init(Module.GetInstance().DMCJGOMOJEF.Data);
 				if (get_SceneId() != ScreenType.Loader)
 				{
-					Module.ELEBLBJKDBI().NFEBHLDPHHI(this);
+					Module.GetInstance().NFEBHLDPHHI(this);
 				}
 				if (_WideScreenController != null)
 				{
@@ -118,7 +118,7 @@ namespace Nekki.SF2.GUI
 				PJNFHNFLNNO();
 			}
 			GAKMJOBBBAD((T)null);
-			Module.ELEBLBJKDBI().JOCFBBAAPBE(this);
+			Module.GetInstance().JOCFBBAAPBE(this);
 		}
 
 		public virtual void UpdateScene(object data)
@@ -127,7 +127,7 @@ namespace Nekki.SF2.GUI
 
 		public virtual void Reload(object data)
 		{
-			ScreenType iPKNDMINFMJ = Module.ELEBLBJKDBI().NMCNDOPKFJD();
+			ScreenType iPKNDMINFMJ = Module.GetInstance().NMCNDOPKFJD();
 		}
 
 		public virtual Sprite GetVisualObject(VisualObjectType NBLGANHBAEH)

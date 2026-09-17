@@ -306,8 +306,8 @@ public class InfoPerk
 			string key = item.Key;
 			int OEMALIFPGPO = item.Value;
 			int OEMALIFPGPO2 = 0;
-			IBODMPMJELJ.KJDFJPBIGJC.KMMJCHDKBDO.IBLHIAHECLK.Get(key, ref OEMALIFPGPO2, false, true);
-			IBODMPMJELJ.KJDFJPBIGJC.KMMJCHDKBDO.IBLHIAHECLK.Set(key, OEMALIFPGPO2 + OEMALIFPGPO * num, true);
+			IBODMPMJELJ.KJDFJPBIGJC.Parameters.IBLHIAHECLK.Get(key, ref OEMALIFPGPO2, false, true);
+			IBODMPMJELJ.KJDFJPBIGJC.Parameters.IBLHIAHECLK.Set(key, OEMALIFPGPO2 + OEMALIFPGPO * num, true);
 			if (key == "DamageFactor" && !CCBEDPIHKAD && IHAHGIHPNIG())
 			{
 				Model.StrikeResult gHHCDAFIKJE = IBODMPMJELJ.BIKLKJMNGKP.GHHCDAFIKJE;
@@ -339,8 +339,8 @@ public class InfoPerk
         if (!NBFBBDHELEJ.Contains(action) || !(action.AMKJNPOCODK is PerkActionSetAttributes) ||
             action.KJDFJPBIGJC != expected || action.AppliedAttributes == null)
             throw new System.InvalidOperationException("The active attribute effect has no matching applied state.");
-        var oldAttributes = expected.KMMJCHDKBDO.IBLHIAHECLK;
-        var newAttributes = replacement.KMMJCHDKBDO.IBLHIAHECLK;
+        var oldAttributes = expected.Parameters.IBLHIAHECLK;
+        var newAttributes = replacement.Parameters.IBLHIAHECLK;
         if (ReferenceEquals(oldAttributes, newAttributes))
             throw new System.InvalidOperationException("Form parameters must own separate attributes.");
         var beforeOld = new Attributes(oldAttributes);
@@ -451,7 +451,7 @@ public class InfoPerk
 
 	private void EAFKPBMOMKI(PerksStage.ActionPerk action, bool remove)
 	{
-		Fight fight = Fight.OHNKFOHIAKG();
+		Fight fight = Fight.GetCurrentFight();
 		if (fight == null)
 			return;
 		if (remove)
@@ -502,17 +502,17 @@ public class InfoPerk
 		}
 		PerkActionStealMagic steal = (PerkActionStealMagic)action.AMKJNPOCODK;
 		string magicName = steal.MagicName.IBCPKBBAFNH().DCJLKCFKCOM;
-		ItemInfo magic = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(magicName);
+		ItemInfo magic = ListSF.GetItems().GetItemByName(magicName);
 		if (magic != null)
 		{
-			action.PreviousMagic = action.KJDFJPBIGJC.KMMJCHDKBDO.ADBKGIBBNHJ;
+			action.PreviousMagic = action.KJDFJPBIGJC.Parameters.Magic;
 			action.KJDFJPBIGJC.SwapPerkItem(magic);
 		}
 	}
 
 	private void PCCAPNKPOKB(PerksStage.ActionPerk IBODMPMJELJ, bool CCBEDPIHKAD)
 	{
-		Fight gDBOMJODDEA = Fight.OHNKFOHIAKG();
+		Fight gDBOMJODDEA = Fight.GetCurrentFight();
 		if (gDBOMJODDEA != null)
 		{
 			gDBOMJODDEA.PHNCLBJKCOE(IBODMPMJELJ.KJDFJPBIGJC, CCBEDPIHKAD);
@@ -535,12 +535,12 @@ public class InfoPerk
 
 	private void GKLCDJLBBAM(PerksStage.ActionPerk IBODMPMJELJ)
 	{
-		Fight gDBOMJODDEA = Fight.OHNKFOHIAKG();
+		Fight gDBOMJODDEA = Fight.GetCurrentFight();
 		if (gDBOMJODDEA != null)
 		{
 			PerkActionLifesteal gGFKBGKDALP = (PerkActionLifesteal)IBODMPMJELJ.AMKJNPOCODK;
 			Model.StrikeResult gHHCDAFIKJE = IBODMPMJELJ.BIKLKJMNGKP.GHHCDAFIKJE;
-			float num = (ObscuredFloat)(IBODMPMJELJ.KJDFJPBIGJC.KMMJCHDKBDO.KKMCHCNOHMB());
+			float num = (ObscuredFloat)(IBODMPMJELJ.KJDFJPBIGJC.Parameters.KKMCHCNOHMB());
 			float aACBFABMADJ = gGFKBGKDALP.NIBCOALEIDN() * gHHCDAFIKJE.EEDJBBOCFNL * (IBODMPMJELJ.KJDFJPBIGJC.EGGEACCDAEK().LJCFIOPBNKD() / gHHCDAFIKJE.KJDFJPBIGJC.LJCFIOPBNKD());
 			gDBOMJODDEA.UpdateLife(IBODMPMJELJ.KJDFJPBIGJC, aACBFABMADJ);
 		}
@@ -669,7 +669,7 @@ public class InfoPerk
 
 	private void CPKHOBHFJDN(PerksStage.ActionPerk IBODMPMJELJ)
 	{
-		Fight gDBOMJODDEA = Fight.OHNKFOHIAKG();
+		Fight gDBOMJODDEA = Fight.GetCurrentFight();
 		if (gDBOMJODDEA == null)
 		{
 			return;
@@ -725,7 +725,7 @@ public class InfoPerk
 
 	private void DDOGCEKKDMK(PerksStage.ActionPerk IBODMPMJELJ)
 	{
-		Fight gDBOMJODDEA = Fight.OHNKFOHIAKG();
+		Fight gDBOMJODDEA = Fight.GetCurrentFight();
 		if (gDBOMJODDEA != null)
 		{
 			ModHealthChange eFIMNMBMCIJ = (ModHealthChange)IBODMPMJELJ.AMKJNPOCODK;
@@ -737,7 +737,7 @@ public class InfoPerk
 	{
 		if (IHAHGIHPNIG())
 		{
-			Fight gDBOMJODDEA = Fight.OHNKFOHIAKG();
+			Fight gDBOMJODDEA = Fight.GetCurrentFight();
 			if (gDBOMJODDEA != null)
 			{
 				PerksStage.ANPAFFMJMNG(DCMHONAFOGI.MBDDKGIOOGD.Name);
@@ -802,7 +802,7 @@ public class InfoPerk
 		{
 			return;
 		}
-		Fight gDBOMJODDEA = Fight.OHNKFOHIAKG();
+		Fight gDBOMJODDEA = Fight.GetCurrentFight();
 		if (gDBOMJODDEA != null)
 		{
 			PerkActionModificator cKCICHAIMFL = (PerkActionModificator)IBODMPMJELJ.AMKJNPOCODK;
@@ -925,7 +925,7 @@ public class InfoPerk
 	public void PANKENFPNPN()
 	{
 		IEDBEDCKAIE.Clear();
-		Fight gDBOMJODDEA = Fight.OHNKFOHIAKG();
+		Fight gDBOMJODDEA = Fight.GetCurrentFight();
 		if (gDBOMJODDEA != null)
 		{
 			gDBOMJODDEA.IEEGPNLEKHH().OFKIKABKDFD()["ModExpires"] = null;

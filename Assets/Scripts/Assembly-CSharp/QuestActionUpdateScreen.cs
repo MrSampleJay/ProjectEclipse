@@ -3,7 +3,7 @@ public class QuestActionUpdateScreen : QuestAction
 	public override void DEJMHFMLKIC(QuestParameters GFIHPBCEEOB)
 	{
 		base.DEJMHFMLKIC(GFIHPBCEEOB);
-		Module module = Module.ELEBLBJKDBI();
+		Module module = Module.GetInstance();
 		ScreenType currentScreen = module.NMCNDOPKFJD();
 		// UpdateScreen can be resumed from the save before the first real module
 		// has been selected. ModuleNone is a sentinel (enum value 8), not a scene
@@ -24,7 +24,7 @@ public class QuestActionUpdateScreen : QuestAction
 
 	private void DOHEMBEEHBB(object data)
 	{
-		Module.ELEBLBJKDBI().RemoveEventListener(1, DOHEMBEEHBB);
+		Module.GetInstance().RemoveEventListener(1, DOHEMBEEHBB);
 		OGIJONMKABB();
 	}
 }

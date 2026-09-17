@@ -85,7 +85,7 @@ public class UserItems
 		foreach (XmlNode childNode in EPGOOPEHFMO.ChildNodes)
 		{
 			if (childNode.NodeType != XmlNodeType.Element) continue;
-			if (Eclipse.Modding.ModSaveData.IsMissingItem(childNode, name => ListSF.DJBOFEEKJMP().KCCDBEEKBCG(name) != null))
+			if (Eclipse.Modding.ModSaveData.IsMissingItem(childNode, name => ListSF.GetItems().GetItemByName(name) != null))
 			{
 				_missingModItemIds.Add(childNode.Attributes["Name"].Value);
 				continue; // Preserve the entire save node, but do not run delivery/equipment logic on it.
@@ -93,7 +93,7 @@ public class UserItems
 			UserItem item = new UserItem(childNode);
 			if (Eclipse.Modding.ModSaveData.IsExternalItem(item.get_Name()))
 			{
-				ItemInfo definition = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(item.get_Name());
+				ItemInfo definition = ListSF.GetItems().GetItemByName(item.get_Name());
 				XmlAttribute equipped = EPGOOPEHFMO.ParentNode?.Attributes?[definition.Type];
 				if (equipped != null) item.JBLKCIBKMKB(equipped.Value == item.get_Name());
 			}
@@ -151,13 +151,13 @@ public class UserItems
 		}
 		if (Eclipse.Modding.ModSaveData.IsExternalItem(name))
 		{
-			ItemInfo requested = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(name);
+			ItemInfo requested = ListSF.GetItems().GetItemByName(name);
 			if (requested != null)
 			{
 				foreach (UserItem item in _items)
 				{
 					if (!Eclipse.Modding.ModSaveData.IsExternalItem(item.get_Name())) continue;
-					if (ListSF.DJBOFEEKJMP().KCCDBEEKBCG(item.get_Name()) == requested) return item;
+					if (ListSF.GetItems().GetItemByName(item.get_Name()) == requested) return item;
 				}
 			}
 		}
@@ -320,11 +320,11 @@ public class UserItems
 				EHDCCPKOANN().Add(NDMCFNGEPOA);
 			}
 			HHGJMMHMEMP.Invoke(NDMCFNGEPOA);
-			QuestParameters hHKLFIIBIFF = ListSF.ELEBLBJKDBI().BNMLDPNCMLB();
+			QuestParameters hHKLFIIBIFF = ListSF.GetInstance().BNMLDPNCMLB();
 			hHKLFIIBIFF.DLKPBAJDHBO = NDMCFNGEPOA.BHKHOJPANHE();
-			if (ListSF.ELEBLBJKDBI().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_DELIVERY))
+			if (ListSF.GetInstance().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_DELIVERY))
 			{
-				ListSF.ELEBLBJKDBI().MHHNIPBJNAD();
+				ListSF.GetInstance().MHHNIPBJNAD();
 			}
 			if (NDMCFNGEPOA.OFOPFCJNEBL() <= 0)
 			{
@@ -425,12 +425,12 @@ public class UserItems
 
 	public void UpdateLockItems(int OMHDLKNHNMJ)
 	{
-		List<ItemInfo> list = ListSF.DJBOFEEKJMP().HCDLKHKBEPF();
+		List<ItemInfo> list = ListSF.GetItems().HCDLKHKBEPF();
 		foreach (ItemInfo item in list)
 		{
 			if (item.DCHJDPCEODD)
 			{
-				ListSF.DJBOFEEKJMP().SetNewAddItem(item, true, OMHDLKNHNMJ);
+				ListSF.GetItems().SetNewAddItem(item, true, OMHDLKNHNMJ);
 			}
 		}
 	}

@@ -72,15 +72,15 @@ public class BattlePeriodic : Battle
 			RosterFight pIGKOIFBOME = jDIPBIHBGPF.FLKFFDLLBKA();
 			if (pIGKOIFBOME == null)
 			{
-				pIGKOIFBOME = nKGLHEGIKKP.OBAFPDGJHNN(jDIPBIHBGPF.BCKFACGMOKC);
-				jDIPBIHBGPF.HOCFLEMFFKC(pIGKOIFBOME);
+				pIGKOIFBOME = nKGLHEGIKKP.OBAFPDGJHNN(jDIPBIHBGPF.FightId);
+				jDIPBIHBGPF.SetRosterFight(pIGKOIFBOME);
 			}
 			pIGKOIFBOME.CKJFJFPBIFF(time);
 			// The map's availability check reads elapsed runtime state, while the
 			// line above only persists the completion timestamp. Keep both in sync
 			// so a finished duel locks and displays its timer immediately.
 			pIGKOIFBOME.ABIELBGOLCA(time);
-			ListSF.ELEBLBJKDBI().EJANJEEGOOE();
+			ListSF.GetInstance().EJANJEEGOOE();
 		}
 	}
 
@@ -89,7 +89,7 @@ public class BattlePeriodic : Battle
 		long num = 0L;
 		foreach (FightList item in JNPMCNMEOLE)
 		{
-			item.PGBKNLAEANJ = ConditionStatus.StatusOpen;
+			item.Status = ConditionStatus.StatusOpen;
 			RosterFight pIGKOIFBOME = item.FLKFFDLLBKA();
 			if (pIGKOIFBOME != null && IKINMKHLDIB && pIGKOIFBOME.ILBNPNIPEHO() > num)
 			{
@@ -105,7 +105,7 @@ public class BattlePeriodic : Battle
 				pIGKOIFBOME2.NAAHEPJIFAD(0L);
 			}
 		}
-		ListSF.ELEBLBJKDBI().EJANJEEGOOE();
+		ListSF.GetInstance().EJANJEEGOOE();
 	}
 
 	protected void FBCMLKCKOEB(long time)
@@ -156,7 +156,7 @@ public class BattlePeriodic : Battle
 		}
 		else
 		{
-			KGKDKENMAOA.HOCFLEMFFKC(ListSF.IKHJKHMIPEP(KGKDKENMAOA, FFIBGBMOMPD));
+			KGKDKENMAOA.SetRosterFight(ListSF.IKHJKHMIPEP(KGKDKENMAOA, FFIBGBMOMPD));
 		}
 	}
 

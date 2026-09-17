@@ -10,8 +10,8 @@ $code=@'
 using System;
 using System.Collections.Generic;
 class PerkInfoItem{public bool Fail;}
-class Parameters{public List<PerkInfoItem> NHBIJEEKALC=new List<PerkInfoItem>();}
-class Model{public Parameters KMMJCHDKBDO=new Parameters();}
+class Parameters{public List<PerkInfoItem> Perks=new List<PerkInfoItem>();}
+class Model{public Parameters Parameters=new Parameters();}
 class InfoPerk{public List<PerksStage.ActionPerk> Pending=new List<PerksStage.ActionPerk>(),Active=new List<PerksStage.ActionPerk>();public List<PerksStage.ActionPerk> MNLNLKOJPHO()=>Pending;public List<PerksStage.ActionPerk> HIPOGANEPMI()=>Active;}
 class PerkModelStruct{public Model Model;public List<InfoPerk> Effects=new List<InfoPerk>();public List<InfoPerk> HIPOGANEPMI()=>Effects;public List<PerkInfoItem> Perks=new List<PerkInfoItem>();public void set_Model(Model value){Model=value;}public Model get_Model()=>Model;}
 class PerksStage{
@@ -24,11 +24,11 @@ class PerksStage{
  static void Check(bool x,string why){if(!x)throw new Exception(why);}
  static void Main(){
  var stage=new PerksStage();var model=new Model();var other=new Model();var first=new PerkInfoItem();var broken=new PerkInfoItem{Fail=true};
- model.KMMJCHDKBDO.NHBIJEEKALC.Add(first);stage.AddModel(model);stage.AddModel(other);var original=stage.MPJMCCGKEOD[0];
+ model.Parameters.Perks.Add(first);stage.AddModel(model);stage.AddModel(other);var original=stage.MPJMCCGKEOD[0];
  var prepared=stage.PrepareModelRegistration(model);Check(stage.MPJMCCGKEOD.Count==2&&stage.MPJMCCGKEOD[0]==original&&prepared!=original&&prepared.get_Model()==model&&prepared.Perks[0]==first,"preparation builds detached registration without replacing active identity");
- model.KMMJCHDKBDO.NHBIJEEKALC.Add(broken);bool failed=false;try{stage.AddModel(model);}catch(InvalidOperationException){failed=true;}
+ model.Parameters.Perks.Add(broken);bool failed=false;try{stage.AddModel(model);}catch(InvalidOperationException){failed=true;}
  Check(failed&&stage.MPJMCCGKEOD.Count==2&&stage.MPJMCCGKEOD[0]==original&&original.Perks.Count==1,"later invalid perk preserves previous registration and trigger table");
- var fresh=new Model();fresh.KMMJCHDKBDO.NHBIJEEKALC.Add(broken);failed=false;try{stage.AddModel(fresh);}catch(InvalidOperationException){failed=true;}Check(failed&&stage.MPJMCCGKEOD.Count==2,"failed fresh preparation leaves no registration");
+ var fresh=new Model();fresh.Parameters.Perks.Add(broken);failed=false;try{stage.AddModel(fresh);}catch(InvalidOperationException){failed=true;}Check(failed&&stage.MPJMCCGKEOD.Count==2,"failed fresh preparation leaves no registration");
  broken.Fail=false;stage.AddModel(model);Check(stage.MPJMCCGKEOD.Count==2&&stage.MPJMCCGKEOD[0].get_Model()==other&&stage.MPJMCCGKEOD[1].Perks.Count==2,"successful replacement preserves native append ordering");
  failed=false;try{stage.PrepareModelRegistration(null);}catch(ArgumentNullException){failed=true;}Check(failed,"null preparation rejects");
  var effect=new InfoPerk();stage.MPJMCCGKEOD[0].Effects.Add(effect);var replacement=new Model();

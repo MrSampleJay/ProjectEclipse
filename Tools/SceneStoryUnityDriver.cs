@@ -12,7 +12,7 @@ public sealed class Module
 {
     public static readonly Module Instance=new Module();
     public ScreenType Requested=ScreenType.ModuleMap;
-    public static Module ELEBLBJKDBI()=>Instance;
+    public static Module GetInstance()=>Instance;
     public ScreenType NMCNDOPKFJD()=>Requested;
 }
 namespace Eclipse.Modding

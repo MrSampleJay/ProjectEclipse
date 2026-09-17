@@ -131,11 +131,11 @@ public class RosterTimerContainer
 
 	public void LIOBMNJPHFH(string name)
 	{
-		QuestParameters hHKLFIIBIFF = ListSF.ELEBLBJKDBI().BNMLDPNCMLB();
+		QuestParameters hHKLFIIBIFF = ListSF.GetInstance().BNMLDPNCMLB();
 		hHKLFIIBIFF.NAMGBBCEEEI = name;
-		if (ListSF.ELEBLBJKDBI().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_TIMER_END))
+		if (ListSF.GetInstance().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_TIMER_END))
 		{
-			ListSF.ELEBLBJKDBI().MHHNIPBJNAD();
+			ListSF.GetInstance().MHHNIPBJNAD();
 		}
 	}
 

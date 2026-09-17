@@ -362,7 +362,7 @@ namespace Eclipse.Diagnostics
 					continue;
 				}
 
-				ModelParameters parameters = model.KMMJCHDKBDO;
+				ModelParameters parameters = model.Parameters;
 				float current = parameters.RemainingHealthInDamageUnits;
 				float maximum = parameters.CIDCNCDFONA * parameters.HealthBarCount;
 				string role = model.IsPlayer ? "PLAYER" : "OPPONENT";
@@ -378,13 +378,13 @@ namespace Eclipse.Diagnostics
 
 		private static Fight GetActiveFight()
 		{
-			Fight fight = Fight.OHNKFOHIAKG();
+			Fight fight = Fight.GetCurrentFight();
 			return fight != null && fight.LNDLFINJHDB != null && fight.LNDLFINJHDB.Count > 0 ? fight : null;
 		}
 
 		private static bool IsFighterModel(Model model)
 		{
-			return model != null && model.KMMJCHDKBDO != null && model.ICDCIANNAAI != null &&
+			return model != null && model.Parameters != null && model.ICDCIANNAAI != null &&
 				model.KFDGGLKBKEP != null && model.HIPJNBEFGHN();
 		}
 

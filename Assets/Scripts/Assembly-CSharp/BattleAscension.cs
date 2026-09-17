@@ -19,11 +19,11 @@ public class BattleAscension : BattleReplayable
 		{
 			if (num + 1 < num2)
 			{
-				item.PGBKNLAEANJ = ConditionStatus.StatusComplete;
+				item.Status = ConditionStatus.StatusComplete;
 			}
 			else
 			{
-				item.PGBKNLAEANJ = ConditionStatus.StatusOpen;
+				item.Status = ConditionStatus.StatusOpen;
 			}
 			num++;
 		}
@@ -47,11 +47,11 @@ public class BattleAscension : BattleReplayable
 		{
 			if (num + 1 < num2)
 			{
-				KGKDKENMAOA.PGBKNLAEANJ = ConditionStatus.StatusComplete;
+				KGKDKENMAOA.Status = ConditionStatus.StatusComplete;
 			}
 			else
 			{
-				KGKDKENMAOA.PGBKNLAEANJ = ConditionStatus.StatusOpen;
+				KGKDKENMAOA.Status = ConditionStatus.StatusOpen;
 			}
 		}
 	}
@@ -73,7 +73,7 @@ public class BattleAscension : BattleReplayable
 		{
 			MEOMPEEPCJJ.EAONJGHNJGB(value);
 		}
-		ListSF.ELEBLBJKDBI().EJANJEEGOOE();
+		ListSF.GetInstance().EJANJEEGOOE();
 	}
 
 	public void IDLDHJBJEII(FightList KGKDKENMAOA)

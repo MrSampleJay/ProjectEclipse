@@ -116,7 +116,7 @@ public class QuestActionDownload : QuestAction
 		PacksController.ELEBLBJKDBI().DDKKLHDOFNG(COPKLEDMPPD.Name, COPKLEDMPPD.Url, aHLPODLKBEP, -1L, COPKLEDMPPD.NBEEINKJMPK);
 		if (isRewriteHashes)
 		{
-			ListSF.ELEBLBJKDBI().EMJLEBDAALP();
+			ListSF.GetInstance().EMJLEBDAALP();
 		}
 		DBONDAIEBPN.DEJMHFMLKIC(PAJDEKLLFNJ);
 	}

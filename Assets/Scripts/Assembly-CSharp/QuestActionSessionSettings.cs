@@ -21,7 +21,7 @@ public class QuestActionSessionSettings : QuestAction
 		{
 			nKGLHEGIKKP.SessionSettings(DDNHIFDLEPK, NILCJDPHEEE);
 		}
-		ListSF.ELEBLBJKDBI().EJANJEEGOOE();
+		ListSF.GetInstance().EJANJEEGOOE();
 		OGIJONMKABB();
 	}
 }

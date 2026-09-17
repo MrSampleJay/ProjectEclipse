@@ -204,27 +204,29 @@ public class ItemInfo
 
 	public XmlNode NodeXML;
 
-	public bool GNDLEFFMJDJ;
+	// best guess for name
+	public bool IgnoreInventoryEnchantments;
 
 	private bool DHDDDJFLDBD;
 
 	public Attributes IBLHIAHECLK = new Attributes();
 
-	public List<PerkInfoItem> NHBIJEEKALC = new List<PerkInfoItem>();
+	// best guess for name
+	public List<PerkInfoItem> InnatePerks = new List<PerkInfoItem>();
 	private InnatePerkOverride _innatePerkOverride;
 
 	private sealed class InnatePerkOverride : System.IDisposable
 	{
 		private ItemInfo _item;
 		private readonly List<PerkInfoItem> _previous;
-		public InnatePerkOverride(ItemInfo item) { _item = item; _previous = item.NHBIJEEKALC; }
+		public InnatePerkOverride(ItemInfo item) { _item = item; _previous = item.InnatePerks; }
 		public void Dispose()
 		{
 			ItemInfo item = _item;
 			if (item == null) return;
 			_item = null;
 			if (!object.ReferenceEquals(item._innatePerkOverride, this)) return;
-			item.NHBIJEEKALC = _previous;
+			item.InnatePerks = _previous;
 			item._innatePerkOverride = null;
 		}
 	}
@@ -247,7 +249,7 @@ public class ItemInfo
 			resolved.Add(definition.Clone(child["Set"], child["RatingEvaluation"]));
 		}
 		var replacement = new InnatePerkOverride(this);
-		NHBIJEEKALC = resolved;
+		InnatePerks = resolved;
 		_innatePerkOverride = replacement;
 		lifetime = replacement;
 		return true;
@@ -255,11 +257,14 @@ public class ItemInfo
 
 	public List<UpgradeData> KEFPALGDBOC = new List<UpgradeData>();
 
-	public List<PerkInfoItem> LFIGBCDJHPG = new List<PerkInfoItem>();
+	// best guess for name
+	public List<PerkInfoItem> DefaultEnchantmentPreviews = new List<PerkInfoItem>();
 
-	public List<PerkInfoItem> BAHCGAGHPNE = new List<PerkInfoItem>();
+	// best guess for name
+	public List<PerkInfoItem> ParsedPerks = new List<PerkInfoItem>();
 
-	public List<PerkStruct> APMJCGBNEDI = new List<PerkStruct>();
+	// best guess for name
+	public List<PerkStruct> DefaultEnchantments = new List<PerkStruct>();
 
 	private DefaultEnchantmentOverride _defaultEnchantmentOverride;
 
@@ -269,15 +274,15 @@ public class ItemInfo
 		private readonly List<PerkInfoItem> _previousPreview;
 		private readonly List<PerkStruct> _previousGrants;
 		public DefaultEnchantmentOverride(ItemInfo item)
-		{ _item = item; _previousPreview = item.LFIGBCDJHPG; _previousGrants = item.APMJCGBNEDI; }
+		{ _item = item; _previousPreview = item.DefaultEnchantmentPreviews; _previousGrants = item.DefaultEnchantments; }
 		public void Dispose()
 		{
 			ItemInfo item = _item;
 			if (item == null) return;
 			_item = null;
 			if (!object.ReferenceEquals(item._defaultEnchantmentOverride, this)) return;
-			item.LFIGBCDJHPG = _previousPreview;
-			item.APMJCGBNEDI = _previousGrants;
+			item.DefaultEnchantmentPreviews = _previousPreview;
+			item.DefaultEnchantments = _previousGrants;
 			item._defaultEnchantmentOverride = null;
 		}
 	}
@@ -302,8 +307,8 @@ public class ItemInfo
 			grants.Add(new PerkStruct(child));
 		}
 		var replacement = new DefaultEnchantmentOverride(this);
-		LFIGBCDJHPG = previews;
-		APMJCGBNEDI = grants;
+		DefaultEnchantmentPreviews = previews;
+		DefaultEnchantments = grants;
 		_defaultEnchantmentOverride = replacement;
 		lifetime = replacement;
 		return true;
@@ -418,14 +423,14 @@ public class ItemInfo
 		HHIFKGOJFAC = item.HHIFKGOJFAC;
 		BBMLCBEFLGI = item.BBMLCBEFLGI;
 		ParentItem = item.ParentItem;
-		GNDLEFFMJDJ = item.GNDLEFFMJDJ;
+		IgnoreInventoryEnchantments = item.IgnoreInventoryEnchantments;
 		DJNOJLDEHDD = item.DJNOJLDEHDD;
 		IBLHIAHECLK = new Attributes(item.IBLHIAHECLK);
-		NHBIJEEKALC = new List<PerkInfoItem>(item.NHBIJEEKALC);
+		InnatePerks = new List<PerkInfoItem>(item.InnatePerks);
 		KEFPALGDBOC = new List<UpgradeData>(item.KEFPALGDBOC);
-		LFIGBCDJHPG = new List<PerkInfoItem>(item.LFIGBCDJHPG);
-		BAHCGAGHPNE = new List<PerkInfoItem>(item.BAHCGAGHPNE);
-		APMJCGBNEDI = new List<PerkStruct>(item.APMJCGBNEDI);
+		DefaultEnchantmentPreviews = new List<PerkInfoItem>(item.DefaultEnchantmentPreviews);
+		ParsedPerks = new List<PerkInfoItem>(item.ParsedPerks);
+		DefaultEnchantments = new List<PerkStruct>(item.DefaultEnchantments);
 	}
 
 	public string JLDEALIEEJI()
@@ -535,7 +540,7 @@ public class ItemInfo
 	public virtual ItemInfo Clone()
 	{
 		ItemInfo dJKEECEOCJB = new ItemInfo(this);
-		dJKEECEOCJB.APMJCGBNEDI.Clear();
+		dJKEECEOCJB.DefaultEnchantments.Clear();
 		return dJKEECEOCJB;
 	}
 
@@ -759,13 +764,13 @@ public class ItemInfo
 
 	public void DELGGDKPMKP(XmlNode node)
 	{
-		NHBIJEEKALC.Clear();
+		InnatePerks.Clear();
 		foreach (XmlNode childNode in node.ChildNodes)
 		{
 			PerkInfoItem aCONCDFDNJH = APPAODDDDKI(childNode);
 			if (aCONCDFDNJH != null)
 			{
-				NHBIJEEKALC.Add(aCONCDFDNJH);
+				InnatePerks.Add(aCONCDFDNJH);
 			}
 		}
 	}
@@ -792,13 +797,13 @@ public class ItemInfo
 
 	public void CKIBPGDJHNO(XmlNode node)
 	{
-		LFIGBCDJHPG.Clear();
+		DefaultEnchantmentPreviews.Clear();
 		foreach (XmlNode childNode in node.ChildNodes)
 		{
 			PerkInfoItem aCONCDFDNJH = APPAODDDDKI(childNode);
 			if (aCONCDFDNJH != null)
 			{
-				LFIGBCDJHPG.Add(aCONCDFDNJH);
+				DefaultEnchantmentPreviews.Add(aCONCDFDNJH);
 			}
 		}
 	}
@@ -815,8 +820,8 @@ public class ItemInfo
 			PerkInfoItem aCONCDFDNJH = APPAODDDDKI(childNode);
 			if (aCONCDFDNJH != null)
 			{
-				BAHCGAGHPNE.Add(aCONCDFDNJH);
-				NHBIJEEKALC.Add(aCONCDFDNJH);
+				ParsedPerks.Add(aCONCDFDNJH);
+				InnatePerks.Add(aCONCDFDNJH);
 			}
 		}
 	}
@@ -827,13 +832,13 @@ public class ItemInfo
 		foreach (XmlNode childNode in node.ChildNodes)
 		{
 			PerkStruct item = new PerkStruct(childNode);
-			APMJCGBNEDI.Add(item);
+			DefaultEnchantments.Add(item);
 		}
 	}
 
 	public void GAHFEAAHDCL()
 	{
-		APMJCGBNEDI.Clear();
+		DefaultEnchantments.Clear();
 	}
 
 	private void FHILKOAPBKG(int NPFOBKBJAOB)
@@ -869,7 +874,7 @@ public class ItemInfo
 		List<UpgradeData> list2 = new List<UpgradeData>();
 		int num = FMHIKMNJHDL();
 		list2.AddRange(KEFPALGDBOC);
-		UpgradeDataContainer aKHJNNDCKMK = ListSF.DJBOFEEKJMP().BKPOCLGODDM(PHDCGJOKBLH);
+		UpgradeDataContainer aKHJNNDCKMK = ListSF.GetItems().BKPOCLGODDM(PHDCGJOKBLH);
 		if (aKHJNNDCKMK != null)
 		{
 			foreach (UpgradeData item in aKHJNNDCKMK.KPAPEBOAKIE)
@@ -1083,7 +1088,7 @@ public class ItemInfo
 
 	public static void DenominateItems(int NPFOBKBJAOB = 0)
 	{
-		List<ItemInfo> list = ListSF.DJBOFEEKJMP().HCDLKHKBEPF();
+		List<ItemInfo> list = ListSF.GetItems().HCDLKHKBEPF();
 		foreach (ItemInfo item in list)
 		{
 			item.KJFAOKLILOC = (ObscuredLong)(GameUtils.GetDenominatedValue((ObscuredLong)(item.KJFAOKLILOC), NPFOBKBJAOB));
@@ -1099,7 +1104,7 @@ public class ItemInfo
 				item.HHIFKGOJFAC = (ObscuredLong)(GameUtils.GetDenominatedValue((ObscuredLong)(item.HHIFKGOJFAC), NPFOBKBJAOB));
 			}
 		}
-		foreach (UpgradeDataContainer item3 in ListSF.DJBOFEEKJMP().CKCGBCNMOOP())
+		foreach (UpgradeDataContainer item3 in ListSF.GetItems().CKCGBCNMOOP())
 		{
 			foreach (UpgradeData item4 in item3.KPAPEBOAKIE)
 			{
@@ -1123,16 +1128,16 @@ public class ItemInfo
 
 	private void APPEHIAIAAM()
 	{
-		BAHCGAGHPNE.ForEach((PerkInfoItem DHDMNHCIPEH) =>
+		ParsedPerks.ForEach((PerkInfoItem DHDMNHCIPEH) =>
 		{
 			MLOOKBFCOHM(DHDMNHCIPEH);
 		});
-		BAHCGAGHPNE.Clear();
+		ParsedPerks.Clear();
 	}
 
 	private void MLOOKBFCOHM(PerkInfoItem DPLEGFCHOCE)
 	{
-		NHBIJEEKALC.Remove(DPLEGFCHOCE);
+		InnatePerks.Remove(DPLEGFCHOCE);
 	}
 
 	private void Init()
@@ -1164,7 +1169,7 @@ public class ItemInfo
 		OJMODONDEHE = 0;
 		DGOMAGNAMMD = false;
 		CMDJPAKOHMK = string.Empty;
-		GNDLEFFMJDJ = false;
+		IgnoreInventoryEnchantments = false;
 		PBMHNMOHODB = "None";
 		PPGBMODEAGD = true;
 	}

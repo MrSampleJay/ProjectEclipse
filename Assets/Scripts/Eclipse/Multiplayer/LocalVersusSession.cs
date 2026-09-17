@@ -45,8 +45,8 @@ namespace Eclipse.Multiplayer
 
         public static bool DevicesReady(bool keyboardPlayerOne)
         {
-            return FightGamepadInput.IsConnected(GamePad.GGAKHLLMPMM.One) &&
-                (keyboardPlayerOne || FightGamepadInput.IsConnected(GamePad.GGAKHLLMPMM.Two));
+            return FightGamepadInput.IsConnected(GamePad.Player.One) &&
+                (keyboardPlayerOne || FightGamepadInput.IsConnected(GamePad.Player.Two));
         }
 
         public static void StartMatch(LocalVersusSettings settings)
@@ -56,18 +56,18 @@ namespace Eclipse.Multiplayer
             if (settings == null) throw new ArgumentNullException(nameof(settings));
             if (!DevicesReady(settings.KeyboardPlayerOne))
                 throw new InvalidOperationException(settings.KeyboardPlayerOne ? "Connect a gamepad for player two." : "Connect two gamepads.");
-            var current = Fight.OHNKFOHIAKG();
+            var current = Fight.GetCurrentFight();
             if (current != null && !current.IsLocalVersus)
                 throw new InvalidOperationException("Leave the current fight before starting local versus.");
             // Validate and prepare both independent loadouts before leaving the lobby.
             var match = new LocalVersusMatch(settings);
-            current?.JOJIDODPDLA(true);
+            current?.SetPaused(true);
             Settings = settings;
             HasResult = false;
             _starting = true;
             _startedAt = Time.realtimeSinceStartup;
             LocalVersusMenu.Ensure().Hide();
-            try { Module.ELEBLBJKDBI().OpenLocalVersus(match); }
+            try { Module.GetInstance().OpenLocalVersus(match); }
             catch
             {
                 _starting = false;
@@ -85,15 +85,15 @@ namespace Eclipse.Multiplayer
 
         public static void Pause(string reason)
         {
-            var fight = Fight.OHNKFOHIAKG();
+            var fight = Fight.GetCurrentFight();
             if (!IsActive || _starting || HasResult || fight == null || !fight.IsLocalVersus) return;
-            fight.JOJIDODPDLA(true);
+            fight.SetPaused(true);
             LocalVersusMenu.Ensure().ShowPause(reason);
         }
 
         public static void Resume()
         {
-            var fight = Fight.OHNKFOHIAKG();
+            var fight = Fight.GetCurrentFight();
             if (!IsActive || HasResult || _starting || fight == null || !fight.IsLocalVersus) return;
             if (!DevicesReady(Settings.KeyboardPlayerOne))
             {
@@ -101,14 +101,14 @@ namespace Eclipse.Multiplayer
                 return;
             }
             LocalVersusMenu.Ensure().Hide();
-            fight.JOJIDODPDLA(false);
+            fight.SetPaused(false);
         }
 
         public static void ShowLobby()
         {
             if (!IsActive || !IsReady || _starting || _returning) return;
-            var fight = Fight.OHNKFOHIAKG();
-            if (fight != null && fight.IsLocalVersus) fight.JOJIDODPDLA(true);
+            var fight = Fight.GetCurrentFight();
+            if (fight != null && fight.IsLocalVersus) fight.SetPaused(true);
             LocalVersusMenu.Ensure().ShowLobby();
         }
 
@@ -116,9 +116,9 @@ namespace Eclipse.Multiplayer
         {
             if (HasResult || fight == null || !fight.IsLocalVersus) return;
             HasResult = true;
-            fight.JOJIDODPDLA(true);
-            int one = fight.BBGAFGNHFEA().KMMJCHDKBDO.FCOALLOHJNP;
-            int two = fight.FHHHIEPAKLP().KMMJCHDKBDO.FCOALLOHJNP;
+            fight.SetPaused(true);
+            int one = fight.GetPlayerModel().Parameters.RoundsWon;
+            int two = fight.GetEnemyModel().Parameters.RoundsWon;
             LocalVersusMenu.Ensure().ShowResult(abandoned ? -1 : (one > two ? 0 : 1), one, two);
         }
 
@@ -126,11 +126,11 @@ namespace Eclipse.Multiplayer
         {
             if (_returning) return;
             _returning = true;
-            Fight.OHNKFOHIAKG()?.JOJIDODPDLA(true);
+            Fight.GetCurrentFight()?.SetPaused(true);
             GameController.get_Current()?.StopController();
             LocalVersusMenu.Ensure().Hide();
             Eclipse.UI.TitleScreen.PrepareForRestart();
-            Sound.IBHIPOOHNFK();
+            Sound.StopLoopedSounds();
             Time.timeScale = 1f;
             // Keep isolation active until the outgoing scene has completed teardown.
             SceneManagerSF.Load(ScreenType.ModulePreloader);
@@ -163,8 +163,8 @@ namespace Eclipse.Multiplayer
                 }
                 return;
             }
-            var fight = Fight.OHNKFOHIAKG();
-            if (Settings != null && fight != null && fight.IsLocalVersus && !HasResult && !fight.PDINEPNPDFI() &&
+            var fight = Fight.GetCurrentFight();
+            if (Settings != null && fight != null && fight.IsLocalVersus && !HasResult && !fight.IsPaused() &&
                 !DevicesReady(Settings.KeyboardPlayerOne)) Pause("A controller disconnected. Reconnect it, then resume.");
         }
     }

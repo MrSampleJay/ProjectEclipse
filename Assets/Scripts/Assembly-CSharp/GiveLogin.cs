@@ -107,7 +107,7 @@ public class GiveLogin
 		}
 		foreach (GiveItemLogin item in OJIAKDDCGLB)
 		{
-			ListSF.DJBOFEEKJMP().CKCMJAJAELO(item.Name).ForEach((ItemInfo PJDAGCBPLJE) =>
+			ListSF.GetItems().CKCMJAJAELO(item.Name).ForEach((ItemInfo PJDAGCBPLJE) =>
 			{
 				if (item.Equip)
 				{
@@ -129,9 +129,9 @@ public class GiveLogin
 		}
 		DCHJDPCEODD = false;
 		GMBOPFIPNAE = OHHLCBPGOIM != 0 || JDPAGMPKLHB != 0 || OJIAKDDCGLB.Count > 0;
-		if (ListSF.ELEBLBJKDBI().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_SERVER_CURRENCY))
+		if (ListSF.GetInstance().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_SERVER_CURRENCY))
 		{
-			ListSF.ELEBLBJKDBI().MHHNIPBJNAD();
+			ListSF.GetInstance().MHHNIPBJNAD();
 		}
 	}
 }

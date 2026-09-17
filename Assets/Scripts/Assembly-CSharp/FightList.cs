@@ -6,7 +6,8 @@ public class FightList
 {
     // Transient encounter observation identity; never part of the roster save.
     internal Eclipse.Modding.ModStoryEncounter EclipseStoryEncounter;
-	public FightIDS BCKFACGMOKC = new FightIDS();
+	// best guess for name
+	public FightIDS FightId = new FightIDS();
 
 	protected BattleType _type;
 
@@ -16,9 +17,11 @@ public class FightList
 
 	protected string _description = string.Empty;
 
-	public string JKMJHIIMHPG = string.Empty;
+	// best guess for name
+	public string Location = string.Empty;
 
-	public Battle CNAOMDMIGLJ;
+	// best guess for name
+	public Battle Battle;
 
 	public string Name = string.Empty;
 
@@ -28,21 +31,25 @@ public class FightList
 
 	public long RepeatTime;
 
-	public bool ANIFGJGHNLN;
+	// best guess for name
+	public bool TrackFightProgress;
 
 	private bool JPNHGEBCPAF;
 
 	private bool AMCPPIOLKGC;
 
-	public ConditionStatus PGBKNLAEANJ;
+	// best guess for name
+	public ConditionStatus Status;
 
 	public bool CNNCIENODGE;
 
-	public int BDBBNECNMBP;
+	// best guess for name
+	public int RoundsToWin;
 
 	public ObscuredInt RoundTime;
 
-	public int JABJLCEJDDM;
+	// best guess for name
+	public int RewardIndex;
 
 	public ObscuredLong LDHOBIADNEC;
 
@@ -56,9 +63,11 @@ public class FightList
 
 	public float FANGNMDAINE;
 
-	public float OMFDJPFGKAB;
+	// best guess for name
+	public float HealthRecovery;
 
-	public string NPPIFKKLNCN = string.Empty;
+	// best guess for name
+	public string Music = string.Empty;
 
 	private List<ModelParameters> KCIGNIAJLBM = new List<ModelParameters>();
 
@@ -94,7 +103,7 @@ public class FightList
 		}
 		set
 		{
-			HOCFLEMFFKC(value);
+			SetRosterFight(value);
 		}
 	}
 
@@ -189,7 +198,8 @@ public class FightList
 		return ECHMHCODAFA;
 	}
 
-	public void HOCFLEMFFKC(RosterFight value)
+	// best guess for name
+	public void SetRosterFight(RosterFight value)
 	{
 		ECHMHCODAFA = value;
 		ECHMHCODAFA.GAHNGDBKFNO = this;
@@ -360,7 +370,7 @@ public class FightList
 			dJKEECEOCJB = null;
 			if (dKCHDHMLKHN2 == null)
 			{
-				dJKEECEOCJB = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(text);
+				dJKEECEOCJB = ListSF.GetItems().GetItemByName(text);
 				if (dJKEECEOCJB == null)
 				{
 					LLLOJBFMONN.Error(" Model::equipRulesItems - item not found \"%s\"", text);
@@ -378,7 +388,7 @@ public class FightList
 			if (dJKEECEOCJB != null && (!FFBFPLODJME || !item.DCFMEDKNIDI()))
 			{
 				ItemInfo dJKEECEOCJB2 = dJKEECEOCJB.Clone();
-				dJKEECEOCJB2.GNDLEFFMJDJ = true;
+				dJKEECEOCJB2.IgnoreInventoryEnchantments = true;
 				IHEFAMAFBIA.OLLNIKFPMKE(dJKEECEOCJB.Type, dJKEECEOCJB2);
 			}
 		}
@@ -565,7 +575,7 @@ public class FightList
 
 	public bool CBJOENICLAF()
 	{
-		return OFKJMHPMCCD().Count > 1 && BDBBNECNMBP > 1;
+		return OFKJMHPMCCD().Count > 1 && RoundsToWin > 1;
 	}
 
 	public void PutRule(Rule HNBFMAKFJAM)
@@ -639,7 +649,8 @@ public class FightList
 		FKDOPPMODKH.AddIfNotExist(HNBFMAKFJAM);
 	}
 
-	public void KMLFBLCMMDO(ModelParameters AIIALIFJJMB)
+	// best guess for name
+	public void AddOpponent(ModelParameters AIIALIFJJMB)
 	{
 		KCIGNIAJLBM.AddIfNotExist(AIIALIFJJMB);
 	}
@@ -652,9 +663,9 @@ public class FightList
 
 	public void CNIIKMBPIDG()
 	{
-		if (ECHMHCODAFA.AANKNHJKJII(RepeatTime) && !ECEFCOJPBPG() && ListSF.ELEBLBJKDBI().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_DUEL_UNLOCKED))
+		if (ECHMHCODAFA.AANKNHJKJII(RepeatTime) && !ECEFCOJPBPG() && ListSF.GetInstance().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_DUEL_UNLOCKED))
 		{
-			ListSF.ELEBLBJKDBI().MHHNIPBJNAD();
+			ListSF.GetInstance().MHHNIPBJNAD();
 		}
 	}
 
@@ -816,7 +827,7 @@ public class FightList
 
 	private void AEHLMKODMBJ()
 	{
-		ListSF.ELEBLBJKDBI().KBCBLOMDKCA(this);
+		ListSF.GetInstance().KBCBLOMDKCA(this);
 	}
 
 	private RatingEvaluationRule NJCFKELLCCB()

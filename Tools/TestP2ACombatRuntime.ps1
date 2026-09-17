@@ -259,10 +259,10 @@ public static class Program {
                 foreach (var entry in catalog.Fights) {
                     catalog.TryGetBattle(entry.Battle,out var owner);
                     string runtimeId=catalog.RuntimeFightId(entry.Id);
-                    ListSF.Fights[runtimeId]=new FightList { BCKFACGMOKC=new FightIDS(runtimeId), CNAOMDMIGLJ=new Battle { Name=owner.LegacyName } };
+                    ListSF.Fights[runtimeId]=new FightList { FightId=new FightIDS(runtimeId), Battle=new Battle { Name=owner.LegacyName } };
                 }
                 var raidEntry=ListSF.Fights[catalog.RuntimeFightId(raid.Fights[0])];
-                Check(ModPolicies.TryRaidBattle(raidEntry.CNAOMDMIGLJ.get_Name(), out var hardMode),
+                Check(ModPolicies.TryRaidBattle(raidEntry.Battle.get_Name(), out var hardMode),
                     "Raid metadata must resolve before parsing assigns the fight's runtime ID.");
                 Check(ModModeRuntime.TryProgress(raidEntry, out var completedSteps, out var stepCount) && completedSteps==0 && stepCount==1,
                     "Initial map indicators disagree with mode progress.");
@@ -277,9 +277,9 @@ public static class Program {
                 Check(!ModModeRuntime.CanResolve(raidEntry), "Duplicate raid result accepted.");
                 Check(ModModeRuntime.TryProgress(raidEntry, out completedSteps, out stepCount) && completedSteps==0 && stepCount==1,
                     "Single-boss raid indicators did not reset after victory.");
-                Check(ModModeRuntime.TryCurrent(raidEntry.CNAOMDMIGLJ,out var next) && next.BCKFACGMOKC.ToString()==catalog.RuntimeFightId(raid.Fights[0]), "Map did not return to the repeatable boss.");
+                Check(ModModeRuntime.TryCurrent(raidEntry.Battle,out var next) && next.FightId.ToString()==catalog.RuntimeFightId(raid.Fights[0]), "Map did not return to the repeatable boss.");
                 string orphanSave=hostSave.OuterXml; ModModeRuntime.Clear(); ModPolicies.Content=new ModContentCatalog();
-                Check(!ModModeRuntime.TryFind(raidEntry.BCKFACGMOKC.ToString(),out var missing) && hostSave.OuterXml==orphanSave, "Missing mod changed orphan progress.");
+                Check(!ModModeRuntime.TryFind(raidEntry.FightId.ToString(),out var missing) && hostSave.OuterXml==orphanSave, "Missing mod changed orphan progress.");
                 ModPolicies.Content=catalog; ModModeRuntime.Bind(hostSave.DocumentElement);
                 Check(ModModeRuntime.ResolveEntry(ref raidEntry) && raidEntry==next && ModModeRuntime.Begin(raidEntry), "Reinstall lost progression or key accounting.");
                 ModModeRuntime.Complete(raidEntry,true); ModModeRuntime.NotifyResult(raidEntry);
@@ -303,7 +303,7 @@ public static class Program {
                 Check(ModModeRuntime.ResolveEntry(ref trialEntry) && ModModeRuntime.Begin(trialEntry),"Branching trial entry failed.");
                 ModModeRuntime.Complete(trialEntry,true);ModModeRuntime.Complete(trialEntry,true);
                 Check(resultCalls==1 && new ModModeProgress(hostSave.DocumentElement,trial).Step==2,"Native settlement did not choose branch once.");
-                Check(ModModeRuntime.ResolveEntry(ref trialEntry) && trialEntry.BCKFACGMOKC.ToString()==catalog.RuntimeFightId(trial.Fights[2]),"Map entry ignored selected branch.");
+                Check(ModModeRuntime.ResolveEntry(ref trialEntry) && trialEntry.FightId.ToString()==catalog.RuntimeFightId(trial.Fights[2]),"Map entry ignored selected branch.");
                 Check(ModModeRuntime.Begin(trialEntry),"Selected branch could not enter.");
                 ModModeRuntime.Complete(trialEntry,false);
                 Check(new ModModeProgress(hostSave.DocumentElement,trial).Step==0,"Native loss did not take Lua route.");
@@ -352,7 +352,7 @@ public static class Program {
             foreach(var id in mode.Fights) {
                 catalog.TryGetFight(id,out var definition);catalog.TryGetBattle(definition.Battle,out var owner);
                 string runtimeId=catalog.RuntimeFightId(id);
-                ListSF.Fights[runtimeId]=new FightList { BCKFACGMOKC=new FightIDS(runtimeId),CNAOMDMIGLJ=new Battle { Name=owner.LegacyName } };
+                ListSF.Fights[runtimeId]=new FightList { FightId=new FightIDS(runtimeId),Battle=new Battle { Name=owner.LegacyName } };
             }
             int calls=0;
             ModModeRuntime.SelectNext=(definition,won,step,completed)=>{
@@ -364,7 +364,7 @@ public static class Program {
             foreach(int expected in seeded?new[]{1,2,0,2,0}:new[]{2,0,1,2,0})
             {
                 var before=new ModModeProgress(data.DocumentElement,mode);
-                Check(ModModeRuntime.ResolveEntry(ref entry) && entry.BCKFACGMOKC.ToString()==catalog.RuntimeFightId(mode.Fights[before.Step]),"Reloaded mode entry selected the wrong encounter.");
+                Check(ModModeRuntime.ResolveEntry(ref entry) && entry.FightId.ToString()==catalog.RuntimeFightId(mode.Fights[before.Step]),"Reloaded mode entry selected the wrong encounter.");
                 Check(ModModeRuntime.Begin(entry),"Repeated route could not enter.");
                 ModModeRuntime.Complete(entry,true);
                 string settled=data.OuterXml;int settledCalls=calls;

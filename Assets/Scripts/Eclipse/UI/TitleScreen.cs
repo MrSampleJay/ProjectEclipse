@@ -278,7 +278,7 @@ namespace Eclipse.UI
                 }
                 Text movementLabel = null;
                 if (ControllerPage)
-                    movementLabel = Row("Movement: D-pad +", () => Eclipse.Input.FightControllerBindings.MovementStick == GamePad.LCNPGEANNDP.LeftStick ? "Left stick" : "Right stick",
+                    movementLabel = Row("Movement: D-pad +", () => Eclipse.Input.FightControllerBindings.MovementStick == GamePad.Stick.LeftStick ? "Left stick" : "Right stick",
                         520, Eclipse.Input.FightControllerBindings.ToggleStick);
                 else
                     Row("Battle touch controls", () => OnOff(BattleTouchControls.Visible), 520, BattleTouchControls.Toggle);

@@ -1014,12 +1014,12 @@ public static class ValidatePackagedArt
             ListSF.ResetModdingTestItems();
             ListSF.SeedModdingTestCoreItems();
             GameUtils.FDEJIIDIPBI.SeedCore(Path.Combine(GameplayContentArchive.GetXmlRoot(), "perks.xml"));
-            ItemInfo vanillaKatana = ListSF.DJBOFEEKJMP().KCCDBEEKBCG("WEAPON_KATANA");
-            ItemInfo vanillaBody = ListSF.DJBOFEEKJMP().KCCDBEEKBCG("Body");
-            ItemInfo vanillaHead = ListSF.DJBOFEEKJMP().KCCDBEEKBCG("Head");
-            ItemInfo vanillaNoRanged = ListSF.DJBOFEEKJMP().KCCDBEEKBCG("NoRanged");
-            ItemInfo vanillaNoMagic = ListSF.DJBOFEEKJMP().KCCDBEEKBCG("NoMagic");
-            ItemInfo[] duplicateRanged = ListSF.DJBOFEEKJMP().HCDLKHKBEPF().Where(x => x.Name == "GlaivebowArrow").ToArray();
+            ItemInfo vanillaKatana = ListSF.GetItems().GetItemByName("WEAPON_KATANA");
+            ItemInfo vanillaBody = ListSF.GetItems().GetItemByName("Body");
+            ItemInfo vanillaHead = ListSF.GetItems().GetItemByName("Head");
+            ItemInfo vanillaNoRanged = ListSF.GetItems().GetItemByName("NoRanged");
+            ItemInfo vanillaNoMagic = ListSF.GetItems().GetItemByName("NoMagic");
+            ItemInfo[] duplicateRanged = ListSF.GetItems().HCDLKHKBEPF().Where(x => x.Name == "GlaivebowArrow").ToArray();
             Require(vanillaKatana != null, "Vanilla weapon fixture was not seeded");
             Require(vanillaBody != null && vanillaHead != null && vanillaNoRanged != null && vanillaNoMagic != null &&
                 duplicateRanged.Length == 2, "Vanilla equipment fixture was not seeded completely");
@@ -1095,14 +1095,14 @@ public static class ValidatePackagedArt
                     new Dictionary<string, string>(StringComparer.Ordinal) { { "phase", "perk_saved" } },
                     new TestFighterOperations(), out string savedPerkInvokeError) && string.IsNullOrEmpty(savedPerkInvokeError),
                 "Saved typed perk did not reach its bounded behavior handler: " + savedPerkInvokeError);
-            Require(ListSF.DJBOFEEKJMP().HCDLKHKBEPF().Count == 745 &&
-                ListSF.DJBOFEEKJMP().KCCDBEEKBCG("core:items/weapon/weapon_katana") == vanillaKatana &&
+            Require(ListSF.GetItems().HCDLKHKBEPF().Count == 745 &&
+                ListSF.GetItems().GetItemByName("core:items/weapon/weapon_katana") == vanillaKatana &&
                 vanillaKatana.Name == "WEAPON_KATANA", "Core registry import duplicated or renamed a legacy weapon");
-            Require(ListSF.DJBOFEEKJMP().KCCDBEEKBCG("core:items/armor/body") == vanillaBody &&
-                ListSF.DJBOFEEKJMP().KCCDBEEKBCG("core:items/helm/head") == vanillaHead &&
-                ListSF.DJBOFEEKJMP().KCCDBEEKBCG("core:items/ranged/noranged") == vanillaNoRanged &&
-                ListSF.DJBOFEEKJMP().KCCDBEEKBCG("core:items/magic/nomagic") == vanillaNoMagic &&
-                ListSF.DJBOFEEKJMP().KCCDBEEKBCG("core:items/ranged/glaivebowarrow/riflebullet") == duplicateRanged[1],
+            Require(ListSF.GetItems().GetItemByName("core:items/armor/body") == vanillaBody &&
+                ListSF.GetItems().GetItemByName("core:items/helm/head") == vanillaHead &&
+                ListSF.GetItems().GetItemByName("core:items/ranged/noranged") == vanillaNoRanged &&
+                ListSF.GetItems().GetItemByName("core:items/magic/nomagic") == vanillaNoMagic &&
+                ListSF.GetItems().GetItemByName("core:items/ranged/glaivebowarrow/riflebullet") == duplicateRanged[1],
                 "Qualified core equipment lookup did not resolve to the exact legacy ItemInfo source");
             WeaponDefinition coreKatana;
             Require(runtimeScripts.Content.TryGetWeapon(DefinitionId.Parse("core:items/weapon/weapon_katana"), out coreKatana) &&
@@ -1138,7 +1138,7 @@ public static class ValidatePackagedArt
                 "ModRuntime did not persist the current deterministic content-set fingerprint");
             const string legacyItemId = "example.weapon:items/weapon/example_blade";
             const string legacyLocalizationId = "example.weapon:localization/weapon.example_blade";
-            ItemInfo legacyWeapon = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(legacyItemId);
+            ItemInfo legacyWeapon = ListSF.GetItems().GetItemByName(legacyItemId);
             Require(legacyWeapon != null && legacyWeapon.Type == "Weapon" && legacyWeapon.SubType == "Katana" &&
                 legacyWeapon.FileName == "example.weapon:sprites/weapon" &&
                 legacyWeapon.Model == "example.weapon:models/mdl_weapon_example" &&
@@ -1147,14 +1147,14 @@ public static class ValidatePackagedArt
                 legacyWeapon.Price == 1000 && legacyWeapon.BonusPrice == 0 &&
                 legacyWeapon.UpgradeTemplate == "Weapon_Bonus",
                 "Committed weapon was not adapted to the expected legacy ItemInfo fields");
-            Require(ListSF.DJBOFEEKJMP().KCCDBEEKBCG("example.weapon:items/weapon/example_blade_legacy") == legacyWeapon,
+            Require(ListSF.GetItems().GetItemByName("example.weapon:items/weapon/example_blade_legacy") == legacyWeapon,
                 "Legacy item lookup did not resolve an old namespaced save ID through the item alias");
-            Require(ListSF.DJBOFEEKJMP().KCCDBEEKBCG("example.weapon:items/weapon/example_blade_retired") == null,
+            Require(ListSF.GetItems().GetItemByName("example.weapon:items/weapon/example_blade_retired") == null,
                 "Tombstoned item ID unexpectedly resolved to a live legacy item");
-            ItemInfo legacyArmor = ListSF.DJBOFEEKJMP().KCCDBEEKBCG("example.loadout:items/armor/eclipse_mantle");
-            ItemInfo legacyHelm = ListSF.DJBOFEEKJMP().KCCDBEEKBCG("example.loadout:items/helm/eclipse_pumpkin");
-            ItemInfo legacyRanged = ListSF.DJBOFEEKJMP().KCCDBEEKBCG("example.loadout:items/ranged/eclipse_skull");
-            ItemInfo legacyMagic = ListSF.DJBOFEEKJMP().KCCDBEEKBCG("example.loadout:items/magic/eclipse_asteroid");
+            ItemInfo legacyArmor = ListSF.GetItems().GetItemByName("example.loadout:items/armor/eclipse_mantle");
+            ItemInfo legacyHelm = ListSF.GetItems().GetItemByName("example.loadout:items/helm/eclipse_pumpkin");
+            ItemInfo legacyRanged = ListSF.GetItems().GetItemByName("example.loadout:items/ranged/eclipse_skull");
+            ItemInfo legacyMagic = ListSF.GetItems().GetItemByName("example.loadout:items/magic/eclipse_asteroid");
             Require(legacyArmor != null && legacyArmor.Type == "Armor" && legacyArmor.Level == 2 &&
                 legacyArmor.UpgradeLevel == 200 && legacyArmor.BodyDefense == 22 && legacyArmor.UnarmedDamage == 8 &&
                 legacyArmor.FileName == "core:ui/items/armor12.img_armor_mantle_of_night" &&
@@ -1208,10 +1208,10 @@ public static class ValidatePackagedArt
             Require(legacyCoreByName != null && legacyCoreByName.texture != null,
                 "Implicit core routing lost PackagedArtCatalog legacy atlas-member compatibility");
             ModRuntime.Shutdown();
-            Require(ListSF.DJBOFEEKJMP().HCDLKHKBEPF().Count == 740 &&
-                ListSF.DJBOFEEKJMP().KCCDBEEKBCG("WEAPON_KATANA") == vanillaKatana,
+            Require(ListSF.GetItems().HCDLKHKBEPF().Count == 740 &&
+                ListSF.GetItems().GetItemByName("WEAPON_KATANA") == vanillaKatana,
                 "ModRuntime shutdown removed a vanilla weapon");
-            Require(ListSF.DJBOFEEKJMP().KCCDBEEKBCG(legacyItemId) == null,
+            Require(ListSF.GetItems().GetItemByName(legacyItemId) == null,
                 "ModRuntime shutdown did not remove the injected legacy weapon");
             Require(LocalizationManager.GetExternalStringForTest(legacyLocalizationId) == null,
                 "ModRuntime shutdown did not remove injected localization aliases");

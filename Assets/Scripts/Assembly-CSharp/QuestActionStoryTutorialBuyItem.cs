@@ -50,7 +50,7 @@ public class QuestActionStoryTutorialBuyItem : QuestAction
 		TutorialComponent component = goldButton.gameObject.GetComponent<TutorialComponent>();
 		component.IsActive = false;
 		string cDNCPBKAHKJ = GameUtils.AKPBNLKFONO.CDNCPBKAHKJ;
-		ItemInfo dJKEECEOCJB = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(cDNCPBKAHKJ);
+		ItemInfo dJKEECEOCJB = ListSF.GetItems().GetItemByName(cDNCPBKAHKJ);
 		if (dJKEECEOCJB != null)
 		{
 			if (ItemBuyHelper.IHHKNBPKGHD(dJKEECEOCJB))

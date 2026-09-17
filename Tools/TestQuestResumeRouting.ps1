@@ -38,12 +38,12 @@ public class RosterQuest {
  public void LCIHKPPGNPF(){Deletes++;Parameters=null;}public int ELBKKOPHLHK(){return Scene;}
 }
 public class Module {
- static readonly Module instance=new Module();public static int Changes;public static Module ELEBLBJKDBI(){return instance;}
+ static readonly Module instance=new Module();public static int Changes;public static Module GetInstance(){return instance;}
  public ScreenType NMCNDOPKFJD(){return ScreenType.ModuleMap;} public static void DLOKJOHNDID(ScreenType s,int n=0){Changes++;}
 }
 public static class LLLOJBFMONN { public static void Error(string f,string n){throw new Exception(f+n);} }
 public class ListSF {
- public static ListSF Current=new ListSF();public static ListSF ELEBLBJKDBI(){return Current;}
+ public static ListSF Current=new ListSF();public static ListSF GetInstance(){return Current;}
  public HashSet<string> Hidden=new HashSet<string>();public List<QuestStage> Definitions=new List<QuestStage>();
  public List<QuestStage> Queued=new List<QuestStage>();public Action<string> OnLoad;public int Loads;
  public bool IsEclipseQuestSuppressed(string n,string file=null){return Hidden.Contains((file??"quests.xml")+"#"+n);}

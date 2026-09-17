@@ -49,9 +49,9 @@ class Program {
  public class QuestStage {public bool allowDoubles,EclipseResumeActions;public string FileName="quests.xml",EclipseActionsDefinition="<Actions><DialogLottery/></Actions>";public ModQuestInvocationLedger EclipseLotteryInvocations;public string get_Name()=>"LotteryQuest";}
  public struct MANJCIGJPMK {public string Image=>"test";public string ViewType=>"Weapon";}
  public class ItemInfo {public int MHGODOLNDLE,OBJDGBBFJOO;public ItemInfo HIOBANJPMKF(int n)=>this;}
- public class Catalog {public ItemInfo KCCDBEEKBCG(string n)=>null;public object ICFINJLNCPM(string n)=>null;public object NDMEGBEFBPJ(string n)=>null;}
+ public class Catalog {public ItemInfo GetItemByName(string n)=>null;public object ICFINJLNCPM(string n)=>null;public object NDMEGBEFBPJ(string n)=>null;}
  public static class GameUtils {public static Catalog AJDKHINLIDI=new Catalog(),JNIMKHKGPHE=new Catalog();}
- public partial class ListSF {public static FightList Fight;public static FightList CHMCKGCDGCM(FightIDS id)=>id.Name=="test"?Fight:null;public static Action Grant;public static int Grants,Writes;public static string Saved;public static Catalog DJBOFEEKJMP()=>new Catalog();static ListSF current=new ListSF();public static ListSF ELEBLBJKDBI()=>current;public bool IMDGMNFHFCN(FightResult.ResultPrizeStruct p){Grants++;Grant?.Invoke();return false;}public void OnAuthenticate(bool force){if(DeferProfileSave())return;Writes++;Saved=_lotteryProfileNode.OwnerDocument.OuterXml;}}
+ public partial class ListSF {public static FightList Fight;public static FightList CHMCKGCDGCM(FightIDS id)=>id.Name=="test"?Fight:null;public static Action Grant;public static int Grants,Writes;public static string Saved;public static Catalog GetItems()=>new Catalog();static ListSF current=new ListSF();public static ListSF GetInstance()=>current;public bool IMDGMNFHFCN(FightResult.ResultPrizeStruct p){Grants++;Grant?.Invoke();return false;}public void OnAuthenticate(bool force){if(DeferProfileSave())return;Writes++;Saved=_lotteryProfileNode.OwnerDocument.OuterXml;}}
  public partial class ListSF {public QuestParameters HAOHNNFLOGK;public static Action Queue;public static int Queued,Runs;public static bool Raid;public static QuestParameters Context;public bool QueueLotteryFightEnd(QuestParameters context,bool raid){Queued++;Context=context;Raid=raid;Queue?.Invoke();return true;}public void MHHNIPBJNAD(){Runs++;}}
  public static class ModLotteryPrizeCodec {
   public static XmlElement Write(XmlDocument d,FightResult.ResultPrizeStruct p){var e=d.CreateElement("Prize");e.SetAttribute("Token",p.Token.ToString());return e;}
@@ -99,11 +99,11 @@ class Program {
   var second=Prepare();Check(Builds==1,"Pending draw rerolled");
   var reloaded=new XmlDocument();reloaded.LoadXml(ListSF.Saved);_lotteryProfileNode=reloaded.DocumentElement;_profileRoster=new Roster();StoryEvents.BindProfile();
   var restored=ResumeLotteryClaim();Check(restored!=null&&Builds==1,"Reload rebuilt random reward");
-  ListSF.Grant=()=>{ListSF.ELEBLBJKDBI().OnAuthenticate(true);Check(!ListSF.Saved.Contains("claimed"),"Native callback saved partial settlement");};
+  ListSF.Grant=()=>{ListSF.GetInstance().OnAuthenticate(true);Check(!ListSF.Saved.Contains("claimed"),"Native callback saved partial settlement");};
   Check(restored.TryClaim()&&ListSF.Saved.Contains("claimed")&&ResumeLotteryClaim()==null,"Completion not persisted");
   Check(!claim.TryClaim()&&!second.TryClaim(),"Old profile handles survived reload");
-  Reset();claim=Prepare();string prepared=ListSF.Saved;ListSF.Grant=()=>{ListSF.ELEBLBJKDBI().OnAuthenticate(true);throw new InvalidOperationException("partial");};
-  Reject(()=>claim.TryClaim(),"Failed settlement accepted");Reject(()=>ListSF.ELEBLBJKDBI().OnAuthenticate(true),"Failed settlement allowed autosave");Check(ListSF.Saved==prepared,"Failed settlement overwrote prepared save");
+  Reset();claim=Prepare();string prepared=ListSF.Saved;ListSF.Grant=()=>{ListSF.GetInstance().OnAuthenticate(true);throw new InvalidOperationException("partial");};
+  Reject(()=>claim.TryClaim(),"Failed settlement accepted");Reject(()=>ListSF.GetInstance().OnAuthenticate(true),"Failed settlement allowed autosave");Check(ListSF.Saved==prepared,"Failed settlement overwrote prepared save");
   Reset();var quest=_lotteryProfileNode.OwnerDocument.CreateElement("Quest");_lotteryProfileNode.AppendChild(quest);var ledger=new ModQuestInvocationLedger(quest,false);
   Check(quest.ChildNodes.Count==0,"Unused ledger eagerly changed profile");
   string operation=ledger.Operation(3);claim=PrepareLotteryClaim(new RewardLottery(),0.5,null,ledger,3);
@@ -163,12 +163,12 @@ class Program {
   claim=ResumeLotteryClaim();Check(claim.TryClaim()&&HasPendingLottery,"Claim discarded unqueued fight-end context");
   Reject(()=>Prepare(),"New draw overwrote unqueued fight-end context");
   reloaded=new XmlDocument();reloaded.LoadXml(ListSF.Saved);_lotteryProfileNode=reloaded.DocumentElement;_profileRoster=new Roster();StoryEvents.BindProfile();
-  ListSF.Queue=()=>{int writes=ListSF.Writes;ListSF.ELEBLBJKDBI().OnAuthenticate(true);Check(ListSF.Writes==writes,"Quest queue saved before dispatch marker");};
+  ListSF.Queue=()=>{int writes=ListSF.Writes;ListSF.GetInstance().OnAuthenticate(true);Check(ListSF.Writes==writes,"Quest queue saved before dispatch marker");};
   CompleteBattleLottery();Check(!HasPendingLottery&&ListSF.Queued==1&&ListSF.Runs==1&&ListSF.Saved.Contains("Dispatched=\"1\""),"Battle continuation not durably accepted");
   Check(ListSF.Raid&&ListSF.Context.JLGLBLDPAAF.ToString()=="test"&&ListSF.Context.inLottery&&ListSF.Context.BJIDALJIKNC==1&&ListSF.Context.fightAvgFps==59.5f,"Battle context changed on reload");
   CompleteBattleLottery();PrepareBattleLottery(new RewardLottery(),context,true,encounter);Check(ListSF.Queued==1&&Builds==1,"Acknowledged battle replayed");
   Reset();ListSF.Queue=()=>throw new InvalidOperationException("queue failure");PrepareBattleLottery(new RewardLottery(),context,false,Guid.NewGuid().ToString("N"));ResumeLotteryClaim().TryClaim();prepared=ListSF.Saved;
-  Reject(()=>CompleteBattleLottery(),"Queue failure ignored");Check(HasPendingLottery&&ListSF.Saved==prepared,"Failed queue overwrote recovery snapshot");Reject(()=>ListSF.ELEBLBJKDBI().OnAuthenticate(true),"Failed queue permitted autosave");
+  Reject(()=>CompleteBattleLottery(),"Queue failure ignored");Check(HasPendingLottery&&ListSF.Saved==prepared,"Failed queue overwrote recovery snapshot");Reject(()=>ListSF.GetInstance().OnAuthenticate(true),"Failed queue permitted autosave");
   Console.WriteLine("PASS: "+checks+" production lottery claim/recovery checks; selection, payload codec, quest stage, grant and disk save services controlled.");
  }
 }

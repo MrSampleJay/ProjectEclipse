@@ -38,7 +38,7 @@ public class QuestActionShop : QuestAction
 		}
 		_sliderType = PNEBCFOGKEE(lNIDLHOIHIM.ToString());
 		OHCGEEEKEJH = lNIDLHOIHIM2.ToString();
-		PJDAGCBPLJE = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(OHCGEEEKEJH);
+		PJDAGCBPLJE = ListSF.GetItems().GetItemByName(OHCGEEEKEJH);
 		GOMCDIMDNON();
 	}
 
@@ -74,19 +74,19 @@ public class QuestActionShop : QuestAction
 		{
 			current.ScrollToItemByName(_sliderType, OHCGEEEKEJH);
 		}
-		Module.ELEBLBJKDBI().RemoveEventListener(1, JILPFNBAKGK);
+		Module.GetInstance().RemoveEventListener(1, JILPFNBAKGK);
 		OGIJONMKABB();
 	}
 
 	private void DOHEMBEEHBB(object data)
 	{
-		Module.ELEBLBJKDBI().RemoveEventListener(1, DOHEMBEEHBB);
+		Module.GetInstance().RemoveEventListener(1, DOHEMBEEHBB);
 		OGIJONMKABB();
 	}
 
 	private void GOMCDIMDNON()
 	{
-		ScreenType iPKNDMINFMJ = Module.ELEBLBJKDBI().NMCNDOPKFJD();
+		ScreenType iPKNDMINFMJ = Module.GetInstance().NMCNDOPKFJD();
 		ShopScene current = Scene<ShopScene>.get_Current();
 		bool flag = current != null;
 		bool flag2 = iPKNDMINFMJ == ScreenType.ModuleShop;
@@ -97,11 +97,11 @@ public class QuestActionShop : QuestAction
 		}
 		else if (flag2)
 		{
-			Module.ELEBLBJKDBI().AddEventListener(1, JILPFNBAKGK);
+			Module.GetInstance().AddEventListener(1, JILPFNBAKGK);
 		}
 		else
 		{
-			Module.ELEBLBJKDBI().AddEventListener(1, DOHEMBEEHBB);
+			Module.GetInstance().AddEventListener(1, DOHEMBEEHBB);
 			Module.DLOKJOHNDID(ScreenType.ModuleShop, new DelayedStrike(_sliderType, PJDAGCBPLJE, true));
 		}
 	}

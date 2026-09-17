@@ -195,12 +195,12 @@ public class FightResult
 			Eclipse.Modding.DefinitionId rewardId;
 			bool repeatableModConsumable = Eclipse.Modding.DefinitionId.TryParse(JJBPBGKBEED.Name, out rewardId) &&
 				rewardId.Namespace.Value != "core" && rewardId.Category == "items" &&
-				ListSF.DJBOFEEKJMP().KCCDBEEKBCG(JJBPBGKBEED.Name)?.Type == "Consumable";
+				ListSF.GetItems().GetItemByName(JJBPBGKBEED.Name)?.Type == "Consumable";
 			if (dKCHDHMLKHN != null && !repeatableModConsumable)
 			{
 				return;
 			}
-			ItemInfo dJKEECEOCJB = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(JJBPBGKBEED.Name);
+			ItemInfo dJKEECEOCJB = ListSF.GetItems().GetItemByName(JJBPBGKBEED.Name);
 			if (dJKEECEOCJB == null)
 			{
 				return;

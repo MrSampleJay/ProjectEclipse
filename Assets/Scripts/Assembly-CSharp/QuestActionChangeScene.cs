@@ -19,7 +19,7 @@ public class QuestActionChangeScene : QuestAction
 		kKDGLNECFHA.LIMHBJBEEIA(GFIHPBCEEOB);
 		kKDGLNECFHA.MCPIOGALBMK(_Destination, lNIDLHOIHIM);
 		empty = lNIDLHOIHIM.ToString();
-		Module.ELEBLBJKDBI().AddEventListener(1, DOHEMBEEHBB);
+		Module.GetInstance().AddEventListener(1, DOHEMBEEHBB);
 		ScreenType kAHMHPNJBGI = Module.DFDEMKONNKK(empty);
 		OCOEIOEDCLE(kAHMHPNJBGI);
 	}
@@ -27,12 +27,12 @@ public class QuestActionChangeScene : QuestAction
 	private void DOHEMBEEHBB(object data)
 	{
 		OGIJONMKABB();
-		Module.ELEBLBJKDBI().RemoveEventListener(1, DOHEMBEEHBB);
+		Module.GetInstance().RemoveEventListener(1, DOHEMBEEHBB);
 	}
 
 	private void OCOEIOEDCLE(ScreenType KAHMHPNJBGI)
 	{
-		ScreenType iPKNDMINFMJ = Module.ELEBLBJKDBI().NMCNDOPKFJD();
+		ScreenType iPKNDMINFMJ = Module.GetInstance().NMCNDOPKFJD();
 		bool flag = false;
 		bool flag2 = KAHMHPNJBGI == iPKNDMINFMJ;
 		bool flag3 = KAHMHPNJBGI != ScreenType.ModuleFight;

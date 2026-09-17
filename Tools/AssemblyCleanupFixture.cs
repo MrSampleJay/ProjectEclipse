@@ -25,7 +25,7 @@ namespace AssemblyCleanupFixture.Session
     {
         private static readonly ListSF instance = new ListSF();
         public readonly QuestParameters Quest = new QuestParameters();
-        public static ListSF ELEBLBJKDBI() { return instance; }
+        public static ListSF GetInstance() { return instance; }
         public static ListSF CCDKHLAMKKO() { return instance; }
         public void MAOPKFNKHOI() { Trace.Events.Add("first-session"); }
         public void BIHELGAGPGO() { Trace.Events.Add("local-update"); }
@@ -82,7 +82,7 @@ namespace AssemblyCleanupFixture
             {
                 bool active = i % 2 == 1;
                 Session.Trace.RunQuests = i >= 2;
-                var quest = Session.ListSF.ELEBLBJKDBI().Quest;
+                var quest = Session.ListSF.GetInstance().Quest;
                 quest.ActiveQuest = active ? new object() : null;
                 quest.HEIADONEACH = "active";
                 Session.Trace.Events.Clear();

@@ -131,7 +131,7 @@ namespace Nekki.SF2.GUI.Map
 			DIBHHDHBKJA();
 			KOAAKKGJOKO();
 			ClearInfo();
-			Module.ELEBLBJKDBI().AddEventListener(4, EFPMIKBJMLD);
+			Module.GetInstance().AddEventListener(4, EFPMIKBJMLD);
 		}
 
 		~InfoBattle()
@@ -156,7 +156,7 @@ namespace Nekki.SF2.GUI.Map
 			jDIPBIHBGPF = GameUtils.GKBHKJNGNPO(DPOOIONCEOA);
 			if (jDIPBIHBGPF != null)
 			{
-				DICGPFLPAIH = new FightIDS(jDIPBIHBGPF.BCKFACGMOKC);
+				DICGPFLPAIH = new FightIDS(jDIPBIHBGPF.FightId);
 			}
 			else
 			{
@@ -207,7 +207,7 @@ namespace Nekki.SF2.GUI.Map
 				_btnFight.gameObject.SetActive(false);
 				return;
 			}
-			if (jDIPBIHBGPF != null && GameUtils.HHKHINLNCJB && GameUtils.NFBKHONMMDL != jDIPBIHBGPF.JKMJHIIMHPG + jDIPBIHBGPF.CNAOMDMIGLJ.get_Name() + jDIPBIHBGPF.Name)
+			if (jDIPBIHBGPF != null && GameUtils.HHKHINLNCJB && GameUtils.NFBKHONMMDL != jDIPBIHBGPF.Location + jDIPBIHBGPF.Battle.get_Name() + jDIPBIHBGPF.Name)
 			{
 				GameUtils.HHKHINLNCJB = false;
 			}
@@ -282,7 +282,7 @@ namespace Nekki.SF2.GUI.Map
 		{
 			if (GetCurrentFight() != null)
 			{
-				return GetCurrentFight().CNAOMDMIGLJ;
+				return GetCurrentFight().Battle;
 			}
 			return ListSF.MKHAAGMJOPG(DICGPFLPAIH);
 		}
@@ -447,7 +447,7 @@ namespace Nekki.SF2.GUI.Map
 			}
 			else if (jDIPBIHBGPF.get_Type() == BattleType.FightRaid)
 			{
-				Battle cNAOMDMIGLJ = jDIPBIHBGPF.CNAOMDMIGLJ;
+				Battle cNAOMDMIGLJ = jDIPBIHBGPF.Battle;
 				BattleRaid pAHLFJIMKCL = (BattleRaid)cNAOMDMIGLJ;
 				if (pAHLFJIMKCL.DJCDFEAMPDA(jDIPBIHBGPF))
 				{
@@ -536,7 +536,7 @@ namespace Nekki.SF2.GUI.Map
 			{
 				return;
 			}
-			Battle cNAOMDMIGLJ = KGKDKENMAOA.CNAOMDMIGLJ;
+			Battle cNAOMDMIGLJ = KGKDKENMAOA.Battle;
 			if (cNAOMDMIGLJ.get_Type() == BattleType.FightSurvival)
 			{
 				ListSF.CCDKHLAMKKO().set_IndexSlider((uint)KODLOCOEFON);
@@ -579,7 +579,7 @@ namespace Nekki.SF2.GUI.Map
 			}
 			GameUtils.HHKHINLNCJB = true;
 			FightList currentFight = GetCurrentFight();
-			GameUtils.NFBKHONMMDL = ((currentFight != null) ? (currentFight.JKMJHIIMHPG + currentFight.CNAOMDMIGLJ.get_Name() + currentFight.Name) : string.Empty);
+			GameUtils.NFBKHONMMDL = ((currentFight != null) ? (currentFight.Location + currentFight.Battle.get_Name() + currentFight.Name) : string.Empty);
 			if (currentFight == null)
 			{
 				return;
@@ -605,7 +605,7 @@ namespace Nekki.SF2.GUI.Map
 				{
 					num = 0;
 				}
-				jDIPBIHBGPF.JABJLCEJDDM = num;
+				jDIPBIHBGPF.RewardIndex = num;
 			}
 			UpdateBattleInfo(GetCurrentBattle());
 		}
@@ -637,7 +637,7 @@ namespace Nekki.SF2.GUI.Map
 		private void DFMGJEIJLCJ()
 		{
 			FightList currentFight = GetCurrentFight();
-			if (currentFight != null && currentFight.BCKFACGMOKC.ToString() == "ZONE_6|BOSS_SAMURAI|6")
+			if (currentFight != null && currentFight.FightId.ToString() == "ZONE_6|BOSS_SAMURAI|6")
 			{
 				FightIDS dIAIIPCBMFL = new FightIDS("ZONE_6", "QuestBattle", string.Empty);
 				Battle cGJCGEBPCAF = ListSF.MKHAAGMJOPG(dIAIIPCBMFL);

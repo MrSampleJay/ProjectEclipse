@@ -13,12 +13,12 @@ public class QuestActionStoryTutorialDoubleSweep : QuestAction
 	{
 		base.DEJMHFMLKIC(GFIHPBCEEOB);
 		MainMenu.get_Instance().SetEnabled(false);
-		Fight gDBOMJODDEA = Fight.OHNKFOHIAKG();
+		Fight gDBOMJODDEA = Fight.GetCurrentFight();
 		Model fGCODGKLHED = gDBOMJODDEA.LNDLFINJHDB[0];
 		fGCODGKLHED.AddEventListener(2, OnAnimationStart);
-		Stick joystick = gDBOMJODDEA.KCJNBFLAMCC.GetJoystick();
+		Stick joystick = gDBOMJODDEA.Controller.GetJoystick();
 		joystick.SetIsFlashing(true);
-		SFButton buttonKick = gDBOMJODDEA.KCJNBFLAMCC.GetButtonKick();
+		SFButton buttonKick = gDBOMJODDEA.Controller.GetButtonKick();
 		buttonKick.AddFlashImage("FightButtons.Kick_Highlight");
 		buttonKick.FlashingImage.rectTransform.localScale = new Vector3(1.33f, 1.33f);
 		buttonKick.set_IsFlashing(true);
@@ -54,12 +54,12 @@ public class QuestActionStoryTutorialDoubleSweep : QuestAction
 			CoroutineManager.get_Current().StopRoutine(_WaitTimeCoroutine);
 		}
 		MainMenu.get_Instance().SetEnabled(true);
-		Fight gDBOMJODDEA = Fight.OHNKFOHIAKG();
+		Fight gDBOMJODDEA = Fight.GetCurrentFight();
 		Model fGCODGKLHED = gDBOMJODDEA.LNDLFINJHDB[0];
 		fGCODGKLHED.RemoveEventListener(2, OnAnimationStart);
-		Stick joystick = gDBOMJODDEA.KCJNBFLAMCC.GetJoystick();
+		Stick joystick = gDBOMJODDEA.Controller.GetJoystick();
 		joystick.SetIsFlashing(false);
-		SFButton buttonKick = gDBOMJODDEA.KCJNBFLAMCC.GetButtonKick();
+		SFButton buttonKick = gDBOMJODDEA.Controller.GetButtonKick();
 		buttonKick.set_IsFlashing(false);
 		OGIJONMKABB();
 	}

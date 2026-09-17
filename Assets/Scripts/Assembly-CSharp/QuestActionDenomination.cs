@@ -21,12 +21,12 @@ public class QuestActionDenomination : QuestAction
 		ListSF.CCDKHLAMKKO().HEIPPEGBOCK(NBBNANIILBL);
 		JEGCABAHHHJ(nPFOBKBJAOB);
 		MenuController.OPPMFDNNBDE();
-		ScreenType iPKNDMINFMJ = Module.ELEBLBJKDBI().DMCJGOMOJEF.ScreenType;
+		ScreenType iPKNDMINFMJ = Module.GetInstance().DMCJGOMOJEF.ScreenType;
 		if (iPKNDMINFMJ != ScreenType.ModuleFight)
 		{
 			Module.DLOKJOHNDID(iPKNDMINFMJ);
 		}
-		ListSF.ELEBLBJKDBI().OnAuthenticate(true);
+		ListSF.GetInstance().OnAuthenticate(true);
 		OGIJONMKABB();
 	}
 

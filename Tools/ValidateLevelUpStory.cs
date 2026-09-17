@@ -28,7 +28,7 @@ public class Roster {
  /* ROSTER METHODS */
 }
 public static class GameUtils { public const uint JNOGEPFLLDM=100000;public static void PIHNKCIDDJB(){} public static void OFOKPNFGDMD(string value){} }
-public class ListSF { public static ListSF ELEBLBJKDBI()=>new ListSF();public void PLNBHLPHDJG(int level){} }
+public class ListSF { public static ListSF GetInstance()=>new ListSF();public void PLNBHLPHDJG(int level){} }
 public static class StatisticsEvent {public enum JDNFFHILFAF{Level_Up}}
 public static class StatisticsCollector {public static void BPDGOKGHDHB(StatisticsEvent.JDNFFHILFAF value){} }
 namespace Eclipse.Modding {

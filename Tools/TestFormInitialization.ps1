@@ -5,7 +5,7 @@ $parameterSource=Get-Content -Raw -LiteralPath (Join-Path $root 'Assets/Scripts/
 $fightSource=Get-Content -Raw -LiteralPath (Join-Path $root 'Assets/Scripts/Assembly-CSharp/Fight.cs')
 $modelSource=Get-Content -Raw -LiteralPath (Join-Path $root 'Assets/Scripts/Assembly-CSharp/Model.cs')
 $initializer=[regex]::Match($gameSource,'(?ms)^    internal static ModelParameters InitializeFormParameters\(.*?^    \}').Value
-$initializer += [regex]::Match($gameSource,'(?ms)^\tprivate static ModelParameters CDCAOHHFNPL\(.*?^\t\}').Value
+$initializer += [regex]::Match($gameSource,'(?ms)^[\t ]*private static ModelParameters InitializeCombatParameters\(.*?^\t\}').Value
 $initializer += [regex]::Match($gameSource,'(?ms)^\tprivate static List<int> LoadMoves\(.*?^\t\}').Value
 $parameters=[regex]::Match($parameterSource,'(?ms)^\tpublic ObscuredInt OJLKDEHMIAC\(.*?^\t\}').Value
 $parameters += [regex]::Match($parameterSource,'(?ms)^\tpublic ObscuredFloat KKMCHCNOHMB\(.*?^\t\}').Value
@@ -42,8 +42,8 @@ class ListSF
     public readonly ItemInfo DefaultBody = new ItemInfo { KJDFJPBIGJC = "default_body" };
     public int Lookups;
     public bool Fail;
-    public static ListSF DJBOFEEKJMP() => Instance;
-    public ItemInfo KCCDBEEKBCG(string name)
+    public static ListSF GetItems() => Instance;
+    public ItemInfo GetItemByName(string name)
     {
         Lookups++;
         if (Fail) throw new InvalidOperationException("default body unavailable");
@@ -53,15 +53,15 @@ class ListSF
 }
 class ModelParameters
 {
-    public bool IsPlayer, ABAPAIEBNGK, EEGMBGBLLIF, EAJHPCJJCDI, ABLMGLAKJBL, LNHMCKNCGDP;
-    public int FCOALLOHJNP, DEGCGHDAMDA = -1;
+    public bool IsPlayer, UserControlled, AiControlled, EAJHPCJJCDI, ABLMGLAKJBL, LNHMCKNCGDP;
+    public int RoundsWon, DEGCGHDAMDA = -1;
     public float CIDCNCDFONA, _CurrentLife;
     public Tactic HBFMBOHLKPJ;
-    public ItemInfo PILJCAOFAED, JGMLKIPCFII, LKKFNMBCCDB, FKMOLBBLKDA;
+    public ItemInfo Skeleton, Weapon, Armor, Helm;
     public string EclipseBodyModel;
     public string[] EclipseSkinModels = Array.Empty<string>();
     public List<int> IAIHFLGBIPB = new List<int>();
-    public List<string> MNPAALCFAKL = new List<string>();
+    public List<string> ModelDocuments = new List<string>();
     public List<ItemInfo> HEKILHEHMMH = new List<ItemInfo>();
     public readonly List<bool> ItemPasses = new List<bool>();
     public int ItemRound, AttributePasses;
@@ -72,24 +72,24 @@ class ModelParameters
     {
         if (FailAttributes) throw new InvalidOperationException("attribute preparation failed");
         AttributePasses++;
-        AttributePaths = new List<string>(MNPAALCFAKL);
+        AttributePaths = new List<string>(ModelDocuments);
     }
     public void KMPACCIOOLE(List<ItemRule> rules, bool second, int round)
     {
         ItemPasses.Add(second);
         ItemRound = round;
-        foreach (var rule in rules) JGMLKIPCFII = rule.Weapon;
+        foreach (var rule in rules) Weapon = rule.Weapon;
     }
 }
 class GameUtils
 {
-    static string MNMGDBGCKOM() => "default_body";
+    static string GetDefaultSkeleton() => "default_body";
     INITIALIZER_METHODS
 }
 class Model
 {
-    public ModelParameters KMMJCHDKBDO;
-    public float KKMCHCNOHMB() => KMMJCHDKBDO.KKMCHCNOHMB();
+    public ModelParameters Parameters;
+    public float KKMCHCNOHMB() => Parameters.KKMCHCNOHMB();
     ROLE_METHODS
 }
 class ModRuntime
@@ -119,7 +119,7 @@ class Rules
         var p = ModRuntime.Destination;
         if (p.CIDCNCDFONA <= 0 || p.KKMCHCNOHMB() <= 0 || p.IAIHFLGBIPB.Count != AnimationData.Count)
             throw new InvalidOperationException("item rules reached before native health/move initialization");
-        if (p.IsPlayer != Current.IsPlayer || p.ABAPAIEBNGK != Current.ABAPAIEBNGK || p.EEGMBGBLLIF != Current.EEGMBGBLLIF)
+        if (p.IsPlayer != Current.IsPlayer || p.UserControlled != Current.UserControlled || p.AiControlled != Current.AiControlled)
             throw new InvalidOperationException("item rules reached before participant ownership restoration");
         Selected = rules;
     }
@@ -145,11 +145,11 @@ class Fight
             if (p.CIDCNCDFONA <= 0 || p.KKMCHCNOHMB() <= 0)
                 throw new InvalidOperationException("native construction received an empty health pool");
             if (!p.ItemPasses.SequenceEqual(new[] { false, true }) || p.AttributePasses < 2 ||
-                !p.AttributePaths.SequenceEqual(p.MNPAALCFAKL) ||
-                !p.MNPAALCFAKL.Contains(p.JGMLKIPCFII.KJDFJPBIGJC + ".xml"))
+                !p.AttributePaths.SequenceEqual(p.ModelDocuments) ||
+                !p.ModelDocuments.Contains(p.Weapon.KJDFJPBIGJC + ".xml"))
                 throw new InvalidOperationException("native construction received stale rule equipment/attributes");
             Constructed++;
-            Model = new Model { KMMJCHDKBDO = p };
+            Model = new Model { Parameters = p };
         }
         public void Dispose() { Disposals++; }
     }
@@ -170,18 +170,18 @@ class ValidateFormInitialization
         if (!value) throw new Exception(message);
     }
     static ModelParameters Current(bool player, bool controlled, bool ai) => new ModelParameters {
-        IsPlayer = player, ABAPAIEBNGK = controlled, EEGMBGBLLIF = ai,
-        CIDCNCDFONA = 200, _CurrentLife = 75, DEGCGHDAMDA = 200, FCOALLOHJNP = 2,
+        IsPlayer = player, UserControlled = controlled, AiControlled = ai,
+        CIDCNCDFONA = 200, _CurrentLife = 75, DEGCGHDAMDA = 200, RoundsWon = 2,
         EAJHPCJJCDI = true, ABLMGLAKJBL = false, HBFMBOHLKPJ = new Tactic { Name = "old_tactic" },
-        IAIHFLGBIPB = new List<int> { 9 }, MNPAALCFAKL = new List<string> { "live_body.xml" } };
+        IAIHFLGBIPB = new List<int> { 9 }, ModelDocuments = new List<string> { "live_body.xml" } };
     static ModelParameters Destination(int life) => new ModelParameters {
-        DEGCGHDAMDA = life, CIDCNCDFONA = 0, _CurrentLife = 0, FCOALLOHJNP = 8,
+        DEGCGHDAMDA = life, CIDCNCDFONA = 0, _CurrentLife = 0, RoundsWon = 8,
         EAJHPCJJCDI = true, HBFMBOHLKPJ = new Tactic { Name = "new_tactic" },
-        JGMLKIPCFII = new ItemInfo { KJDFJPBIGJC = "destination_weapon" },
-        IAIHFLGBIPB = new List<int> { 87 }, MNPAALCFAKL = new List<string> { "stale.xml" } };
-    static string State(ModelParameters p) => string.Join("|", new object[] { p.IsPlayer, p.ABAPAIEBNGK, p.EEGMBGBLLIF,
-        p.CIDCNCDFONA, p.KKMCHCNOHMB(), p.OJLKDEHMIAC(), p.FCOALLOHJNP, p.EAJHPCJJCDI, p.ABLMGLAKJBL,
-        p.HBFMBOHLKPJ?.Name, string.Join(",", p.IAIHFLGBIPB), string.Join(",", p.MNPAALCFAKL) });
+        Weapon = new ItemInfo { KJDFJPBIGJC = "destination_weapon" },
+        IAIHFLGBIPB = new List<int> { 87 }, ModelDocuments = new List<string> { "stale.xml" } };
+    static string State(ModelParameters p) => string.Join("|", new object[] { p.IsPlayer, p.UserControlled, p.AiControlled,
+        p.CIDCNCDFONA, p.KKMCHCNOHMB(), p.OJLKDEHMIAC(), p.RoundsWon, p.EAJHPCJJCDI, p.ABLMGLAKJBL,
+        p.HBFMBOHLKPJ?.Name, string.Join(",", p.IAIHFLGBIPB), string.Join(",", p.ModelDocuments) });
     static void Requests()
     {
         foreach (bool player in new[] { false, true })
@@ -191,7 +191,7 @@ class ValidateFormInitialization
             string before = State(current);
             var destination = Destination(-1);
             var tactic = destination.HBFMBOHLKPJ;
-            var expected = new Model { KMMJCHDKBDO = current };
+            var expected = new Model { Parameters = current };
             var fight = new Fight();
             if (player) fight._playerModel = expected; else fight.CKNCPOABFBO = expected;
             fight.round.round = requestedRound;
@@ -242,20 +242,20 @@ class ValidateFormInitialization
             string before = State(current);
             var liveMoves = current.IAIHFLGBIPB;
             var p = Destination(life);
-            p.IsPlayer = !player; p.ABAPAIEBNGK = !controlled; p.EEGMBGBLLIF = !ai;
-            var tactic = p.HBFMBOHLKPJ; var weapon = p.JGMLKIPCFII;
+            p.IsPlayer = !player; p.UserControlled = !controlled; p.AiControlled = !ai;
+            var tactic = p.HBFMBOHLKPJ; var weapon = p.Weapon;
             var staleMoves = p.IAIHFLGBIPB;
             Check(GameUtils.InitializeFormParameters(p, current) == p, "initializer retains owned parameter identity");
             float maximum = life > 0 ? life : 1;
             Check(p.CIDCNCDFONA == maximum && p.KKMCHCNOHMB() == maximum, "native Life or one-bar fallback fills current health");
-            var model = new Model { KMMJCHDKBDO = p };
+            var model = new Model { Parameters = p };
             Check(model.EPCNJLEHJCB() == player && model.BCKKCJONNHG() == controlled && model.FGKAFKFBFEM() == ai,
                 "native side/input/AI accessors preserve all participant role combinations");
-            Check(p.HBFMBOHLKPJ == tactic && p.JGMLKIPCFII == weapon, "destination tactic/equipment identities retained");
-            Check(p.PILJCAOFAED == ListSF.Instance.DefaultBody &&
-                p.MNPAALCFAKL.SequenceEqual(new[] { "default_body.xml", "destination_weapon.xml" }),
+            Check(p.HBFMBOHLKPJ == tactic && p.Weapon == weapon, "destination tactic/equipment identities retained");
+            Check(p.Skeleton == ListSF.Instance.DefaultBody &&
+                p.ModelDocuments.SequenceEqual(new[] { "default_body.xml", "destination_weapon.xml" }),
                 "native path assembly receives default body and destination equipment");
-            Check(!p.EAJHPCJJCDI && p.ABLMGLAKJBL && p.FCOALLOHJNP == 0, "canonical preparation flags and wins initialized");
+            Check(!p.EAJHPCJJCDI && p.ABLMGLAKJBL && p.RoundsWon == 0, "canonical preparation flags and wins initialized");
             Check(p.IAIHFLGBIPB.SequenceEqual(Enumerable.Range(0, AnimationData.Count)) && p.IAIHFLGBIPB != staleMoves &&
                 staleMoves.SequenceEqual(new[] { 87 }), "native move indices replace detached stale list");
             Check(State(current) == before && current.IAIHFLGBIPB == liveMoves, "current participant is untouched");
@@ -268,13 +268,13 @@ class ValidateFormInitialization
         var current = Current(true, true, false);
         var p = Destination(40);
         var body = new ItemInfo { KJDFJPBIGJC = "authored_skeleton" };
-        p.PILJCAOFAED = body;
+        p.Skeleton = body;
         p.EclipseBodyModel = "sample:models/body.xml";
         p.EclipseSkinModels = new[] { "sample:models/skin.xml" };
         int lookups = ListSF.Instance.Lookups;
         GameUtils.InitializeFormParameters(p, current);
-        Check(ListSF.Instance.Lookups == lookups && p.PILJCAOFAED == body &&
-            p.MNPAALCFAKL.SequenceEqual(new[] { "sample:models/body.xml", "destination_weapon.xml", "sample:models/skin.xml" }),
+        Check(ListSF.Instance.Lookups == lookups && p.Skeleton == body &&
+            p.ModelDocuments.SequenceEqual(new[] { "sample:models/body.xml", "destination_weapon.xml", "sample:models/skin.xml" }),
             "authored body/skin bypass fallback and retain native composition priority");
         var another = Destination(40);
         GameUtils.InitializeFormParameters(another, current);

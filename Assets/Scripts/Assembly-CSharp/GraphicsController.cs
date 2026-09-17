@@ -12,7 +12,7 @@ public static class GraphicsController
 	{
 		Roster nKGLHEGIKKP = ListSF.CCDKHLAMKKO();
 		nKGLHEGIKKP.SessionSettings("ControllerScale", value.ToString());
-		ListSF.ELEBLBJKDBI().EJANJEEGOOE();
+		ListSF.GetInstance().EJANJEEGOOE();
 	}
 
 	public static bool OPEHHMBJABL()
@@ -40,7 +40,7 @@ public static class GraphicsController
 	{
 		IFOOEAMIMGM = value;
 		ListSF.CCDKHLAMKKO().SessionSettings("QualityCondition", IFOOEAMIMGM);
-		ListSF.ELEBLBJKDBI().EJANJEEGOOE(1);
+		ListSF.GetInstance().EJANJEEGOOE(1);
 	}
 
 	public static string DKALBDKBCFP()
@@ -149,7 +149,7 @@ public static class GraphicsController
 	{
 		Roster nKGLHEGIKKP = ListSF.CCDKHLAMKKO();
 		nKGLHEGIKKP.SessionSettings("LocationResolution", value);
-		ListSF.ELEBLBJKDBI().EJANJEEGOOE();
+		ListSF.GetInstance().EJANJEEGOOE();
 	}
 
 	private static string AIGJNJNMODH()

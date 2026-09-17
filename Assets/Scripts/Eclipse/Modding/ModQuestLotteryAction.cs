@@ -22,7 +22,7 @@ namespace Eclipse.Modding
         {
             this.complete = complete ?? throw new ArgumentNullException(nameof(complete));
             this.claim = claim;
-            module = Module.ELEBLBJKDBI();
+            module = Module.GetInstance();
             if (claim != null)
             {
                 module.AddEventListener((int)Module.FKHIMIAOCJL.OnOpenScene, OnOpenScene);

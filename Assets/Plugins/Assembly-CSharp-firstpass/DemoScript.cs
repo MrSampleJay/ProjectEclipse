@@ -5,10 +5,10 @@ public class DemoScript : MonoBehaviour
 {
 	private void OEEIEAMDKIG()
 	{
-		GamePad.JAHEECFCLHN(GamePad.PFENLAPGKFM.A, GamePad.GGAKHLLMPMM.One);
-		GamePad.CNNMBBLLGNE(GamePad.LCNPGEANNDP.LeftStick, GamePad.GGAKHLLMPMM.One);
-		GamePad.MAJINGINCHM(GamePad.HKKPDLMCPIF.RightTrigger, GamePad.GGAKHLLMPMM.One);
-		GamepadState iOIGCCPIJPN = GamePad.GetState(GamePad.GGAKHLLMPMM.One);
+		GamePad.GetButtonDown(GamePad.Button.A, GamePad.Player.One);
+		GamePad.GetStick(GamePad.Stick.LeftStick, GamePad.Player.One);
+		GamePad.GetTrigger(GamePad.Trigger.RightTrigger, GamePad.Player.One);
+		GamepadState iOIGCCPIJPN = GamePad.GetState(GamePad.Player.One);
 		MonoBehaviour.print("A: " + iOIGCCPIJPN.IEKADOOKFKG);
 	}
 
@@ -20,14 +20,14 @@ public class DemoScript : MonoBehaviour
 		AKMACMCIKGK();
 		for (int i = 0; i < 5; i++)
 		{
-			LCBBJNJDHOM((GamePad.GGAKHLLMPMM)i);
+			LCBBJNJDHOM((GamePad.Player)i);
 		}
 		GUILayout.FlexibleSpace();
 		GUILayout.EndHorizontal();
 		GUILayout.EndArea();
 	}
 
-	private void LCBBJNJDHOM(GamePad.GGAKHLLMPMM OJINMMFLEEB)
+	private void LCBBJNJDHOM(GamePad.Player OJINMMFLEEB)
 	{
 		GUILayout.Space(45f);
 		GUILayout.BeginVertical();

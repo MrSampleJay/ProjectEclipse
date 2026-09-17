@@ -175,8 +175,8 @@ namespace Nekki.SF2.Core
 			if (ListSF.CCDKHLAMKKO() != null)
 			{
 				ListSF.CCDKHLAMKKO().RandomizeObscuredVars();
-				ListSF.DJBOFEEKJMP().RandomizeObscuredVars();
-				ListSF.ELEBLBJKDBI().RandomizeObscuredVars();
+				ListSF.GetItems().RandomizeObscuredVars();
+				ListSF.GetInstance().RandomizeObscuredVars();
 				if (Scene<FightScene>.get_Current() != null)
 				{
 					Scene<FightScene>.get_Current().RandomizeObscuredVars();

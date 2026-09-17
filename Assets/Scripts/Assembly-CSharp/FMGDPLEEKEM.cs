@@ -6,7 +6,7 @@ public class FMGDPLEEKEM : FNEEAGNNFNN
 {
 	public void GGGEHAGCLGC(bool AJAJBBKANGD)
 	{
-		ListSF.ELEBLBJKDBI().HandleAuthenticateResult(AJAJBBKANGD);
+		ListSF.GetInstance().HandleAuthenticateResult(AJAJBBKANGD);
 	}
 
 	public bool JAMADKCIMMB(XmlAttribute GICKLJAIHFC)

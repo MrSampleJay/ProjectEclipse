@@ -126,7 +126,7 @@ public class MapButtonController : global::EventDispatcher<MapButtonInfo>
 			{
 				node.ACBPMPMPKJJ("MapButtons");
 				_node = node["MapButtons"];
-				ListSF.ELEBLBJKDBI().EJANJEEGOOE();
+				ListSF.GetInstance().EJANJEEGOOE();
 			}
 		}
 	}
@@ -161,7 +161,7 @@ public class MapButtonController : global::EventDispatcher<MapButtonInfo>
 			mEEAKLDGLDF.LLIKNHNLGJJ("Timer").Value = DJDNMAOEFBD.Timer;
 		}
 		mEEAKLDGLDF.LLIKNHNLGJJ("ShowType").Value = DJDNMAOEFBD.MLKPBAALMBC;
-		ListSF.ELEBLBJKDBI().EJANJEEGOOE();
+		ListSF.GetInstance().EJANJEEGOOE();
 	}
 
 	private void KFEBGKAALIA(MapButtonInfo DJDNMAOEFBD)
@@ -175,7 +175,7 @@ public class MapButtonController : global::EventDispatcher<MapButtonInfo>
 		if (xmlNode != null)
 		{
 			_node.RemoveChild(xmlNode);
-			ListSF.ELEBLBJKDBI().EJANJEEGOOE();
+			ListSF.GetInstance().EJANJEEGOOE();
 		}
 	}
 }

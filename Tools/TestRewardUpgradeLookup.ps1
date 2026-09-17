@@ -19,7 +19,7 @@ class UpgradeData:IComparable<UpgradeData> {
 }
 class UpgradeDataContainer {public List<UpgradeData> KPAPEBOAKIE=new List<UpgradeData>();}
 class ListSF {
- public static readonly ListSF Catalog=new ListSF();public static ListSF DJBOFEEKJMP()=>Catalog;
+ public static readonly ListSF Catalog=new ListSF();public static ListSF GetItems()=>Catalog;
  public Dictionary<string,UpgradeDataContainer> Templates=new Dictionary<string,UpgradeDataContainer>();
  public UpgradeDataContainer BKPOCLGODDM(string name)=>name!=null&&Templates.TryGetValue(name,out var value)?value:null;
 }

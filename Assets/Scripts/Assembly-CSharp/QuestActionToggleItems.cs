@@ -43,19 +43,19 @@ public class QuestActionToggleItems : QuestAction
 	{
 		if (PEJELKNFEKJ)
 		{
-			List<ItemInfo> list = ListSF.DJBOFEEKJMP().HCDLKHKBEPF();
+			List<ItemInfo> list = ListSF.GetItems().HCDLKHKBEPF();
 			int num = ListSF.CCDKHLAMKKO().PINDEKDNCNL();
 			{
 				foreach (ItemInfo item in list)
 				{
 					if (item.DCHJDPCEODD && item.MMHIKEIDDNB == ECNLPLIBNHF)
 					{
-						ListSF.DJBOFEEKJMP().SetNewAddItem(item, true, (!(item.Type == "RealMoneyItem")) ? num : item.MHGODOLNDLE);
+						ListSF.GetItems().SetNewAddItem(item, true, (!(item.Type == "RealMoneyItem")) ? num : item.MHGODOLNDLE);
 					}
 				}
 				return;
 			}
 		}
-		ListSF.DJBOFEEKJMP().MJICEAIDCGP(ECNLPLIBNHF);
+		ListSF.GetItems().MJICEAIDCGP(ECNLPLIBNHF);
 	}
 }

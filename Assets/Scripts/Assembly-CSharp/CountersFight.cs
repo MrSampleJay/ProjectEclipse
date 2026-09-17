@@ -260,7 +260,7 @@ public class CountersFight : global::EventDispatcher<object>
 				item3.IsNot = true;
 			}
 			string jIIFFJAJNNN = item3.EOGLBDCLMBM.JIIFFJAJNNN;
-			if (IHEFAMAFBIA.JGMLKIPCFII != null && jIIFFJAJNNN != string.Empty && IHEFAMAFBIA.JGMLKIPCFII.Name != jIIFFJAJNNN)
+			if (IHEFAMAFBIA.Weapon != null && jIIFFJAJNNN != string.Empty && IHEFAMAFBIA.Weapon.Name != jIIFFJAJNNN)
 			{
 				item3.IsNot = true;
 			}
@@ -395,7 +395,7 @@ public class CountersFight : global::EventDispatcher<object>
 		string[] array = MPBIEONNLIJ.Split('|');
 		for (int i = 0; i < array.Length; i++)
 		{
-			BattleType pJMEMGHKKBM = ListSF.ELEBLBJKDBI().HIDKFHHJBDH(array[i]);
+			BattleType pJMEMGHKKBM = ListSF.GetInstance().HIDKFHHJBDH(array[i]);
 			if (pJMEMGHKKBM == EMPNPOMEAPL.BattleType)
 			{
 				return true;

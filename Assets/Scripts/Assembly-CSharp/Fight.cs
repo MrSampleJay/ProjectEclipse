@@ -10,7 +10,7 @@ using UnityEngine;
 
 public class Fight
 {
-    public bool IsLocalVersus => KGKDKENMAOA is Eclipse.Multiplayer.LocalVersusMatch;
+    public bool IsLocalVersus => FightDefinition is Eclipse.Multiplayer.LocalVersusMatch;
     internal sealed class PreparedFormModel : IDisposable
     {
         private Model _model;
@@ -22,7 +22,7 @@ public class Fight
             // Never let preparation mutate a catalog definition or the live fighter's parameters.
             var parameters = new ModelParameters(destination);
             parameters.IBBALIJOJMC = SceneTypes.SceneFight;
-            ModelLoader.RequireModelDocuments(parameters.MNPAALCFAKL);
+            ModelLoader.RequireModelDocuments(parameters.ModelDocuments);
             var model = new Model(parameters);
             try
             {
@@ -238,8 +238,8 @@ public class Fight
         int index = LNDLFINJHDB.IndexOf(expected);
         if ((!player && expected != CKNCPOABFBO) || index < 0 || LNDLFINJHDB.Contains(replacement))
             throw new InvalidOperationException("Form participant identity is stale.");
-        var originalParameters = expected.KMMJCHDKBDO;
-        var parameters = replacement.KMMJCHDKBDO;
+        var originalParameters = expected.Parameters;
+        var parameters = replacement.Parameters;
         if (parameters == originalParameters || parameters.IsPlayer != player ||
             (player ? NMNCKBPFCCP : AKBNKDBHCEO) != originalParameters ||
             (!player && (ADJAMFGBOAP < 0 || ADJAMFGBOAP >= IDAAONBIBJM.Count ||
@@ -367,7 +367,7 @@ public class Fight
         public ModCombatActivityEvent ActivityEvent { get; }
         public ModCombatSnapshot CaptureCombatSnapshot()
         {
-            if (_fight == null || _model == null || _model.KMMJCHDKBDO == null) return null;
+            if (_fight == null || _model == null || _model.Parameters == null) return null;
             var self = Capture(_model);
             if (self == null) return null;
             var opponent = _model == _fight._playerModel ? _fight.CKNCPOABFBO : _fight._playerModel;
@@ -375,10 +375,10 @@ public class Fight
         }
         private static ModFighterSnapshot Capture(Model model)
         {
-            if (model == null || model.KMMJCHDKBDO == null || model.CLDMEJKGLBA() == null) return null;
+            if (model == null || model.Parameters == null || model.CLDMEJKGLBA() == null) return null;
             var position = model.PLBNCDCFPML();
             if (position == null) return null;
-            var parameters = model.KMMJCHDKBDO;
+            var parameters = model.Parameters;
             return new ModFighterSnapshot(model.KKMCHCNOHMB(), parameters.CIDCNCDFONA,
                 parameters.HealthBarCount, position.GILCBJJPKBK(), position.OBIMBNIBEFG(), position.KMFEKANLCFO(),
                 ModRuntime.CaptureAnimationSnapshot(model));
@@ -486,7 +486,8 @@ public class Fight
 
 	private int fightTimeInFrame;
 
-	private FightList KGKDKENMAOA;
+	// best guess for name
+	private FightList FightDefinition;
 
 	private int HJCJMEELHPC;
 
@@ -643,7 +644,8 @@ public class Fight
 
 	public PreFight preFight;
 
-	public GameController KCJNBFLAMCC;
+	// best guess for name
+	public GameController Controller;
 
 	public SelectAnimation _SelectAnimation = new SelectAnimation();
 
@@ -657,11 +659,11 @@ public class Fight
 	{
 		get
 		{
-			return PDINEPNPDFI();
+			return IsPaused();
 		}
 		set
 		{
-			JOJIDODPDLA(value);
+			SetPaused(value);
 		}
 	}
 
@@ -669,7 +671,7 @@ public class Fight
 	{
 		get
 		{
-			return OHNKFOHIAKG();
+			return GetCurrentFight();
 		}
 		set
 		{
@@ -749,7 +751,7 @@ public class Fight
 	{
 		get
 		{
-			return BBGAFGNHFEA();
+			return GetPlayerModel();
 		}
 	}
 
@@ -757,7 +759,7 @@ public class Fight
 	{
 		get
 		{
-			return FHHHIEPAKLP();
+			return GetEnemyModel();
 		}
 	}
 
@@ -845,8 +847,8 @@ public class Fight
 	{
 		_currentFight = this;
 		_UnityObject = new GameObject("Fight");
-		JOJIDODPDLA(false);
-		KGKDKENMAOA = (FightList)data;
+		SetPaused(false);
+		FightDefinition = (FightList)data;
 		ADJAMFGBOAP = 0;
 		NMNCKBPFCCP = AIFLOMMDGJB;
 		IDAAONBIBJM = ELGGAEBPCHI;
@@ -910,7 +912,7 @@ public class Fight
 		DODCPKOADGF = false;
 		JPCKKIBCAMG = new Queue<global::Pair<string, int>>();
 		MEBIKGAKIMG = true;
-		GameUtils.MHMGONPIPKG(KGKDKENMAOA.CNAOMDMIGLJ);
+		GameUtils.MHMGONPIPKG(FightDefinition.Battle);
 		if (!GameUtils.NMODJEJFFNC())
 		{
 		}
@@ -935,10 +937,10 @@ public class Fight
 		AKBNKDBHCEO = IDAAONBIBJM[ADJAMFGBOAP];
 		GINNOLEJDFM = AKBNKDBHCEO.HBFMBOHLKPJ;
 		MIEPNNMDNBO();
-		Zone locationZone = KGKDKENMAOA.CNAOMDMIGLJ == null ? null : KGKDKENMAOA.CNAOMDMIGLJ.OAEIILGHJMG;
+		Zone locationZone = FightDefinition.Battle == null ? null : FightDefinition.Battle.OAEIILGHJMG;
 		bool raidLayout = UnderworldZonePolicy.IsRaidZone(locationZone);
-		_location = new Location(Location.ResolveEntryLocation(KGKDKENMAOA.get_Type(), KGKDKENMAOA.JKMJHIIMHPG),
-			KGKDKENMAOA.NPPIFKKLNCN, raidLayout);
+		_location = new Location(Location.ResolveEntryLocation(FightDefinition.get_Type(), FightDefinition.Location),
+			FightDefinition.Music, raidLayout);
 		_location.init();
 		NMNCKBPFCCP.JJCKADKCDIF.Set(_location.JJNMOJLLDEC);
 		AKBNKDBHCEO.JJCKADKCDIF.Set(_location.CLGGLBHOMCE);
@@ -954,7 +956,7 @@ public class Fight
 		GameUtils.MJAPCKDDAMK(_location.JMLAKAKDBBL - _location.MFAPMDDJBBL);
 		if (!flag)
 		{
-			MOBFFOHPCOE.Init(IsLocalVersus ? new Dictionary<string, Counter>() : GameUtils.OJNHPHEPFLI.ECMIANLOLHM(KGKDKENMAOA), NMNCKBPFCCP, KGKDKENMAOA.get_Type(), GameUtils.MPNBGBIMEIP(KGKDKENMAOA));
+			MOBFFOHPCOE.Init(IsLocalVersus ? new Dictionary<string, Counter>() : GameUtils.OJNHPHEPFLI.ECMIANLOLHM(FightDefinition), NMNCKBPFCCP, FightDefinition.get_Type(), GameUtils.MPNBGBIMEIP(FightDefinition));
 			MOBFFOHPCOE.AddEventListener(0, GJJLEFLCOFL);
 		}
 		_Camera = new Camera(_UnityObject.transform);
@@ -966,7 +968,7 @@ public class Fight
 		this.preFight = preFight;
 		if (this.preFight != null)
 		{
-			this.preFight.Init(KGKDKENMAOA);
+			this.preFight.Init(FightDefinition);
 			this.preFight.ViewerPauseVisible(HNKJALKBCBN());
 			this.preFight.OnStopScreen.AddListener(OnStopPreFight);
 			this.preFight.OnButtonClick.AddListener(OnButtonClick);
@@ -978,9 +980,9 @@ public class Fight
 		_Camera.DFKKNMDAFDC(false);
 		round.round = 0;
 		JNBONELPNKE();
-		if (KGKDKENMAOA.get_Type() != BattleType.FightNone)
+		if (FightDefinition.get_Type() != BattleType.FightNone)
 		{
-			KGKDKENMAOA.set_IsInFight(true);
+			FightDefinition.set_IsInFight(true);
 			Sound.PlayMusic(_location.MOADJJNKFKB());
 			SoundController.IsBackgroundMusicIntro = false;
 			StartVS();
@@ -993,29 +995,32 @@ public class Fight
 		GameUtils.CEPJBBGGMDP(1);
 		if (!AssemblyController.JEEFAGGMFCK())
 		{
-			AKBNKDBHCEO.EEGMBGBLLIF = false;
+			AKBNKDBHCEO.AiControlled = false;
 		}
 		OMBDLIKCNIP = false;
 		ModelAi.set_AiOn(true);
 	}
 
-	public bool PDINEPNPDFI()
+	// best guess for name
+	public bool IsPaused()
 	{
 		return GAOPEBOEEGB;
 	}
 
-	public void JOJIDODPDLA(bool value)
+	// best guess for name
+	public void SetPaused(bool value)
 	{
-		if (IsLocalVersus && KCJNBFLAMCC != null)
+		if (IsLocalVersus && Controller != null)
 		{
-			if (value) KCJNBFLAMCC.StopController();
+			if (value) Controller.StopController();
 			else if (!isGameOver && stageType == StageType.FDBBPEGEGMK.STAGE_FIGHT)
-				KCJNBFLAMCC.StartController();
+				Controller.StartController();
 		}
 		GAOPEBOEEGB = value;
 	}
 
-	public static Fight OHNKFOHIAKG()
+	// best guess for name
+	public static Fight GetCurrentFight()
 	{
 		return _currentFight;
 	}
@@ -1034,12 +1039,12 @@ public class Fight
 
 	public FightList OGNINOBBHIG()
 	{
-		return KGKDKENMAOA;
+		return FightDefinition;
 	}
 
 	public void ODJNDMPFBMA(FightList value)
 	{
-		KGKDKENMAOA = value;
+		FightDefinition = value;
 	}
 
 	public GameObject MJNPBMOAFML()
@@ -1064,7 +1069,7 @@ public class Fight
 
 	public BattleType MBEJJCKIIHK()
 	{
-		return KGKDKENMAOA.get_Type();
+		return FightDefinition.get_Type();
 	}
 
 	public bool CONGPMFCIJM()
@@ -1077,12 +1082,14 @@ public class Fight
 		return stageType == StageType.FDBBPEGEGMK.STAGE_NONE;
 	}
 
-	public Model BBGAFGNHFEA()
+	// best guess for name
+	public Model GetPlayerModel()
 	{
 		return _playerModel;
 	}
 
-	public Model FHHHIEPAKLP()
+	// best guess for name
+	public Model GetEnemyModel()
 	{
 		return CKNCPOABFBO;
 	}
@@ -1119,16 +1126,16 @@ public class Fight
 
 	public bool get_isFightNone()
 	{
-		if (KGKDKENMAOA != null)
+		if (FightDefinition != null)
 		{
-			return KGKDKENMAOA.get_Type() == BattleType.FightNone;
+			return FightDefinition.get_Type() == BattleType.FightNone;
 		}
 		return false;
 	}
 
 	public bool get_IsRaidFight()
 	{
-		return KGKDKENMAOA.get_Type() == BattleType.FightRaid;
+		return FightDefinition.get_Type() == BattleType.FightRaid;
 	}
 
 	public bool get_IsFightOver()
@@ -1149,14 +1156,14 @@ public class Fight
 			SystemProperties.NHIDOHIJMBG(GameUtils.CDILOOACLKK);
 		}
 		set_CurrentFight(null);
-		IGIANHEMGKA(KGKDKENMAOA);
-		KGKDKENMAOA.set_IsInFight(false);
-		KGKDKENMAOA.JENGHOJIOFK();
+		IGIANHEMGKA(FightDefinition);
+		FightDefinition.set_IsInFight(false);
+		FightDefinition.JENGHOJIOFK();
 		ResetParameters();
 		GameUtils.CEPJBBGGMDP(1);
-		KCJNBFLAMCC.RemoveEventListener(0, ControlPress);
-		KCJNBFLAMCC.RemoveEventListener(1, ControlRelease);
-		KCJNBFLAMCC.ResetController();
+		Controller.RemoveEventListener(0, ControlPress);
+		Controller.RemoveEventListener(1, ControlRelease);
+		Controller.ResetController();
 		EPBDEDGLHJE.RemoveEventListener(11, LDBBHGDELIJ);
 		_rulesInspector.ClearRules();
 		foreach (Model item in LNDLFINJHDB)
@@ -1165,7 +1172,7 @@ public class Fight
 		}
 		_SelectAnimation.FDBHLFMBECM();
 		ModelLoader.PAGDHDKNBPK();
-		if (KGKDKENMAOA.get_Type() != BattleType.FightNone)
+		if (FightDefinition.get_Type() != BattleType.FightNone)
 		{
 			SoundController.KHPHDKFDCLL();
 		}
@@ -1222,9 +1229,9 @@ public class Fight
 		{
 			if ((bool)preFight)
 			{
-				preFight.SetPause(PDINEPNPDFI());
+				preFight.SetPause(IsPaused());
 			}
-			if (PDINEPNPDFI())
+			if (IsPaused())
 			{
 				break;
 			}
@@ -1242,10 +1249,10 @@ public class Fight
 		switch (PBFPKFPMFCI)
 		{
 		case FightCID.PauseButton:
-			JOJIDODPDLA(!PDINEPNPDFI());
+			SetPaused(!IsPaused());
 			break;
 		case FightCID.NextFrameButton:
-			if (PDINEPNPDFI())
+			if (IsPaused())
 			{
 				Render();
 			}
@@ -1291,10 +1298,10 @@ public class Fight
 			CKNCPOABFBO.NEHLJGPKHKF(!CKNCPOABFBO.FGAHBBDGPBO());
 			break;
 		case FightCID.SetPlayerImmortality:
-			_playerModel.KMMJCHDKBDO.set_IsImmortalityEnabled(!_playerModel.KMMJCHDKBDO.AGICDDJBPLB());
+			_playerModel.Parameters.set_IsImmortalityEnabled(!_playerModel.Parameters.AGICDDJBPLB());
 			break;
 		case FightCID.SetBotImmortality:
-			CKNCPOABFBO.KMMJCHDKBDO.set_IsImmortalityEnabled(!CKNCPOABFBO.KMMJCHDKBDO.AGICDDJBPLB());
+			CKNCPOABFBO.Parameters.set_IsImmortalityEnabled(!CKNCPOABFBO.Parameters.AGICDDJBPLB());
 			break;
 		case FightCID.ShowEdgesButton:
 			break;
@@ -1413,7 +1420,7 @@ public class Fight
 		if (stageType == StageType.FDBBPEGEGMK.STAGE_START_STANCE && flag)
 		{
 			BPFFCNAGLCN();
-			if (KGKDKENMAOA.get_Type() != BattleType.FightNone)
+			if (FightDefinition.get_Type() != BattleType.FightNone)
 			{
 				StartFight();
 			}
@@ -1464,10 +1471,10 @@ public class Fight
 		switch (LFLGCDNKNJI)
 		{
 		case StageType.FDBBPEGEGMK.STAGE_FIGHT:
-			KCJNBFLAMCC.StartController();
+			Controller.StartController();
 			break;
 		case StageType.FDBBPEGEGMK.STAGE_END_STANCE:
-			KCJNBFLAMCC.StopController();
+			Controller.StopController();
 			break;
 		}
 		stageType = LFLGCDNKNJI;
@@ -1520,7 +1527,7 @@ public class Fight
 		}
 		if (DODCPKOADGF)
 		{
-			HPIIICCLOON(FHHHIEPAKLP());
+			HPIIICCLOON(GetEnemyModel());
 			DODCPKOADGF = false;
 		}
 		List<Model> list = new List<Model>();
@@ -1634,9 +1641,9 @@ public class Fight
 
 	public void HIIGDMMGBBD(bool ONFJJLFGNCH = false)
 	{
-		if (KGKDKENMAOA.get_Type() != BattleType.FightNone)
+		if (FightDefinition.get_Type() != BattleType.FightNone)
 		{
-			if (PDINEPNPDFI())
+			if (IsPaused())
 			{
 				ClosePauseScreen();
 			}
@@ -1696,14 +1703,14 @@ public class Fight
 
 	public bool UpdateLife(Model ACENLMONNPA, float AACBFABMADJ)
 	{
-		if (KGKDKENMAOA.get_Type() == BattleType.FightNone)
+		if (FightDefinition.get_Type() == BattleType.FightNone)
 		{
 			return false;
 		}
 		ACENLMONNPA.GEACPINOAAN(AACBFABMADJ);
-		if (ACENLMONNPA.KMMJCHDKBDO.OJMIFOAHKBK())
+		if (ACENLMONNPA.Parameters.OJMIFOAHKBK())
 		{
-			ACENLMONNPA.KMMJCHDKBDO.PCALDKCJGCK = true;
+			ACENLMONNPA.Parameters.PCALDKCJGCK = true;
 		}
 		return !ACENLMONNPA.PDFCAFIMALN();
 	}
@@ -1883,7 +1890,7 @@ public class Fight
 		{
 			gHHCDAFIKJE.DNGKOMPMPCD = false;
 		}
-		if (KGKDKENMAOA.get_Type() == BattleType.FightNone)
+		if (FightDefinition.get_Type() == BattleType.FightNone)
 		{
 			gHHCDAFIKJE.DNGKOMPMPCD = false;
 			gHHCDAFIKJE.APCAKCCOMLO = false;
@@ -1902,8 +1909,8 @@ public class Fight
 		}
 		if (gHHCDAFIKJE.NIKPBGPPFEP)
 		{
-			ItemInfo dJKEECEOCJB = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(GameUtils.APCAKCCOMLO.JIIFFJAJNNN);
-			bool flag = dJKEECEOCJB != null && EGHPHELLOGO.KJDFJPBIGJC.KMMJCHDKBDO.JGMLKIPCFII.Name == dJKEECEOCJB.Name;
+			ItemInfo dJKEECEOCJB = ListSF.GetItems().GetItemByName(GameUtils.APCAKCCOMLO.JIIFFJAJNNN);
+			bool flag = dJKEECEOCJB != null && EGHPHELLOGO.KJDFJPBIGJC.Parameters.Weapon.Name == dJKEECEOCJB.Name;
 			if (EGHPHELLOGO.KJDFJPBIGJC.HFHJFOEFPCD() || flag)
 			{
 				gHHCDAFIKJE.NIKPBGPPFEP = false;
@@ -1940,7 +1947,7 @@ public class Fight
 			EGHPHELLOGO.KJDFJPBIGJC.RemoveInterval(IntervalAnimation.NGAJJDIEDGF.INTERVAL_BLOCK);
 			isFirstStrike = true;
 		}
-		ModelParameters kMMJCHDKBDO = EGHPHELLOGO.KJDFJPBIGJC.KMMJCHDKBDO;
+		ModelParameters kMMJCHDKBDO = EGHPHELLOGO.KJDFJPBIGJC.Parameters;
         // Native hit/critical/block calculations are complete. Defense and health application follow.
         if (_eclipseFightBeginDispatched)
         {
@@ -2012,9 +2019,9 @@ public class Fight
 				EPBDEDGLHJE.JALOHCICLGN(EGHPHELLOGO.GAIBPAGPEGK, PerkEvent.KNKIIEPDCPN.EVENT_MAGIC_CHARGED, true);
 			}
 		}
-		if (EGHPHELLOGO.KJDFJPBIGJC.KMMJCHDKBDO.OJMIFOAHKBK())
+		if (EGHPHELLOGO.KJDFJPBIGJC.Parameters.OJMIFOAHKBK())
 		{
-			EGHPHELLOGO.KJDFJPBIGJC.KMMJCHDKBDO.PCALDKCJGCK = true;
+			EGHPHELLOGO.KJDFJPBIGJC.Parameters.PCALDKCJGCK = true;
 		}
 		IFKFINOGOLC(false);
 		if (gHHCDAFIKJE.DNGKOMPMPCD || (gHHCDAFIKJE.JMDIIIFJMFH && !gHHCDAFIKJE.DFOHNJEBDED) || gHHCDAFIKJE.APCAKCCOMLO)
@@ -2031,7 +2038,7 @@ public class Fight
 		UpdateFightDataDamage(gHHCDAFIKJE, eJPOJJKKICO);
 		_SelectAnimation.CheckEvent(EventAnimation.EECEJKADLCK.EVENT_HIT, EGHPHELLOGO);
 		_SelectAnimation.CheckEvent(EventAnimation.EECEJKADLCK.EVENT_STRIKE, EGHPHELLOGO);
-		if (!Module.ELEBLBJKDBI().OMDLOOFIJDF() && EGHPHELLOGO.KJDFJPBIGJC.OKDDOLCHDCM == GameUtils.JOODENKAECE)
+		if (!Module.GetInstance().OMDLOOFIJDF() && EGHPHELLOGO.KJDFJPBIGJC.OKDDOLCHDCM == GameUtils.JOODENKAECE)
 		{
 			EGHPHELLOGO.KJDFJPBIGJC.ABAOJIMJIDG();
 		}
@@ -2075,14 +2082,14 @@ public class Fight
 		{
 			num = 97f;
 		}
-		ActionButtons actionButtons = KCJNBFLAMCC.GetActionButtons();
+		ActionButtons actionButtons = Controller.GetActionButtons();
 		actionButtons.SetNeededPercentageToActBtn(bOMCDIIDKPD.NBIBIANJLEA, num, bOMCDIIDKPD.OCFKLCDIEBF);
 	}
 
 	public void BHBGIMOHFPI(object data)
 	{
 		Model.EventActBtnSettings bOMCDIIDKPD = (Model.EventActBtnSettings)data;
-		ActionButtons actionButtons = KCJNBFLAMCC.GetActionButtons();
+		ActionButtons actionButtons = Controller.GetActionButtons();
 		actionButtons.SetBulletsCountToActBtn(bOMCDIIDKPD.NBIBIANJLEA, bOMCDIIDKPD.PKMHOICGDIM);
 	}
 
@@ -2151,22 +2158,22 @@ public class Fight
 	public void AJFGKPFJJNL()
 	{
 		EPBDEDGLHJE.JBOGMAPDLHG();
-		GGJJDLNDFLF(BBGAFGNHFEA());
-		GGJJDLNDFLF(FHHHIEPAKLP());
+		GGJJDLNDFLF(GetPlayerModel());
+		GGJJDLNDFLF(GetEnemyModel());
 	}
 
 	public void GGJJDLNDFLF(Model ACENLMONNPA)
 	{
-		ACENLMONNPA.KMMJCHDKBDO.AJFGKPFJJNL();
+		ACENLMONNPA.Parameters.AJFGKPFJJNL();
 		List<PerkInfoItem> list = BGBDGPDPCMP(ACENLMONNPA.EPCNJLEHJCB());
 		foreach (PerkInfoItem item in list)
 		{
-			ACENLMONNPA.KMMJCHDKBDO.NHBIJEEKALC.Add(item);
+			ACENLMONNPA.Parameters.Perks.Add(item);
 		}
 		ACENLMONNPA.GLKOLOBIHLP();
 		List<NoPerksRule> gOMIMEDNKHH = NDDMGLCJDOB(ACENLMONNPA.EPCNJLEHJCB());
-		_rulesInspector.ApplyNoPerksRules(ACENLMONNPA.KMMJCHDKBDO, gOMIMEDNKHH);
-		if (!ACENLMONNPA.EPCNJLEHJCB() || KGKDKENMAOA.get_Type() == BattleType.FightRaid)
+		_rulesInspector.ApplyNoPerksRules(ACENLMONNPA.Parameters, gOMIMEDNKHH);
+		if (!ACENLMONNPA.EPCNJLEHJCB() || FightDefinition.get_Type() == BattleType.FightRaid)
 		{
 		}
 		EPBDEDGLHJE.AddModel(ACENLMONNPA);
@@ -2238,7 +2245,7 @@ public class Fight
 	public void AOMJIMPGBMO()
 	{
 		GJIGBLMLJLD();
-		GameUtils.StartFight(KGKDKENMAOA, false, KGKDKENMAOA.CNAOMDMIGLJ);
+		GameUtils.StartFight(FightDefinition, false, FightDefinition.Battle);
 	}
 
 	public void AJKJEMODFGN()
@@ -2251,7 +2258,7 @@ public class Fight
 
 	private bool KillModel(bool EKBOGDKIHIH, bool KIDOEGEPDKL)
 	{
-		if (KGKDKENMAOA.get_Type() == BattleType.FightNone)
+		if (FightDefinition.get_Type() == BattleType.FightNone)
 		{
 			return false;
 		}
@@ -2265,20 +2272,20 @@ public class Fight
 		bool flag = false;
 		foreach (Model item in LNDLFINJHDB)
 		{
-			if (item.EPCNJLEHJCB() == EKBOGDKIHIH && item.HIPJNBEFGHN() && !item.KMMJCHDKBDO.BHHLEBHLBLH && item.OCPMJKIEPIG().NMEEPBDJHMG() && item.OCPMJKIEPIG().HDJBHPOGKNJ(IntervalAnimation.NGAJJDIEDGF.INTERVAL_INVULNERABLE) == null)
+			if (item.EPCNJLEHJCB() == EKBOGDKIHIH && item.HIPJNBEFGHN() && !item.Parameters.BHHLEBHLBLH && item.OCPMJKIEPIG().NMEEPBDJHMG() && item.OCPMJKIEPIG().HDJBHPOGKNJ(IntervalAnimation.NGAJJDIEDGF.INTERVAL_INVULNERABLE) == null)
 			{
 				item.KDAHHIMLJGG.Data = null;
-				item.KMMJCHDKBDO.PCALDKCJGCK = true;
+				item.Parameters.PCALDKCJGCK = true;
 				item.GFNCMLFKBGP(0f);
 				item.IFDGGKPAHMC(cMGIPKIPIPA, true);
 				flag = true;
 				if (KIDOEGEPDKL)
 				{
-					item.EGGEACCDAEK().KMMJCHDKBDO.FCOALLOHJNP = round.roundTotal;
+					item.EGGEACCDAEK().Parameters.RoundsWon = round.roundTotal;
 				}
 			}
 		}
-		if (flag && KIDOEGEPDKL && !EKBOGDKIHIH && KGKDKENMAOA.CBJOENICLAF())
+		if (flag && KIDOEGEPDKL && !EKBOGDKIHIH && FightDefinition.CBJOENICLAF())
 		{
 			ADJAMFGBOAP = IDAAONBIBJM.Count - 1;
 		}
@@ -2319,7 +2326,7 @@ public class Fight
 
 	private void GJIGBLMLJLD()
 	{
-		if (KGKDKENMAOA.get_Type() == BattleType.FightNone)
+		if (FightDefinition.get_Type() == BattleType.FightNone)
 		{
 			return;
 		}
@@ -2330,7 +2337,7 @@ public class Fight
 		BHOPDEJOKOJ(CKNCPOABFBO);
 		foreach (ModelParameters item in IDAAONBIBJM)
 		{
-			item.FCOALLOHJNP = 0;
+			item.RoundsWon = 0;
 			item.ALNNLCAKCAF();
 			item.IsWinner = false;
 			item.PCALDKCJGCK = false;
@@ -2346,13 +2353,13 @@ public class Fight
 		ADJAMFGBOAP = 0;
 		if (!AssemblyController.JEEFAGGMFCK())
 		{
-			AKBNKDBHCEO.EEGMBGBLLIF = false;
+			AKBNKDBHCEO.AiControlled = false;
 		}
 		CKNCPOABFBO = AddModel(AKBNKDBHCEO);
 		ADCBNMPOKOJ();
-		ModelParameters kMMJCHDKBDO = _playerModel.KMMJCHDKBDO;
+		ModelParameters kMMJCHDKBDO = _playerModel.Parameters;
 		kMMJCHDKBDO.ALNNLCAKCAF();
-		kMMJCHDKBDO.FCOALLOHJNP = 0;
+		kMMJCHDKBDO.RoundsWon = 0;
 		_Camera.DFKKNMDAFDC(false);
 		EPBDEDGLHJE.MIPABIOGDBH(LNDLFINJHDB);
 		_SelectAnimation.set_Models(LNDLFINJHDB);
@@ -2368,7 +2375,7 @@ public class Fight
 
 	private void MLJCABABNDB()
 	{
-		if (KGKDKENMAOA.get_Type() != BattleType.FightNone)
+		if (FightDefinition.get_Type() != BattleType.FightNone)
 		{
 			isGameOver = false;
 			isStopFight = false;
@@ -2376,12 +2383,12 @@ public class Fight
 			round.round--;
 			BHOPDEJOKOJ(CKNCPOABFBO);
 			IDAAONBIBJM[ADJAMFGBOAP].GFNCMLFKBGP(JOEADOFBDOC.PPFGEADDLNN);
-			IDAAONBIBJM[ADJAMFGBOAP].FCOALLOHJNP = JOEADOFBDOC.OGOLNFLBLBD;
+			IDAAONBIBJM[ADJAMFGBOAP].RoundsWon = JOEADOFBDOC.OGOLNFLBLBD;
 			AKBNKDBHCEO = IDAAONBIBJM[ADJAMFGBOAP];
 			GINNOLEJDFM = AKBNKDBHCEO.HBFMBOHLKPJ;
 			if (!AssemblyController.JEEFAGGMFCK())
 			{
-				AKBNKDBHCEO.EEGMBGBLLIF = false;
+				AKBNKDBHCEO.AiControlled = false;
 			}
 			CKNCPOABFBO = AddModel(AKBNKDBHCEO);
 			CKNCPOABFBO.OGHAMAGPFLF(JOEADOFBDOC.BNMFCPPJIAG);
@@ -2389,9 +2396,9 @@ public class Fight
 			CKNCPOABFBO.KBKIMPEHPKF(JOEADOFBDOC.HCBNOKJFGLN);
 			CKNCPOABFBO.PFIJCCKDAAB(JOEADOFBDOC.JAOMELOGOOJ);
 			ADCBNMPOKOJ();
-			ModelParameters kMMJCHDKBDO = _playerModel.KMMJCHDKBDO;
+			ModelParameters kMMJCHDKBDO = _playerModel.Parameters;
 			kMMJCHDKBDO.GFNCMLFKBGP(JEBNOLKKCIK.PPFGEADDLNN);
-			kMMJCHDKBDO.FCOALLOHJNP = JEBNOLKKCIK.OGOLNFLBLBD;
+			kMMJCHDKBDO.RoundsWon = JEBNOLKKCIK.OGOLNFLBLBD;
 			_playerModel.OGHAMAGPFLF(JEBNOLKKCIK.BNMFCPPJIAG);
 			_playerModel.FLBDBIHFJAI(JEBNOLKKCIK.CPOOPPKHFHB);
 			_playerModel.KBKIMPEHPKF(JEBNOLKKCIK.HCBNOKJFGLN);
@@ -2422,15 +2429,15 @@ public class Fight
 	{
 		if (!(GOPFBDGGNGI == null))
 		{
-			KCJNBFLAMCC = GOPFBDGGNGI;
-			KCJNBFLAMCC.AddEventListener(0, ControlPress);
-			KCJNBFLAMCC.AddEventListener(1, ControlRelease);
-			KCJNBFLAMCC.ResetController();
-			if (KGKDKENMAOA is Eclipse.Multiplayer.LocalVersusMatch localMatch)
-				KCJNBFLAMCC.ConfigureLocalVersusInput(true, localMatch.Settings.KeyboardPlayerOne);
-			KCJNBFLAMCC.Init();
-			_Camera.HDFAOMAONJI(KCJNBFLAMCC);
-			KCJNBFLAMCC.IsShowController(AssemblyController.PGFJMOGKEID());
+			Controller = GOPFBDGGNGI;
+			Controller.AddEventListener(0, ControlPress);
+			Controller.AddEventListener(1, ControlRelease);
+			Controller.ResetController();
+			if (FightDefinition is Eclipse.Multiplayer.LocalVersusMatch localMatch)
+				Controller.ConfigureLocalVersusInput(true, localMatch.Settings.KeyboardPlayerOne);
+			Controller.Init();
+			_Camera.HDFAOMAONJI(Controller);
+			Controller.IsShowController(AssemblyController.PGFJMOGKEID());
 			MMOHFIMMFDF(!get_isFightNone());
 		}
 	}
@@ -2468,7 +2475,7 @@ public class Fight
 	{
 		string nJFGLOECJEK = GameUtils.PPAEHBGNDNF().Attribute;
 		int OEMALIFPGPO = 0;
-		if (ACENLMONNPA.KMMJCHDKBDO.IBLHIAHECLK.Get(nJFGLOECJEK, ref OEMALIFPGPO))
+		if (ACENLMONNPA.Parameters.IBLHIAHECLK.Get(nJFGLOECJEK, ref OEMALIFPGPO))
 		{
 			float num = (float)OEMALIFPGPO * GameUtils.PPAEHBGNDNF().Base * CKKFKEIELCP * (ACENLMONNPA.EGGEACCDAEK().LJCFIOPBNKD() / ACENLMONNPA.LJCFIOPBNKD());
 			if (num != 0f)
@@ -2564,7 +2571,7 @@ public class Fight
 			{
 				CKNCPOABFBO.DJLNJPMAHDL().POPNNILNKAE();
 			}
-			if (num <= 0 && KGKDKENMAOA.get_Type() == BattleType.FightRaid)
+			if (num <= 0 && FightDefinition.get_Type() == BattleType.FightRaid)
 			{
 				LBKDADMLJOE.MHNEKAEGNBO = GameOverTypes.GAME_OVER_RAID_ROUND_TIMEOUT;
 			}
@@ -2583,7 +2590,7 @@ public class Fight
 	{
 		ResetParameters();
 		LOGIFPHMNJM(CKNCPOABFBO);
-		int fCOALLOHJNP = AKBNKDBHCEO.FCOALLOHJNP;
+		int fCOALLOHJNP = AKBNKDBHCEO.RoundsWon;
 		if (IHBIGLMLKKG)
 		{
 			CKNCPOABFBO.LFNOLPFIBKC(GINNOLEJDFM);
@@ -2591,11 +2598,11 @@ public class Fight
 			ADJAMFGBOAP++;
 			AKBNKDBHCEO = IDAAONBIBJM[ADJAMFGBOAP];
 			AKBNKDBHCEO.JJCKADKCDIF = _location.CLGGLBHOMCE;
-			AKBNKDBHCEO.FCOALLOHJNP = fCOALLOHJNP;
+			AKBNKDBHCEO.RoundsWon = fCOALLOHJNP;
 			GINNOLEJDFM = AKBNKDBHCEO.HBFMBOHLKPJ;
 			if (!AssemblyController.JEEFAGGMFCK())
 			{
-				AKBNKDBHCEO.EEGMBGBLLIF = false;
+				AKBNKDBHCEO.AiControlled = false;
 			}
 			_rulesInspector.ApplyNoPerksRules(AKBNKDBHCEO, _rulesInspector.GetEnemyNoPerks());
 			CKNCPOABFBO = AddModel(AKBNKDBHCEO);
@@ -2725,21 +2732,21 @@ public class Fight
 	private void StartVS()
 	{
 		round.processing = false;
-		round.roundTotal = KGKDKENMAOA.BDBBNECNMBP;
+		round.roundTotal = FightDefinition.RoundsToWin;
 		round.time = 0;
-		round.timeTotal = (ObscuredInt)(KGKDKENMAOA.RoundTime);
+		round.timeTotal = (ObscuredInt)(FightDefinition.RoundTime);
 		List<ModelParameters> list = null;
 		int num = 0;
-		Battle cNAOMDMIGLJ = KGKDKENMAOA.CNAOMDMIGLJ;
+		Battle cNAOMDMIGLJ = FightDefinition.Battle;
 		bool bBBNBKIMHJC = false;
 		bool flag = true;
 		bool flag2 = true;
-		flag2 = !KGKDKENMAOA.CBJOENICLAF() || (NMNCKBPFCCP.FCOALLOHJNP == 0 && AKBNKDBHCEO.FCOALLOHJNP == 0);
+		flag2 = !FightDefinition.CBJOENICLAF() || (NMNCKBPFCCP.RoundsWon == 0 && AKBNKDBHCEO.RoundsWon == 0);
 		flag = flag2;
 		if (cNAOMDMIGLJ.get_Type() == BattleType.FightBosses || cNAOMDMIGLJ.get_Type() == BattleType.FightBossesReplayable || cNAOMDMIGLJ.get_Type() == BattleType.FightFinalTitan)
 		{
 			list = new List<ModelParameters>();
-			foreach (FightList item in cNAOMDMIGLJ.ANNHMNIHKCC())
+			foreach (FightList item in cNAOMDMIGLJ.GetFights())
 			{
 				List<ModelParameters> list2 = GameUtils.IGNNMAKHBFF(item.OFKJMHPMCCD());
 				if (list2.Count > 0)
@@ -2747,7 +2754,7 @@ public class Fight
 					list.Add(list2[0]);
 				}
 			}
-			num = KGKDKENMAOA.Index;
+			num = FightDefinition.Index;
 			bBBNBKIMHJC = true;
 		}
 		else
@@ -2795,14 +2802,14 @@ public class Fight
 		JEBNOLKKCIK.CPOOPPKHFHB = _playerModel.LPOJKGLFMAL();
 		JEBNOLKKCIK.HCBNOKJFGLN = _playerModel.CKAKLHDLHJO();
 		JEBNOLKKCIK.JAOMELOGOOJ = _playerModel.LJCFIOPBNKD();
-		JEBNOLKKCIK.OGOLNFLBLBD = NMNCKBPFCCP.FCOALLOHJNP;
+		JEBNOLKKCIK.OGOLNFLBLBD = NMNCKBPFCCP.RoundsWon;
 		JOEADOFBDOC.PPFGEADDLNN = (ObscuredFloat)(IDAAONBIBJM[ADJAMFGBOAP].KKMCHCNOHMB());
 		JOEADOFBDOC.BNMFCPPJIAG = CKNCPOABFBO.EKAFGLHNMCN();
 		JOEADOFBDOC.CPOOPPKHFHB = CKNCPOABFBO.LPOJKGLFMAL();
 		JOEADOFBDOC.HCBNOKJFGLN = CKNCPOABFBO.CKAKLHDLHJO();
 		JOEADOFBDOC.JAOMELOGOOJ = CKNCPOABFBO.LJCFIOPBNKD();
-		JOEADOFBDOC.OGOLNFLBLBD = IDAAONBIBJM[ADJAMFGBOAP].FCOALLOHJNP;
-		Sound.IBHIPOOHNFK();
+		JOEADOFBDOC.OGOLNFLBLBD = IDAAONBIBJM[ADJAMFGBOAP].RoundsWon;
+		Sound.StopLoopedSounds();
 		_Camera.KKFIJLOMOJI().JPPGJBHLAGC();
 		KFGCODDPNJP();
 		isStopFight = false;
@@ -2818,7 +2825,7 @@ public class Fight
 		if (preFight != null)
 		{
 			preFight.ClearInscription();
-			if (KGKDKENMAOA.get_Type() == BattleType.FightRaid)
+			if (FightDefinition.get_Type() == BattleType.FightRaid)
 			{
 				preFight.CreateSkipRound();
 			}
@@ -2837,7 +2844,7 @@ public class Fight
 		foreach (Model item in LNDLFINJHDB)
 		{
 			item.NextRound(round.round);
-			item.KMMJCHDKBDO.HANOHOBGGJF();
+			item.Parameters.HANOHOBGGJF();
 		}
 		EPBDEDGLHJE.DEHPKPPDIIA();
 		DispatchEclipseCombatEvent();
@@ -2861,11 +2868,11 @@ public class Fight
         try
         {
             var scripts = ModRuntime.Scripts;
-            ModRuntime.DispatchBattleRules(_eclipseBattleRules, KGKDKENMAOA.BCKFACGMOKC.ToString(), false,
+            ModRuntime.DispatchBattleRules(_eclipseBattleRules, FightDefinition.FightId.ToString(), false,
                 round.round, ListSF.CCDKHLAMKKO().JPMPIDFGCJL(), _eclipseFightId, _eclipsePlayerResult, effectEvent,
                 new EclipseFighterOperations(this, CKNCPOABFBO, damage, incoming, activity));
             var active = new HashSet<DefinitionId>();
-            foreach (var runtimePerk in CKNCPOABFBO.KMMJCHDKBDO.NHBIJEEKALC)
+            foreach (var runtimePerk in CKNCPOABFBO.Parameters.Perks)
             {
                 if (runtimePerk == null || !DefinitionId.TryParse(runtimePerk.Name, out var id) || !active.Add(id) ||
                     !scripts.Content.TryGetPerk(id, out var perk) || !perk.HasBehavior ||
@@ -2908,11 +2915,11 @@ public class Fight
 				ModScriptSession scripts = ModRuntime.Scripts;
 				if (scripts == null || NMNCKBPFCCP == null || !NMNCKBPFCCP.IsPlayer || _playerModel == null) return;
 				var fighterOperations = new EclipseFighterOperations(this, _playerModel, damageEvent, incomingHit, activity);
-                ModRuntime.DispatchBattleRules(_eclipseBattleRules, KGKDKENMAOA.BCKFACGMOKC.ToString(), true,
+                ModRuntime.DispatchBattleRules(_eclipseBattleRules, FightDefinition.FightId.ToString(), true,
                     round.round, ListSF.CCDKHLAMKKO().JPMPIDFGCJL(), _eclipseFightId, _eclipsePlayerResult, effectEvent, fighterOperations);
 
 				var activeRuntimePerks = new HashSet<string>(StringComparer.Ordinal);
-			foreach (PerkInfoItem perk in NMNCKBPFCCP.NHBIJEEKALC)
+			foreach (PerkInfoItem perk in NMNCKBPFCCP.Perks)
 			{
 					if (perk != null && !string.IsNullOrEmpty(perk.Name)) activeRuntimePerks.Add(perk.Name);
 				}
@@ -2920,7 +2927,7 @@ public class Fight
 				// Learned/profile perks are a separate provenance source from item enchantments. Intersect
 				// them with the final active runtime set so recovered NoPerks/rule filtering still wins.
 				var dispatchedPerks = new HashSet<DefinitionId>();
-				foreach (PerkInfoItem learnedPerk in NMNCKBPFCCP.JGCNPHDGHAK)
+				foreach (PerkInfoItem learnedPerk in NMNCKBPFCCP.LearnedPerks)
 				{
 					if (learnedPerk == null || string.IsNullOrEmpty(learnedPerk.Name) ||
 						!activeRuntimePerks.Contains(learnedPerk.Name)) continue;
@@ -2950,7 +2957,7 @@ public class Fight
                 foreach (ItemInfo equipment in NMNCKBPFCCP.PJNJIJIODHE())
                 {
                     if (equipment == null) continue;
-                    foreach (PerkInfoItem innate in equipment.NHBIJEEKALC)
+                    foreach (PerkInfoItem innate in equipment.InnatePerks)
                     {
                         if (innate == null || !activeRuntimePerks.Contains(innate.Name) ||
                             !DefinitionId.TryParse(innate.Name, out var perkId) || perkId.Category != "perks" ||
@@ -2980,7 +2987,7 @@ public class Fight
 			{
 				// Mirror ModelParameters.JBIOECDAAKP(): rule-created/replaced item clones do not
 				// consume the player's saved UserItem enchantments.
-				if (item == null || item.GNDLEFFMJDJ) continue;
+				if (item == null || item.IgnoreInventoryEnchantments) continue;
 				UserItem userItem = userItems.CMGOCLGHNLH(item);
 				System.Xml.XmlNode enchantments = userItem?.Node?["Enchantments"];
 				if (enchantments == null) continue;
@@ -3180,7 +3187,7 @@ public class Fight
 	{
 		if (GJMHPBIBHMO)
 		{
-			bool flag = LBKDADMLJOE.ABKBEJBICOA.FCOALLOHJNP >= round.roundTotal;
+			bool flag = LBKDADMLJOE.ABKBEJBICOA.RoundsWon >= round.roundTotal;
 			if (get_IsRaidFight() && flag)
 			{
 				GJMHPBIBHMO = false;
@@ -3195,7 +3202,7 @@ public class Fight
 				}
 				GJMHPBIBHMO = false;
 				bool flag2 = LBKDADMLJOE.ABKBEJBICOA.IsPlayer && ADJAMFGBOAP < IDAAONBIBJM.Count - 1;
-				bool flag3 = KGKDKENMAOA.CBJOENICLAF();
+				bool flag3 = FightDefinition.CBJOENICLAF();
 				OMBDLIKCNIP = false;
 				if ((!flag && flag3) || (flag && flag2))
 				{
@@ -3210,7 +3217,7 @@ public class Fight
 					}
 					else
 					{
-						NMNCKBPFCCP.FCOALLOHJNP = 0;
+						NMNCKBPFCCP.RoundsWon = 0;
 					}
 				}
 				else if (flag)
@@ -3241,7 +3248,7 @@ public class Fight
 		{
 			HGGGBDFFGNM();
 		}
-		else if (KGKDKENMAOA.get_Type() != BattleType.FightNone && round.processing && (NMNCKBPFCCP.PCALDKCJGCK || AKBNKDBHCEO.PCALDKCJGCK || (preFight != null && preFight.IsTimeOut()) || _endFightRule != null))
+		else if (FightDefinition.get_Type() != BattleType.FightNone && round.processing && (NMNCKBPFCCP.PCALDKCJGCK || AKBNKDBHCEO.PCALDKCJGCK || (preFight != null && preFight.IsTimeOut()) || _endFightRule != null))
 		{
 			if (FCCPOLAMJNO)
 			{
@@ -3266,7 +3273,7 @@ public class Fight
 		if (IsLocalVersus && Eclipse.Multiplayer.LocalVersusRoundRules.ResolveWinner(
 			NMNCKBPFCCP.HABJPOFCIHA(), AKBNKDBHCEO.HABJPOFCIHA()) < 0)
 		{
-			KCJNBFLAMCC.StopController();
+			Controller.StopController();
 			_Camera.DFKKNMDAFDC(false);
 			ResetModels(false);
 			OMBDLIKCNIP = false;
@@ -3302,7 +3309,7 @@ public class Fight
 				ABKBEJBICOA = AKBNKDBHCEO;
 			}
 		}
-		ABKBEJBICOA.FCOALLOHJNP++;
+		ABKBEJBICOA.RoundsWon++;
 		ABKBEJBICOA.IsWinner = true;
 		ABKBEJBICOA.BHHLEBHLBLH = true;
 		ABKBEJBICOA.EndRoundType = LFLGCDNKNJI;
@@ -3333,12 +3340,12 @@ public class Fight
 	private void GameOver(ModelParameters ABKBEJBICOA, ModelParameters LEBLJJCFKOP)
 	{
 		MDJEDDJCGGE(true);
-		if (KGKDKENMAOA.get_Type() != BattleType.FightRaid)
+		if (FightDefinition.get_Type() != BattleType.FightRaid)
 		{
 			ResetParameters();
 		}
 		isGameOver = true;
-		KGKDKENMAOA.JABJLCEJDDM = ADJAMFGBOAP;
+		FightDefinition.RewardIndex = ADJAMFGBOAP;
 		CheckCountersStopFight(ABKBEJBICOA, LEBLJJCFKOP);
 		if (FDACGIEEIEE.Count > 0 || KJKJOJCMDGH)
 		{
@@ -3356,7 +3363,7 @@ public class Fight
 		}
 		// Offline raids are won by exhausting the boss pool, never by having a
 		// higher remaining health percentage when the long timer expires.
-		if (Eclipse.Modding.ModModeRuntime.IsRaid(KGKDKENMAOA))
+		if (Eclipse.Modding.ModModeRuntime.IsRaid(FightDefinition))
 		{
 			bool bossDefeated = (ObscuredFloat)AKBNKDBHCEO.KKMCHCNOHMB() <= 0f;
 			return bossDefeated == PLGGPKEJPPJ ? NMNCKBPFCCP : AKBNKDBHCEO;
@@ -3384,10 +3391,10 @@ public class Fight
 		{
 			item.MLIIBCBGHBH(false);
 			item.set_IsShock(false);
-			ModelParameters kMMJCHDKBDO = item.KMMJCHDKBDO;
+			ModelParameters kMMJCHDKBDO = item.Parameters;
 			if (!OMBDLIKCNIP)
 			{
-				kMMJCHDKBDO.ALNNLCAKCAF(KGKDKENMAOA.OMFDJPFGKAB);
+				kMMJCHDKBDO.ALNNLCAKCAF(FightDefinition.HealthRecovery);
 			}
 			kMMJCHDKBDO.IsWinner = false;
 			kMMJCHDKBDO.PCALDKCJGCK = false;
@@ -3422,7 +3429,7 @@ public class Fight
 
 	private void KCACCJNMOFM(Model.EventModel EGHPHELLOGO)
 	{
-		if (!round.processing || KGKDKENMAOA.get_Type() == BattleType.FightNone || FCCPOLAMJNO || LKCNBFEINCM || !EGHPHELLOGO.KJDFJPBIGJC.LLBJPPAJOHE())
+		if (!round.processing || FightDefinition.get_Type() == BattleType.FightNone || FCCPOLAMJNO || LKCNBFEINCM || !EGHPHELLOGO.KJDFJPBIGJC.LLBJPPAJOHE())
 		{
 			return;
 		}
@@ -3437,7 +3444,7 @@ public class Fight
 			return;
 		}
 		float num = EGHPHELLOGO.GAIBPAGPEGK.GetTotalDamage((IntervalAttack)mNOIEOBBCMI, false, false, null);
-		float num2 = EGHPHELLOGO.GAIBPAGPEGK.KMMJCHDKBDO.RemainingHealthInDamageUnits;
+		float num2 = EGHPHELLOGO.GAIBPAGPEGK.Parameters.RemainingHealthInDamageUnits;
 		if (num2 <= num)
 		{
 			EGHPHELLOGO.KJDFJPBIGJC.FHMLAFHENBB(false);
@@ -3527,7 +3534,7 @@ public class Fight
 
 	private void ODNEEGLKKCK()
 	{
-		_rulesInspector = new RulesInspector(this, KGKDKENMAOA);
+		_rulesInspector = new RulesInspector(this, FightDefinition);
 		_rulesInspector.CurrentRound = round.round;
 	}
 
@@ -3545,10 +3552,10 @@ public class Fight
 		AKBNKDBHCEO.NOBKKLBJFIL();
 		ApplyRules();
 		MMOHFIMMFDF();
-		if (KCJNBFLAMCC != null)
+		if (Controller != null)
 		{
-			KCJNBFLAMCC.ClearButtonsAppearance();
-			_rulesInspector.CheckButtonRules(KCJNBFLAMCC);
+			Controller.ClearButtonsAppearance();
+			_rulesInspector.CheckButtonRules(Controller);
 		}
 		AJFGKPFJJNL();
 	}
@@ -3646,7 +3653,7 @@ public class Fight
 
 	private void MMOHFIMMFDF(bool APDPBLADDCN = true)
 	{
-		if (!(KCJNBFLAMCC == null))
+		if (!(Controller == null))
 		{
 			if (!APDPBLADDCN || round.round == 1)
 			{
@@ -3693,7 +3700,7 @@ public class Fight
         try
         {
             var parameters = ModRuntime.BuildFormParameters(character, expected == _playerModel);
-            GameUtils.InitializeFormParameters(parameters, expected.KMMJCHDKBDO);
+            GameUtils.InitializeFormParameters(parameters, expected.Parameters);
             var itemRules = expected == _playerModel ? _rulesInspector.GetPlayerItemRules() : _rulesInspector.GetEnemyItemRules();
             _rulesInspector.PrepareItemRules(itemRules);
             parameters.KMPACCIOOLE(itemRules, false, Math.Max(1, round.round));
@@ -3716,15 +3723,15 @@ public class Fight
     {
         var replacement = prepared == null ? null : prepared.Model;
         if (expected == null || replacement == null || complete == null || expected == replacement ||
-            expected.KMMJCHDKBDO.IsPlayer != replacement.KMMJCHDKBDO.IsPlayer) return false;
+            expected.Parameters.IsPlayer != replacement.Parameters.IsPlayer) return false;
         return QueueModelTransition(expected, () =>
         {
-            var original = expected.KMMJCHDKBDO;
-            var parameters = replacement.KMMJCHDKBDO;
+            var original = expected.Parameters;
+            var parameters = replacement.Parameters;
             if (original.CIDCNCDFONA <= 0 || parameters.CIDCNCDFONA <= 0)
                 throw new InvalidOperationException("Form health pools must be positive.");
             parameters.GFNCMLFKBGP(expected.KKMCHCNOHMB() / original.CIDCNCDFONA * parameters.CIDCNCDFONA);
-            parameters.FCOALLOHJNP = original.FCOALLOHJNP;
+            parameters.RoundsWon = original.RoundsWon;
             parameters.IsWinner = original.IsWinner;
             replacement.SetModelPosition(new Vector3f(expected.PLBNCDCFPML()));
             replacement.NFOOGKCGFAB = expected.KFCNPADAMHA();
@@ -3839,7 +3846,7 @@ public class Fight
             try
             {
                 if (refreshed && panel != null)
-                    panel.RefreshForm(replacement.KMMJCHDKBDO, expected.KMMJCHDKBDO);
+                    panel.RefreshForm(replacement.Parameters, expected.Parameters);
             }
             finally
             {
@@ -3856,7 +3863,7 @@ public class Fight
             if (panel != null)
             {
                 refreshed = true;
-                if (!panel.RefreshForm(expected.KMMJCHDKBDO, replacement.KMMJCHDKBDO))
+                if (!panel.RefreshForm(expected.Parameters, replacement.Parameters))
                     throw new InvalidOperationException("Fight HUD no longer belongs to the original fighter.");
             }
         }
@@ -3921,10 +3928,10 @@ public class Fight
 	private void CheckCountersStopFight(ModelParameters ABKBEJBICOA, ModelParameters LEBLJJCFKOP)
 	{
 		if (IsLocalVersus) return;
-		BattleType pJMEMGHKKBM = KGKDKENMAOA.get_Type();
-		Battle cNAOMDMIGLJ = KGKDKENMAOA.CNAOMDMIGLJ;
-		int num = cNAOMDMIGLJ.ANNHMNIHKCC().Count - 1;
-		int gCAABNKEIBN = KGKDKENMAOA.Index;
+		BattleType pJMEMGHKKBM = FightDefinition.get_Type();
+		Battle cNAOMDMIGLJ = FightDefinition.Battle;
+		int num = cNAOMDMIGLJ.GetFights().Count - 1;
+		int gCAABNKEIBN = FightDefinition.Index;
 		bool jEDBJFMHGCH = ABKBEJBICOA.IsPlayer;
 		if (jEDBJFMHGCH)
 		{
@@ -3956,8 +3963,8 @@ public class Fight
 			{
 				MOBFFOHPCOE.LAHGOBJIOOG();
 			}
-			MOBFFOHPCOE.IHANMCFEJJG(KGKDKENMAOA.BCKFACGMOKC);
-			MOBFFOHPCOE.MEFALNAFBNG(KGKDKENMAOA.BCKFACGMOKC);
+			MOBFFOHPCOE.IHANMCFEJJG(FightDefinition.FightId);
+			MOBFFOHPCOE.MEFALNAFBNG(FightDefinition.FightId);
 			MOBFFOHPCOE.PIPGPHELPPK();
 		}
 		else
@@ -3978,7 +3985,7 @@ public class Fight
 		Model nPPONCJECLA = _playerModel;
 		if (ABKBEJBICOA.IsPlayer)
 		{
-			int bAINMLLIKOL = (ObscuredInt)(KGKDKENMAOA.RoundTime) - preFight.get_TimeLeft();
+			int bAINMLLIKOL = (ObscuredInt)(FightDefinition.RoundTime) - preFight.get_TimeLeft();
 			ComboStatistic statistic = preFight.GetStatistic(0);
 			MOBFFOHPCOE.SetTime(bAINMLLIKOL);
 			float bAINMLLIKOL2 = (ObscuredFloat)(ABKBEJBICOA.KKMCHCNOHMB());
@@ -4017,7 +4024,7 @@ public class Fight
 
 	private void GJJLEFLCOFL(object data)
 	{
-		if (!KGKDKENMAOA.ANIFGJGHNLN)
+		if (!FightDefinition.TrackFightProgress)
 		{
 			return;
 		}
@@ -4197,7 +4204,7 @@ public class Fight
             DispatchEclipseOpponent(ModEffectEvent.FightEnd);
             _eclipseShields.Clear();
         }
-		Sound.IBHIPOOHNFK();
+		Sound.StopLoopedSounds();
 		MOBFFOHPCOE.Complete(round.roundTotal, true);
 		MOBFFOHPCOE.HOCBEHCHOFL(true);
 		ComboStatistic aIOMDIAFHGB = null;
@@ -4209,11 +4216,11 @@ public class Fight
 			mOJHPBGGNAH = preFight.GetStatistic(1);
 			num = preFight.get_TimeLeft();
 		}
-		if (KGKDKENMAOA.get_Type() != BattleType.FightRaid || Eclipse.Modding.ModModeRuntime.IsRaid(KGKDKENMAOA))
+		if (FightDefinition.get_Type() != BattleType.FightRaid || Eclipse.Modding.ModModeRuntime.IsRaid(FightDefinition))
 		{
-			GameUtils.EndFight(aIOMDIAFHGB, KGKDKENMAOA, null, null, MHNEKAEGNBO, mOJHPBGGNAH, DKDMOJJJHHL);
+			GameUtils.EndFight(aIOMDIAFHGB, FightDefinition, null, null, MHNEKAEGNBO, mOJHPBGGNAH, DKDMOJJJHHL);
 		}
-		if (KGKDKENMAOA.ANIFGJGHNLN)
+		if (FightDefinition.TrackFightProgress)
 		{
 			ListSF.CCDKHLAMKKO().KJNPJKEHGLE().BFCLLIKOJGD();
 		}
@@ -4228,7 +4235,7 @@ public class Fight
 		}
 		if (preFight != null)
 		{
-			JOJIDODPDLA(true);
+			SetPaused(true);
 			preFight.OpenPauseScreen();
 		}
 	}
@@ -4237,7 +4244,7 @@ public class Fight
 	{
 		if (preFight != null)
 		{
-			JOJIDODPDLA(false);
+			SetPaused(false);
 			preFight.ClosePauseScreen();
 		}
 	}
@@ -4246,7 +4253,7 @@ public class Fight
 	{
 		if (preFight != null)
 		{
-			JOJIDODPDLA(true);
+			SetPaused(true);
 			preFight.OpenEndFightScreen(DCJLKCFKCOM);
 		}
 	}
@@ -4334,7 +4341,7 @@ public class Fight
 
 	private void ControlPress(object data)
 	{
-		if (!IOPJDMCBIMM || (IsLocalVersus && PDINEPNPDFI()))
+		if (!IOPJDMCBIMM || (IsLocalVersus && IsPaused()))
 		{
 			return;
 		}
@@ -4401,7 +4408,7 @@ public class Fight
 	private void IPILDDCKHMP()
 	{
 		FINFDFAMMDJ();
-		KCJNBFLAMCC.GetActionButtons().ResetMagicButton();
+		Controller.GetActionButtons().ResetMagicButton();
 	}
 
 	private void MIEPNNMDNBO()
@@ -4413,7 +4420,7 @@ public class Fight
 	private void BNAGOFIAABA()
 	{
 		FELJFJOEJNC();
-		KCJNBFLAMCC.GetActionButtons().ResetRaidChargeButton();
+		Controller.GetActionButtons().ResetRaidChargeButton();
 	}
 
 	private void AlignCameraOnModels(List<Model> INNLAFHKJNI)
@@ -4455,7 +4462,7 @@ public class Fight
             DispatchEclipseOpponent(ModEffectEvent.FightEnd);
             _eclipseShields.Clear();
 		}
-		Sound.IBHIPOOHNFK();
+		Sound.StopLoopedSounds();
 		if (MNEOALEBNNA)
 		{
 			MOBFFOHPCOE.OPLKJKPHHOH();
@@ -4473,21 +4480,21 @@ public class Fight
 			preFight.gameObject.SetActive(false);
 		}
 		float pIFMOMMPFFM = (float)fightTimeInFrame / 60f;
-		GameUtils.EndFight(aIOMDIAFHGB, KGKDKENMAOA, LBKDADMLJOE.ABKBEJBICOA, LBKDADMLJOE.LEBLJJCFKOP, LBKDADMLJOE.MHNEKAEGNBO, mOJHPBGGNAH, DKDMOJJJHHL, _playerModel.KADMPAHPOLD(), pIFMOMMPFFM, (int)_playerModel.DJLNJPMAHDL().HALCJLMJDII());
+		GameUtils.EndFight(aIOMDIAFHGB, FightDefinition, LBKDADMLJOE.ABKBEJBICOA, LBKDADMLJOE.LEBLJJCFKOP, LBKDADMLJOE.MHNEKAEGNBO, mOJHPBGGNAH, DKDMOJJJHHL, _playerModel.KADMPAHPOLD(), pIFMOMMPFFM, (int)_playerModel.DJLNJPMAHDL().HALCJLMJDII());
 		MOBFFOHPCOE.HOCBEHCHOFL(false);
 		GameUtils.AHJGPLGCNGI();
-		if (KGKDKENMAOA.ANIFGJGHNLN)
+		if (FightDefinition.TrackFightProgress)
 		{
 			ListSF.CCDKHLAMKKO().KJNPJKEHGLE().BFCLLIKOJGD();
 		}
-		if (KGKDKENMAOA.get_Type() != BattleType.FightRaid)
+		if (FightDefinition.get_Type() != BattleType.FightRaid)
 		{
 		}
 	}
 
 	private void EndFightRaid()
 	{
-		if (Eclipse.Modding.ModModeRuntime.IsRaid(KGKDKENMAOA)) EndFight();
+		if (Eclipse.Modding.ModModeRuntime.IsRaid(FightDefinition)) EndFight();
 	}
 
 	private Model ADOHNBMKNBG(int index)
@@ -4549,9 +4556,9 @@ public class Fight
 	private void InitRules()
 	{
 		_rulesInspector.ResetRules((round.round <= 0) ? 1 : round.round);
-		if (KGKDKENMAOA != null)
+		if (FightDefinition != null)
 		{
-			KGKDKENMAOA.GJFPAFPEPLK();
+			FightDefinition.GJFPAFPEPLK();
 		}
 	}
 
@@ -4587,8 +4594,8 @@ public class Fight
 
 	private void CheckChangeFightRules()
 	{
-		ELLBMOPJHJI(KGKDKENMAOA);
-		_rulesInspector.CheckChangeFightRules(KGKDKENMAOA);
+		ELLBMOPJHJI(FightDefinition);
+		_rulesInspector.CheckChangeFightRules(FightDefinition);
 	}
 
 	private void CENFCGAKDOL()
@@ -4611,14 +4618,14 @@ public class Fight
 	{
 		List<string> list = new List<string>(4);
 		List<string> list2 = new List<string>();
-		ItemInfo jGMLKIPCFII = _playerModel.KMMJCHDKBDO.JGMLKIPCFII;
+		ItemInfo jGMLKIPCFII = _playerModel.Parameters.Weapon;
 		if (jGMLKIPCFII != null)
 		{
 			string mDPPNGIEJGD = jGMLKIPCFII.MDPPNGIEJGD;
 			list.AddIfNotExist(mDPPNGIEJGD);
 			list2.AddIfNotExist(mDPPNGIEJGD);
 		}
-		ItemInfo jGMLKIPCFII2 = CKNCPOABFBO.KMMJCHDKBDO.JGMLKIPCFII;
+		ItemInfo jGMLKIPCFII2 = CKNCPOABFBO.Parameters.Weapon;
 		if (jGMLKIPCFII2 != null)
 		{
 			string mDPPNGIEJGD2 = jGMLKIPCFII2.MDPPNGIEJGD;
@@ -4653,8 +4660,8 @@ public class Fight
 	{
 		if (AssemblyController.PGFJMOGKEID() || AssemblyController.KMEOEAGGPBI())
 		{
-			bool hFIIEPMEMFF = NMNCKBPFCCP.ADBKGIBBNHJ != null && NMNCKBPFCCP.ADBKGIBBNHJ.Name != GameUtils.GetDefaultItem("Magic");
-			KCJNBFLAMCC.GetActionButtons().ShowMagic(hFIIEPMEMFF);
+			bool hFIIEPMEMFF = NMNCKBPFCCP.Magic != null && NMNCKBPFCCP.Magic.Name != GameUtils.GetDefaultItem("Magic");
+			Controller.GetActionButtons().ShowMagic(hFIIEPMEMFF);
 		}
 	}
 
@@ -4662,8 +4669,8 @@ public class Fight
 	{
 		if (AssemblyController.PGFJMOGKEID() || AssemblyController.JONCCPLEIBE().NPNOMBEEPJD())
 		{
-			bool gKGKKCLPGBB = NMNCKBPFCCP.LGHMILECPLA != null && NMNCKBPFCCP.LGHMILECPLA.Name != GameUtils.GetDefaultItem("Ranged");
-			KCJNBFLAMCC.GetActionButtons().ShowRanged(gKGKKCLPGBB);
+			bool gKGKKCLPGBB = NMNCKBPFCCP.Ranged != null && NMNCKBPFCCP.Ranged.Name != GameUtils.GetDefaultItem("Ranged");
+			Controller.GetActionButtons().ShowRanged(gKGKKCLPGBB);
 		}
 	}
 
@@ -4672,8 +4679,8 @@ public class Fight
 		if (AssemblyController.PGFJMOGKEID() || AssemblyController.KMEOEAGGPBI())
 		{
 			KAOPLEPILDH kAOPLEPILDH = NMNCKBPFCCP as KAOPLEPILDH;
-			bool oPPBHOOBHOE = KGKDKENMAOA.get_Type() == BattleType.FightRaid && kAOPLEPILDH != null && kAOPLEPILDH.LMIBBJIKLNO != null && kAOPLEPILDH.LMIBBJIKLNO.Name != GameUtils.GetDefaultItem("RaidCharge") && _playerModel.CKAKLHDLHJO() > 0;
-			KCJNBFLAMCC.GetActionButtons().ShowRaidCharge(oPPBHOOBHOE);
+			bool oPPBHOOBHOE = FightDefinition.get_Type() == BattleType.FightRaid && kAOPLEPILDH != null && kAOPLEPILDH.LMIBBJIKLNO != null && kAOPLEPILDH.LMIBBJIKLNO.Name != GameUtils.GetDefaultItem("RaidCharge") && _playerModel.CKAKLHDLHJO() > 0;
+			Controller.GetActionButtons().ShowRaidCharge(oPPBHOOBHOE);
 		}
 	}
 
@@ -4704,7 +4711,7 @@ public class Fight
 	{
 		uint num = ListSF.CCDKHLAMKKO().EOKLELGLHJJ();
 		uint num2 = ListSF.CCDKHLAMKKO().HEOHJNFGEDH();
-		uint num3 = GameUtils.IBNHPCFKGOH(KGKDKENMAOA, MFDIOECHDOA);
+		uint num3 = GameUtils.IBNHPCFKGOH(FightDefinition, MFDIOECHDOA);
 		int num4 = ListSF.CCDKHLAMKKO().PINDEKDNCNL();
 		int count = GameUtils.HHONBOCJBLB.PEDIMBMABIG.Count;
 		global::Pair<int, uint> cCKLNOPEKHO = GameUtils.HHONBOCJBLB.PEDIMBMABIG[count - 1];

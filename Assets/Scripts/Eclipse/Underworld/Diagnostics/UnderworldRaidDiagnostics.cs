@@ -10,7 +10,7 @@ namespace Eclipse.Underworld.Diagnostics
 		// and made equipment upgrades ineffective. Alignment is evaluated at hit time.
 		public static void LogEnemies(FightList fight, ModelParameters player, List<ModelParameters> enemies)
 		{
-			Battle battle = fight.CNAOMDMIGLJ;
+			Battle battle = fight.Battle;
 			Zone zone = battle == null ? null : battle.OAEIILGHJMG;
 			if (!UnderworldZonePolicy.IsRaidZone(zone))
 			{
@@ -31,7 +31,7 @@ namespace Eclipse.Underworld.Diagnostics
 					" warriorPower=" + enemy.FPIMGHKNHMO + " healthBars=" + enemy.HealthBarCount +
 					" bossWeapon=" + weapon + " bossDefense=" + defense +
 					" playerWeapon=" + playerWeapon + " playerDefense=" + playerDefense +
-					" alignmentRules=" + enemy.FKJBBIMPCBB.Count);
+					" alignmentRules=" + enemy.AttributeAlignments.Count);
 			}
 		}
 	}

@@ -31,7 +31,7 @@ public static class LocalizationManager { public static void Init() {} }
 public class PerkTree { public static PerkTree GBPBIPFIOJH() => new PerkTree(); public void LJHPGKAOIAE() {} }
 public class ListSF {
     public static int Parses;
-    public static ListSF ELEBLBJKDBI() => new ListSF();
+    public static ListSF GetInstance() => new ListSF();
     public static ListSF CCDKHLAMKKO() => new ListSF();
     public void AFAKCAMAACM() {}
     public void IIKDNMBIHCM() { Parses++; Eclipse.Modding.ModRuntime.ApplyStageContent(); Eclipse.Modding.ModRuntime.ApplyQuestContent(); }
@@ -41,7 +41,7 @@ public enum RuleAppliance { AppliancePlayer, ApplianceOpponent }
 public class EndRule { public RuleAppliance IMINMDOFHMG() => RuleAppliance.AppliancePlayer; }
 public class ModelParameters { public float Life; public float KKMCHCNOHMB() => Life; }
 public class WinnerProbe {
-    object KGKDKENMAOA;
+    object FightDefinition;
     public ModelParameters NMNCKBPFCCP = new ModelParameters { Life = 1 };
     public ModelParameters AKBNKDBHCEO = new ModelParameters { Life = 0.1f };
     EndRoundType _endRoundType = EndRoundType.Timeout;

@@ -97,17 +97,17 @@ public class MagicSettings
 
 	public float HCJBIAGKIGI(Model ACENLMONNPA)
 	{
-		return HCJBIAGKIGI(ACENLMONNPA.KMMJCHDKBDO);
+		return HCJBIAGKIGI(ACENLMONNPA.Parameters);
 	}
 
 	public float MPIOONCNFOK(Model ACENLMONNPA)
 	{
-		return MPIOONCNFOK(ACENLMONNPA.KMMJCHDKBDO);
+		return MPIOONCNFOK(ACENLMONNPA.Parameters);
 	}
 
 	public float LLKJJLOMNID(Model ACENLMONNPA)
 	{
-		return LLKJJLOMNID(ACENLMONNPA.KMMJCHDKBDO);
+		return LLKJJLOMNID(ACENLMONNPA.Parameters);
 	}
 
 	public float HCJBIAGKIGI(ModelParameters IHEFAMAFBIA)

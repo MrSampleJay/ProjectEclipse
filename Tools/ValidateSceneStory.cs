@@ -21,7 +21,7 @@ public static class SceneManagerSF {
 public class Module {
  public class Info {public object Data;}
  public Info DMCJGOMOJEF=new Info();public ScreenType Requested=ScreenType.ModuleMap;
- public static Module Value=new Module();public static Module ELEBLBJKDBI()=>Value;
+ public static Module Value=new Module();public static Module GetInstance()=>Value;
  public ScreenType NMCNDOPKFJD()=>Requested;
  public void NFEBHLDPHHI(object scene){Trace.Steps.Add("module");}
 }

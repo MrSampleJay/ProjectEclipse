@@ -15,7 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml;
 enum SceneTypes{Other,SceneFight}
-class ModelParameters{public List<string> MNPAALCFAKL=new List<string>(); public SceneTypes IBBALIJOJMC; public ModelParameters(){MNPAALCFAKL.Add("body");} public ModelParameters(ModelParameters p){IBBALIJOJMC=p.IBBALIJOJMC;MNPAALCFAKL.AddRange(p.MNPAALCFAKL);}}
+class ModelParameters{public List<string> ModelDocuments=new List<string>(); public SceneTypes IBBALIJOJMC; public ModelParameters(){ModelDocuments.Add("body");} public ModelParameters(ModelParameters p){IBBALIJOJMC=p.IBBALIJOJMC;ModelDocuments.AddRange(p.ModelDocuments);}}
 static class SF2Paths{public static string BNHLPKEDMOM()=>"fixture";}
 static class ModelLoader{
  public static bool Missing;public static string Xml="<Scene><Figures/></Scene>";

@@ -20,7 +20,7 @@ public class ConditionBattle : ConditionCounter
 
 	public override void AEPHNNABOEK()
 	{
-		JGEBALAKCIJ = ListSF.ELEBLBJKDBI().HIDKFHHJBDH(_type);
+		JGEBALAKCIJ = ListSF.GetInstance().HIDKFHHJBDH(_type);
 	}
 
 	protected override void Parse(XmlNode node)

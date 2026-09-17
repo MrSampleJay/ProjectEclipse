@@ -51,7 +51,7 @@ namespace Eclipse.Modding
                 ItemDefinition definition;
                 if (!_content.TryGetItem(listing.Item, out definition))
                     throw new InvalidOperationException("Committed shop listing has no item: " + listing.Item);
-                if (_items.KCCDBEEKBCG(definition.Id.ToString()) != null)
+                if (_items.GetItemByName(definition.Id.ToString()) != null)
                     throw new InvalidOperationException("Legacy item already exists: " + definition.Id);
             }
 
@@ -60,7 +60,7 @@ namespace Eclipse.Modding
                 foreach (NonEquipmentItemDefinition definition in _content.NonEquipmentItems)
                 {
                     if (definition.IsCore) continue;
-                    if (_items.KCCDBEEKBCG(definition.Id.ToString()) != null)
+                    if (_items.GetItemByName(definition.Id.ToString()) != null)
                         throw new InvalidOperationException("Legacy item already exists: " + definition.Id);
                     ItemInfo item = _items.AddExternalItem(BuildNonEquipmentItemNode(definition));
                     _itemNames.Add(item.Name);
@@ -351,8 +351,8 @@ namespace Eclipse.Modding
             RemoveLocalization();
             RemoveP1DContent();
             RemoveP3Content();
-            RemoveQuests(ListSF.ELEBLBJKDBI());
-            RemoveStages(ListSF.ELEBLBJKDBI());
+            RemoveQuests(ListSF.GetInstance());
+            RemoveStages(ListSF.GetInstance());
             RemovePerksAndEnchantments();
             RemoveItems();
             _disposed = true;
@@ -792,7 +792,7 @@ namespace Eclipse.Modding
             var document = new XmlDocument();
             var node = BuildWarriorNode(document, warrior);
             document.AppendChild(node);
-            return ListSF.ELEBLBJKDBI().CreateFormParameters(node, player);
+            return ListSF.GetInstance().CreateFormParameters(node, player);
         }
 
         private XmlElement BuildWarriorNode(XmlDocument document, WarriorDefinition warrior)
@@ -1105,7 +1105,7 @@ namespace Eclipse.Modding
             {
                 if (_items == null || !_content.TryGetItem(definition.Item, out var target))
                     throw new InvalidOperationException("Tactic subtype requires applied items: " + definition.Item);
-                var item = _items.KCCDBEEKBCG(target.IsCore ? target.LegacyName : target.Id.ToString());
+                var item = _items.GetItemByName(target.IsCore ? target.LegacyName : target.Id.ToString());
                 if (item == null || !item.TryOverrideTacticSubtype(definition.Group, out var lifetime))
                     throw new InvalidOperationException("Could not apply tactic subtype for '" + definition.Owner + "': " + definition.Item);
                 _tacticSubtypeLifetimes.Add(lifetime);
@@ -1118,7 +1118,7 @@ namespace Eclipse.Modding
             {
                 if (_items == null || !_content.TryGetItem(definition.Item, out var target))
                     throw new InvalidOperationException("Innate perks require applied items: " + definition.Item);
-                var item = _items.KCCDBEEKBCG(target.IsCore ? target.LegacyName : target.Id.ToString());
+                var item = _items.GetItemByName(target.IsCore ? target.LegacyName : target.Id.ToString());
                 var xml = new XmlDocument();
                 var root = xml.CreateElement("Perks"); xml.AppendChild(root);
                 foreach (var entry in definition.Entries)
@@ -1145,7 +1145,7 @@ namespace Eclipse.Modding
             {
                 if (_items == null || !_content.TryGetItem(definition.Item, out var target))
                     throw new InvalidOperationException("Default enchantments require applied items: " + definition.Item);
-                var item = _items.KCCDBEEKBCG(target.IsCore ? target.LegacyName : target.Id.ToString());
+                var item = _items.GetItemByName(target.IsCore ? target.LegacyName : target.Id.ToString());
                 var xml = new XmlDocument();
                 var root = xml.CreateElement("Enchantments"); xml.AppendChild(root);
                 foreach (var entry in definition.Entries)

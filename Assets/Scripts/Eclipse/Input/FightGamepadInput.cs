@@ -9,7 +9,7 @@ namespace Eclipse.Input
 
 		private readonly Func<FightCID, bool> _isControlEnabled;
 		private readonly Action<int, FightCID> _emitControlEvent;
-		private readonly GamePad.GGAKHLLMPMM _player;
+		private readonly GamePad.Player _player;
 
 		private FightCID _direction = FightCID.QuadrantZero;
 		private bool _punchPressed;
@@ -19,7 +19,7 @@ namespace Eclipse.Input
 		private bool _chargePressed;
 
 		public FightGamepadInput(Func<FightCID, bool> isControlEnabled, Action<int, FightCID> emitControlEvent,
-			GamePad.GGAKHLLMPMM player = GamePad.GGAKHLLMPMM.One)
+			GamePad.Player player = GamePad.Player.One)
 		{
 			_isControlEnabled = isControlEnabled;
 			_emitControlEvent = emitControlEvent;
@@ -39,8 +39,8 @@ namespace Eclipse.Input
 			public void Poll(bool keyboardMovement = true, bool keyboardActions = false, bool gamepadEnabled = true)
 			{
 				gamepadEnabled = gamepadEnabled && IsConnected(_player);
-				Vector2 dpad = gamepadEnabled ? GamePad.CNNMBBLLGNE(GamePad.LCNPGEANNDP.Dpad, _player, true) : Vector2.zero;
-				Vector2 leftStick = gamepadEnabled ? GamePad.CNNMBBLLGNE(FightControllerBindings.MovementStick, _player, true) : Vector2.zero;
+				Vector2 dpad = gamepadEnabled ? GamePad.GetStick(GamePad.Stick.Dpad, _player, true) : Vector2.zero;
+				Vector2 leftStick = gamepadEnabled ? GamePad.GetStick(FightControllerBindings.MovementStick, _player, true) : Vector2.zero;
 			Vector2 movement = dpad.sqrMagnitude >= DeadZone * DeadZone ? dpad : leftStick;
 			// Resolve both axes together; opposite keys cancel, and releasing one
             // half of a diagonal immediately restores the remaining direction.
@@ -60,7 +60,7 @@ namespace Eclipse.Input
 				SetButton(ref _chargePressed, ReadButton(4, KeyCode.J, keyboardActions, gamepadEnabled), FightCID.RaidChargeButton);
 			}
 
-			public static bool IsConnected(GamePad.GGAKHLLMPMM player)
+			public static bool IsConnected(GamePad.Player player)
 			{
 				var devices = UnityEngine.Input.GetJoystickNames();
 				int index = (int)player - 1;

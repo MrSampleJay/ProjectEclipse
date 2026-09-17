@@ -200,7 +200,7 @@ public class DialogsOpener
 		{
 			bool flag = item.EndDate < 0 || item.EndDate > GameUtils.ECCPJAPIABG();
 			bool flag2 = !item.CIKJHDEGHGD;
-			bool flag3 = ListSF.ELEBLBJKDBI().NKLCAPEMDIO(item.KJHMHHBJEDH);
+			bool flag3 = ListSF.GetInstance().NKLCAPEMDIO(item.KJHMHHBJEDH);
 			if (item.DCHJDPCEODD && item.GAHGCJNGDMH && flag && flag2 && flag3)
 			{
 				item.CIKJHDEGHGD = true;

@@ -272,7 +272,7 @@ namespace Nekki.SF2.GUI.Shop
 			if (_buttonPanel != null)
 			{
 				_buttonPanel.Init();
-				if (ListSF.DJBOFEEKJMP().KEFJPEOEPBN().Count == 0)
+				if (ListSF.GetItems().KEFJPEOEPBN().Count == 0)
 				{
 					_buttonPanel.HideButton(6);
 				}
@@ -302,7 +302,7 @@ namespace Nekki.SF2.GUI.Shop
 				_CheatsPanel.HideCheats();
 			}
 			SetFocusOnStart();
-			UpdateModel(ListSF.CCDKHLAMKKO().get_Parameters().JGMLKIPCFII);
+			UpdateModel(ListSF.CCDKHLAMKKO().get_Parameters().Weapon);
 			ShowUI();
 		}
 
@@ -357,7 +357,7 @@ namespace Nekki.SF2.GUI.Shop
 			if (!(LIBKHDGLJFF == null) && !(_itemProperties == null) && !(KDFADLAANLM == null))
 			{
 				ItemInfo itemInfo = LIBKHDGLJFF.get_ItemInfo();
-				if (itemInfo != null && itemInfo.LFIGBCDJHPG.Count > 0)
+				if (itemInfo != null && itemInfo.DefaultEnchantmentPreviews.Count > 0)
 				{
 					_itemProperties.set_OpenImage(NGNPGDAKHJJ);
 					_itemProperties.set_CloseImage(GHHDJJEMHAN);
@@ -573,14 +573,14 @@ namespace Nekki.SF2.GUI.Shop
 
 		private void IDKPGMCBIFM()
 		{
-			DFADPMMIAAL(ListSF.DJBOFEEKJMP().MJKFCBMNNGJ(), DOHLAAPAOOO);
-			DFADPMMIAAL(ListSF.DJBOFEEKJMP().MCGKNJPLIIH(), KBMOJAPFLAO);
-			DFADPMMIAAL(ListSF.DJBOFEEKJMP().EKKIBLDGNHH(), GIECPODANIL);
-			DFADPMMIAAL(ListSF.DJBOFEEKJMP().LKGPBHADANE(), IMHIHAMOFJD);
-			DFADPMMIAAL(ListSF.DJBOFEEKJMP().OGFOBKIEGKA(), JFBDPCMEKMN);
-			DFADPMMIAAL(ListSF.DJBOFEEKJMP().KCIHHGCHEKM(), EBHGBBEGOAM);
-			DFADPMMIAAL(ListSF.DJBOFEEKJMP().BFFNOIPELKC(), EBHGBBEGOAM);
-			DFADPMMIAAL(ListSF.DJBOFEEKJMP().KEFJPEOEPBN(), AEABDIBDJAH);
+			DFADPMMIAAL(ListSF.GetItems().MJKFCBMNNGJ(), DOHLAAPAOOO);
+			DFADPMMIAAL(ListSF.GetItems().MCGKNJPLIIH(), KBMOJAPFLAO);
+			DFADPMMIAAL(ListSF.GetItems().EKKIBLDGNHH(), GIECPODANIL);
+			DFADPMMIAAL(ListSF.GetItems().LKGPBHADANE(), IMHIHAMOFJD);
+			DFADPMMIAAL(ListSF.GetItems().OGFOBKIEGKA(), JFBDPCMEKMN);
+			DFADPMMIAAL(ListSF.GetItems().KCIHHGCHEKM(), EBHGBBEGOAM);
+			DFADPMMIAAL(ListSF.GetItems().BFFNOIPELKC(), EBHGBBEGOAM);
+			DFADPMMIAAL(ListSF.GetItems().KEFJPEOEPBN(), AEABDIBDJAH);
 		}
 
 		private void DFADPMMIAAL(List<ItemInfo> CAIHJJFKFLP, List<ItemInfo> PPFNLLCMHGM)
@@ -672,7 +672,7 @@ namespace Nekki.SF2.GUI.Shop
 					DHDMNHCIPEH.BEBDMOEIEJN(false);
 				});
 			}
-			int num = ListSF.DJBOFEEKJMP().EFEJPENECKN();
+			int num = ListSF.GetItems().EFEJPENECKN();
 			if (BONAMONOIIC != num)
 			{
 				BONAMONOIIC = num;
@@ -684,7 +684,7 @@ namespace Nekki.SF2.GUI.Shop
 				{
 					_mainMenu.UpdateNewItems();
 				}
-				ListSF.ELEBLBJKDBI().EJANJEEGOOE();
+				ListSF.GetInstance().EJANJEEGOOE();
 			}
 		}
 
@@ -927,7 +927,7 @@ namespace Nekki.SF2.GUI.Shop
 				if (dJKEECEOCJB == null)
 				{
 					ShopTableViewCell shopTableViewCell = _shopTableView.get_SelectedCell() as ShopTableViewCell;
-					dJKEECEOCJB = ((!(shopTableViewCell != null)) ? ListSF.CCDKHLAMKKO().get_Parameters().LKKFNMBCCDB : shopTableViewCell.get_ItemInfo());
+					dJKEECEOCJB = ((!(shopTableViewCell != null)) ? ListSF.CCDKHLAMKKO().get_Parameters().Armor : shopTableViewCell.get_ItemInfo());
 				}
 				if (dJKEECEOCJB != null)
 				{

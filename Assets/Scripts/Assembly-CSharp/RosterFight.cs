@@ -514,7 +514,7 @@ public class RosterFight
 		OEKFMKDLLHE(NekkiMath.randomInt(int.MaxValue));
 		HasRandomSeeds = true;
 		NAAHEPJIFAD(ListSF.IDMJOMOMDOJ());
-		ListSF.ELEBLBJKDBI().EJANJEEGOOE();
+		ListSF.GetInstance().EJANJEEGOOE();
 	}
 
 	public bool AANKNHJKJII(long LHLPFBOAEPA)

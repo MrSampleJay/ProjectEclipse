@@ -326,8 +326,8 @@ $requiredAdapterContracts = @(
     'list.AddExternalBattle(zone.LegacyName, battleNode);',
     'list.RemoveExternalBattle(_externalBattles[i].ZoneName, _externalBattles[i].BattleName);',
     'binding.Battle.RestoreSourceDefinitionForModding(binding.Original, out ignored);',
-    'RemoveQuests(ListSF.ELEBLBJKDBI());',
-    'RemoveStages(ListSF.ELEBLBJKDBI());'
+    'RemoveQuests(ListSF.GetInstance());',
+    'RemoveStages(ListSF.GetInstance());'
 )
 foreach ($contract in $requiredAdapterContracts) {
     if (-not $adapter.Contains($contract)) { throw "Legacy P1A/P1B runtime bridge contract missing: $contract" }

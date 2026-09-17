@@ -23,7 +23,7 @@ namespace Nekki.SF2.Core.Tutorials
 
 		public virtual void Run()
 		{
-			GGEKAKEKBEH = Module.ELEBLBJKDBI().HMGDPCPPEFC();
+			GGEKAKEKBEH = Module.GetInstance().HMGDPCPPEFC();
 		}
 
 		protected virtual bool CHDEIEMINPF()

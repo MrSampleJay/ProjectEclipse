@@ -99,7 +99,7 @@ namespace Nekki.SF2.GUI.Map
 			{
 				if (item4.GOOBKHECJIF)
 				{
-					ItemInfo dJKEECEOCJB = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(item4.Name);
+					ItemInfo dJKEECEOCJB = ListSF.GetItems().GetItemByName(item4.Name);
 					UserItem dKCHDHMLKHN = ListSF.CCDKHLAMKKO().KHCNHPCPFII().CMGOCLGHNLH(dJKEECEOCJB);
 					if (dKCHDHMLKHN == null)
 					{

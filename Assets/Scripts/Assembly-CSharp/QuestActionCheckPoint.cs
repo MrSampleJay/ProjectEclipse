@@ -4,7 +4,7 @@ public class QuestActionCheckPoint : QuestAction
 	{
 		base.DEJMHFMLKIC(GFIHPBCEEOB);
 		OIPDKFAJILO(GFIHPBCEEOB);
-		ListSF.ELEBLBJKDBI().EJANJEEGOOE();
+		ListSF.GetInstance().EJANJEEGOOE();
 		OGIJONMKABB();
 	}
 
@@ -19,6 +19,6 @@ public class QuestActionCheckPoint : QuestAction
 		}
 		dKBDLDGOFDN.ECGFFBHMIIK(GFIHPBCEEOB, AMIMGEOENPL, Index);
 		dKBDLDGOFDN.FileName = AEHNKDOJALB;
-		ListSF.ELEBLBJKDBI().EJANJEEGOOE();
+		ListSF.GetInstance().EJANJEEGOOE();
 	}
 }

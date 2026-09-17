@@ -119,8 +119,8 @@ namespace Nekki.SF2.Core.Fights
 			_location.gameLayer.MJNPBMOAFML().transform.SetParent(base.transform, false);
 			NFFPENNBCMB();
 			HEGIABHIPHA = GameUtils.LBMPHBNJMGG();
-			HEGIABHIPHA.EEGMBGBLLIF = false;
-			HEGIABHIPHA.ABAPAIEBNGK = false;
+			HEGIABHIPHA.AiControlled = false;
+			HEGIABHIPHA.UserControlled = false;
 		}
 
 		private void OnDestroy()
@@ -177,8 +177,8 @@ namespace Nekki.SF2.Core.Fights
 			}
 			HEGIABHIPHA = new ModelParameters(GameUtils.LBMPHBNJMGG());
 			HEGIABHIPHA.JJCKADKCDIF = new Vector3f(_modelPosition);
-			HEGIABHIPHA.EEGMBGBLLIF = false;
-			HEGIABHIPHA.ABAPAIEBNGK = false;
+			HEGIABHIPHA.AiControlled = false;
+			HEGIABHIPHA.UserControlled = false;
 			HEGIABHIPHA.IBBALIJOJMC = BMGDMKHAPEC(MHOCFOODLLL);
 			_currentScene = MHOCFOODLLL;
 			ItemInfo dJKEECEOCJB = null;
@@ -187,27 +187,27 @@ namespace Nekki.SF2.Core.Fights
 				if (item.Type.Equals("Weapon"))
 				{
 					dJKEECEOCJB = OCEIGMAPCHK.JGMLKIPCFII;
-					HEGIABHIPHA.JGMLKIPCFII = item;
+					HEGIABHIPHA.Weapon = item;
 				}
 				else if (item.Type.Equals("Armor"))
 				{
 					dJKEECEOCJB = OCEIGMAPCHK.LKKFNMBCCDB;
-					HEGIABHIPHA.LKKFNMBCCDB = item;
+					HEGIABHIPHA.Armor = item;
 				}
 				else if (item.Type.Equals("Helm"))
 				{
 					dJKEECEOCJB = OCEIGMAPCHK.FKMOLBBLKDA;
-					HEGIABHIPHA.FKMOLBBLKDA = item;
+					HEGIABHIPHA.Helm = item;
 				}
 				else if (item.Type.Equals("Ranged"))
 				{
 					dJKEECEOCJB = OCEIGMAPCHK.LGHMILECPLA;
-					HEGIABHIPHA.LGHMILECPLA = item;
+					HEGIABHIPHA.Ranged = item;
 				}
 				else if (item.Type.Equals("Magic"))
 				{
 					dJKEECEOCJB = OCEIGMAPCHK.ADBKGIBBNHJ;
-					HEGIABHIPHA.ADBKGIBBNHJ = item;
+					HEGIABHIPHA.Magic = item;
 				}
 				else if (item.Type.Equals("RaidConsumable") && item.MDPPNGIEJGD.Equals("RaidCharge"))
 				{
@@ -342,15 +342,15 @@ namespace Nekki.SF2.Core.Fights
 
 		public bool IsItemDiffer(ModelParameters JCICKLIMBEF)
 		{
-			if (BKBMDPBINNO(OCEIGMAPCHK.LKKFNMBCCDB, JCICKLIMBEF.LKKFNMBCCDB))
+			if (BKBMDPBINNO(OCEIGMAPCHK.LKKFNMBCCDB, JCICKLIMBEF.Armor))
 			{
 				return true;
 			}
-			if (BKBMDPBINNO(OCEIGMAPCHK.FKMOLBBLKDA, JCICKLIMBEF.FKMOLBBLKDA))
+			if (BKBMDPBINNO(OCEIGMAPCHK.FKMOLBBLKDA, JCICKLIMBEF.Helm))
 			{
 				return true;
 			}
-			if (BKBMDPBINNO(OCEIGMAPCHK.PILJCAOFAED, JCICKLIMBEF.PILJCAOFAED))
+			if (BKBMDPBINNO(OCEIGMAPCHK.PILJCAOFAED, JCICKLIMBEF.Skeleton))
 			{
 				return true;
 			}
@@ -358,15 +358,15 @@ namespace Nekki.SF2.Core.Fights
 			{
 				return true;
 			}
-			if (BKBMDPBINNO(OCEIGMAPCHK.JGMLKIPCFII, JCICKLIMBEF.JGMLKIPCFII))
+			if (BKBMDPBINNO(OCEIGMAPCHK.JGMLKIPCFII, JCICKLIMBEF.Weapon))
 			{
 				return true;
 			}
-			if (BKBMDPBINNO(OCEIGMAPCHK.ADBKGIBBNHJ, JCICKLIMBEF.ADBKGIBBNHJ))
+			if (BKBMDPBINNO(OCEIGMAPCHK.ADBKGIBBNHJ, JCICKLIMBEF.Magic))
 			{
 				return true;
 			}
-			if (BKBMDPBINNO(OCEIGMAPCHK.LGHMILECPLA, JCICKLIMBEF.LGHMILECPLA))
+			if (BKBMDPBINNO(OCEIGMAPCHK.LGHMILECPLA, JCICKLIMBEF.Ranged))
 			{
 				return true;
 			}
@@ -380,15 +380,15 @@ namespace Nekki.SF2.Core.Fights
 
 		private ItemInfo CNIMJKICMBG()
 		{
-			if (OCEIGMAPCHK.LKKFNMBCCDB != HEGIABHIPHA.LKKFNMBCCDB)
+			if (OCEIGMAPCHK.LKKFNMBCCDB != HEGIABHIPHA.Armor)
 			{
 				return OCEIGMAPCHK.LKKFNMBCCDB;
 			}
-			if (OCEIGMAPCHK.FKMOLBBLKDA != HEGIABHIPHA.FKMOLBBLKDA)
+			if (OCEIGMAPCHK.FKMOLBBLKDA != HEGIABHIPHA.Helm)
 			{
 				return OCEIGMAPCHK.FKMOLBBLKDA;
 			}
-			if (OCEIGMAPCHK.PILJCAOFAED != HEGIABHIPHA.PILJCAOFAED)
+			if (OCEIGMAPCHK.PILJCAOFAED != HEGIABHIPHA.Skeleton)
 			{
 				return OCEIGMAPCHK.PILJCAOFAED;
 			}
@@ -396,15 +396,15 @@ namespace Nekki.SF2.Core.Fights
 			{
 				return OCEIGMAPCHK.KKJJONOBHKI;
 			}
-			if (OCEIGMAPCHK.JGMLKIPCFII != HEGIABHIPHA.JGMLKIPCFII)
+			if (OCEIGMAPCHK.JGMLKIPCFII != HEGIABHIPHA.Weapon)
 			{
 				return OCEIGMAPCHK.JGMLKIPCFII;
 			}
-			if (OCEIGMAPCHK.ADBKGIBBNHJ != HEGIABHIPHA.ADBKGIBBNHJ)
+			if (OCEIGMAPCHK.ADBKGIBBNHJ != HEGIABHIPHA.Magic)
 			{
 				return OCEIGMAPCHK.ADBKGIBBNHJ;
 			}
-			if (OCEIGMAPCHK.LGHMILECPLA != HEGIABHIPHA.LGHMILECPLA)
+			if (OCEIGMAPCHK.LGHMILECPLA != HEGIABHIPHA.Ranged)
 			{
 				return OCEIGMAPCHK.LGHMILECPLA;
 			}
@@ -530,7 +530,7 @@ namespace Nekki.SF2.Core.Fights
 			ShopOverride jHJPEFFBMFM = GameUtils.JNDLCLLIMMM.GetOverrideByScreen(NFNJJIGAKNN);
 			if (jHJPEFFBMFM != null)
 			{
-				ItemInfo mBIJKDIEFIF = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(jHJPEFFBMFM.DAOMBPLCBMN);
+				ItemInfo mBIJKDIEFIF = ListSF.GetItems().GetItemByName(jHJPEFFBMFM.DAOMBPLCBMN);
 				HEGIABHIPHA.OLLNIKFPMKE(jHJPEFFBMFM.Type, mBIJKDIEFIF);
 				HEGIABHIPHA.PPFDLIBLNDG();
 			}

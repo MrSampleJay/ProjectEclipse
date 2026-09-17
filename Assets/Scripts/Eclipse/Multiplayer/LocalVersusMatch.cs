@@ -28,27 +28,27 @@ namespace Eclipse.Multiplayer
                 throw new ArgumentException("The selected local matchup is unavailable.", nameof(settings));
             Name = "1";
             Index = 0;
-            BCKFACGMOKC = new FightIDS("EclipseLocal", "versus", Name);
+            FightId = new FightIDS("EclipseLocal", "versus", Name);
             set_Type(BattleType.FightPVP);
-            BDBBNECNMBP = settings.WinsRequired;
+            RoundsToWin = settings.WinsRequired;
             RoundTime = settings.RoundTimeSeconds;
-            JABJLCEJDDM = 1;
-            OMFDJPFGKAB = 1f;
-            JKMJHIIMHPG = settings.Location;
-            NPPIFKKLNCN = "fight1_samurai_spirit";
-            ANIFGJGHNLN = false;
-            PGBKNLAEANJ = ConditionStatus.StatusOpen;
-            CNAOMDMIGLJ = new Battle("PVP", Vector2.zero, "versus", "", "", "Local Versus",
-                0, 0, "", "", JKMJHIIMHPG, NPPIFKKLNCN, "", "");
-            CNAOMDMIGLJ.ANNHMNIHKCC().Add(this);
+            RewardIndex = 1;
+            HealthRecovery = 1f;
+            Location = settings.Location;
+            Music = "fight1_samurai_spirit";
+            TrackFightProgress = false;
+            Status = ConditionStatus.StatusOpen;
+            Battle = new Battle("PVP", Vector2.zero, "versus", "", "", "Local Versus",
+                0, 0, "", "", Location, Music, "", "");
+            Battle.GetFights().Add(this);
             var rosterDocument = new XmlDocument();
             var rosterNode = rosterDocument.CreateElement("Fight");
-            rosterNode.SetAttribute("Name", BCKFACGMOKC.ToString());
+            rosterNode.SetAttribute("Name", FightId.ToString());
             rosterDocument.AppendChild(rosterNode);
-            HOCFLEMFFKC(new RosterFight(rosterNode));
+            SetRosterFight(new RosterFight(rosterNode));
             PlayerOne = PrepareFighter(settings.PlayerOneWeapon, true);
             PlayerTwo = PrepareFighter(settings.PlayerTwoWeapon, false);
-            KMLFBLCMMDO(PlayerTwo);
+            AddOpponent(PlayerTwo);
         }
 
         private static ModelParameters PrepareFighter(string weapon, bool left)
@@ -66,36 +66,36 @@ namespace Eclipse.Multiplayer
             // Equipment selects moves and appearance. Both sides use the same combat ratings.
             foreach (var rating in new[] { "HeadDefense", "BodyDefense", "UnarmedDamage", "WeaponDamage", "RangedDamage", "MagicDamage" })
                 warrior.SetAttribute(rating, "0");
-            var parameters = ListSF.ELEBLBJKDBI().CreateFormParameters(warrior, left);
-            parameters.PILJCAOFAED = CopyItem(GameUtils.MNMGDBGCKOM());
-            parameters.LKKFNMBCCDB = CopyItem(GameUtils.GetDefaultItem("Armor"));
-            parameters.FKMOLBBLKDA = CopyItem(GameUtils.GetDefaultItem("Helm"));
-            parameters.JGMLKIPCFII = CopyItem(weapon);
-            parameters.LGHMILECPLA = CopyItem(GameUtils.GetDefaultItem("Ranged"));
-            parameters.ADBKGIBBNHJ = CopyItem(GameUtils.GetDefaultItem("Magic"));
-            parameters.CHFEHBNIGKA = left ? "PLAYER 1" : "PLAYER 2";
-            parameters.FKJBBIMPCBB.Clear();
-            parameters.FKJBBIMPCBB.Add(new AttributesAlign());
+            var parameters = ListSF.GetInstance().CreateFormParameters(warrior, left);
+            parameters.Skeleton = CopyItem(GameUtils.GetDefaultSkeleton());
+            parameters.Armor = CopyItem(GameUtils.GetDefaultItem("Armor"));
+            parameters.Helm = CopyItem(GameUtils.GetDefaultItem("Helm"));
+            parameters.Weapon = CopyItem(weapon);
+            parameters.Ranged = CopyItem(GameUtils.GetDefaultItem("Ranged"));
+            parameters.Magic = CopyItem(GameUtils.GetDefaultItem("Magic"));
+            parameters.DisplayName = left ? "PLAYER 1" : "PLAYER 2";
+            parameters.AttributeAlignments.Clear();
+            parameters.AttributeAlignments.Add(new AttributesAlign());
             parameters.ShieldTotal = 0;
             parameters.HasShieldTotalOverride = true;
-            parameters.GIKPDPFOAIL.Clear();
-            parameters.JGCNPHDGHAK.Clear();
-            parameters.NHBIJEEKALC.Clear();
+            parameters.WarriorPerks.Clear();
+            parameters.LearnedPerks.Clear();
+            parameters.Perks.Clear();
             GameUtils.InitializeLocalVersusParameters(parameters, left);
-            ModelLoader.RequireModelDocuments(parameters.MNPAALCFAKL);
+            ModelLoader.RequireModelDocuments(parameters.ModelDocuments);
             return parameters;
         }
 
         private static ItemInfo CopyItem(string name)
         {
-            var source = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(name);
+            var source = ListSF.GetItems().GetItemByName(name);
             if (source == null) throw new InvalidOperationException("Local versus equipment is missing: " + name);
             var item = source.Clone();
-            item.GNDLEFFMJDJ = true;
-            item.NHBIJEEKALC.Clear();
-            item.APMJCGBNEDI.Clear();
-            item.LFIGBCDJHPG.Clear();
-            item.BAHCGAGHPNE.Clear();
+            item.IgnoreInventoryEnchantments = true;
+            item.InnatePerks.Clear();
+            item.DefaultEnchantments.Clear();
+            item.DefaultEnchantmentPreviews.Clear();
+            item.ParsedPerks.Clear();
             if (source.NodeXML != null) item.NodeXML = source.NodeXML.CloneNode(true);
             return item;
         }

@@ -15,7 +15,7 @@ public class QuestActionAttachFile : QuestAction
 		base.DEJMHFMLKIC(GFIHPBCEEOB);
 		if (IEICEKFPADK != string.Empty)
 		{
-			ListSF.ELEBLBJKDBI().PDCHBPKOBFI(IEICEKFPADK);
+			ListSF.GetInstance().PDCHBPKOBFI(IEICEKFPADK);
 		}
 		OGIJONMKABB();
 	}

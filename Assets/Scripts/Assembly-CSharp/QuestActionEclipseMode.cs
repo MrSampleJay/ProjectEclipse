@@ -19,7 +19,7 @@ public class QuestActionEclipseMode : QuestAction
 		if (roster != null)
 		{
 			roster.SetEclipseMode(_enabled);
-			ListSF.ELEBLBJKDBI().EJANJEEGOOE();
+			ListSF.GetInstance().EJANJEEGOOE();
 		}
 		OGIJONMKABB();
 	}

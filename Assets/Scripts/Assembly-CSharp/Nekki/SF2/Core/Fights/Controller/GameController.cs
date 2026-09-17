@@ -401,7 +401,7 @@ namespace Nekki.SF2.Core.Fights.Controller
 				if (_localVersusPlayerTwoInput == null)
 					_localVersusPlayerTwoInput = new FightGamepadInput(control => true,
 						(eventType, control) => EmitControl(eventType, new CBBEIGACPPD { Index = 1, KMOPCKPBHIA = control }),
-						_localVersusKeyboardPlayerOne ? GamePad.GGAKHLLMPMM.One : GamePad.GGAKHLLMPMM.Two);
+						_localVersusKeyboardPlayerOne ? GamePad.Player.One : GamePad.Player.Two);
 				return _localVersusPlayerTwoInput;
 			}
 

@@ -28,7 +28,7 @@ public class Roster {
  public ModelParameters get_Parameters()=>Parameters;
  public void AddEventListener(int n,Action<object> callback){}
 }
-public class Items {public object HCDLKHKBEPF()=>null;public object KCCDBEEKBCG(string name)=>new object();}
+public class Items {public object HCDLKHKBEPF()=>null;public object GetItemByName(string name)=>new object();}
 public class GlobalTimer {public static GlobalTimer get_Instance()=>new GlobalTimer();public void removeEventListener(int n,Action<object> callback){}}
 public static class QuestsManager {public static void Reset(){}}
 namespace Eclipse.Modding {
@@ -50,7 +50,7 @@ public class NativeLoader {
  private XmlDocument IEDEFCBFJAD;
  private XmlNode _CurrentUserNode;
  public static Roster Active=>ANEHEDFAPCH;
- private static Items DJBOFEEKJMP()=>_items;
+ private static Items GetItems()=>_items;
  private int HFPJDOEEDCA()=>int.Parse(IEDEFCBFJAD.SelectSingleNode("Root/CurrentUser/@ID").Value);
  private ModelParameters IAOBIMJFBMH(XmlNode n,object template,bool flag)=>new ModelParameters{Node=n};
  private void EJANJEEGOOE(object data){}

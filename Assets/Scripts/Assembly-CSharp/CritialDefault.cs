@@ -19,7 +19,7 @@ public class CritialDefault
 	public float JJNCDHOKEIA(Model ACENLMONNPA)
 	{
 		int OEMALIFPGPO = 0;
-		if (ACENLMONNPA.KMMJCHDKBDO.IBLHIAHECLK.Get(JLIBFOIHBMN.Second, ref OEMALIFPGPO) && !string.IsNullOrEmpty(JLIBFOIHBMN.Second))
+		if (ACENLMONNPA.Parameters.IBLHIAHECLK.Get(JLIBFOIHBMN.Second, ref OEMALIFPGPO) && !string.IsNullOrEmpty(JLIBFOIHBMN.Second))
 		{
 			return JLIBFOIHBMN.First * (float)OEMALIFPGPO;
 		}
@@ -29,7 +29,7 @@ public class CritialDefault
 	public float KDPAKCJCNMI(Model ACENLMONNPA)
 	{
 		int OEMALIFPGPO = 0;
-		if (ACENLMONNPA.KMMJCHDKBDO.IBLHIAHECLK.Get(_Damage.Second, ref OEMALIFPGPO) && !string.IsNullOrEmpty(_Damage.Second))
+		if (ACENLMONNPA.Parameters.IBLHIAHECLK.Get(_Damage.Second, ref OEMALIFPGPO) && !string.IsNullOrEmpty(_Damage.Second))
 		{
 			return _Damage.First * (float)OEMALIFPGPO;
 		}

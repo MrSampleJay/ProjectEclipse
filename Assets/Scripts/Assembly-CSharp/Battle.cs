@@ -205,7 +205,7 @@ public class Battle
 	{
 		get
 		{
-			return ANNHMNIHKCC();
+			return GetFights();
 		}
 	}
 
@@ -380,7 +380,8 @@ public class Battle
 		return jDIPBIHBGPF;
 	}
 
-	public virtual List<FightList> ANNHMNIHKCC()
+	// best guess for name
+	public virtual List<FightList> GetFights()
 	{
 		if (!NLLECKHLMAN)
 		{
@@ -394,7 +395,7 @@ public class Battle
 		for (int i = 0; i < AIKIOPMGCEG; i++)
 		{
 			FightList jDIPBIHBGPF = OAJCBGAKHJJ(i);
-			if (jDIPBIHBGPF.PGBKNLAEANJ == ConditionStatus.StatusOpen)
+			if (jDIPBIHBGPF.Status == ConditionStatus.StatusOpen)
 			{
 				return jDIPBIHBGPF;
 			}
@@ -471,7 +472,7 @@ public class Battle
 	{
 		foreach (FightList item in JNPMCNMEOLE)
 		{
-			item.PGBKNLAEANJ = status;
+			item.Status = status;
 		}
 	}
 
@@ -490,7 +491,7 @@ public class Battle
 
 	public virtual void EMFABIGKAHC(FightList KGKDKENMAOA, bool FFIBGBMOMPD)
 	{
-		KGKDKENMAOA.HOCFLEMFFKC(ListSF.IKHJKHMIPEP(KGKDKENMAOA, FFIBGBMOMPD));
+		KGKDKENMAOA.SetRosterFight(ListSF.IKHJKHMIPEP(KGKDKENMAOA, FFIBGBMOMPD));
 	}
 
 	public virtual void BKGJCODJHKF()
@@ -502,7 +503,7 @@ public class Battle
 		}
 		foreach (FightList item in JNPMCNMEOLE)
 		{
-			if (item.PGBKNLAEANJ == ConditionStatus.StatusOpen)
+			if (item.Status == ConditionStatus.StatusOpen)
 			{
 				if (item.Index > 0)
 				{
@@ -527,7 +528,7 @@ public class Battle
 	{
 		foreach (FightList item in JNPMCNMEOLE)
 		{
-			if (item.PGBKNLAEANJ == ConditionStatus.StatusComplete)
+			if (item.Status == ConditionStatus.StatusComplete)
 			{
 				return true;
 			}
@@ -624,8 +625,8 @@ public class Battle
 
 	public void MHMGONPIPKG()
 	{
-		QuestParameters hHKLFIIBIFF = ListSF.ELEBLBJKDBI().BNMLDPNCMLB();
-		QuestParameters hAOHNNFLOGK = ListSF.ELEBLBJKDBI().HAOHNNFLOGK;
+		QuestParameters hHKLFIIBIFF = ListSF.GetInstance().BNMLDPNCMLB();
+		QuestParameters hAOHNNFLOGK = ListSF.GetInstance().HAOHNNFLOGK;
 		int num = 0;
 		while (num != JNPMCNMEOLE.Count)
 		{
@@ -633,7 +634,7 @@ public class Battle
 			if (hHKLFIIBIFF.LBGOMJFFEPP() != jDIPBIHBGPF && hAOHNNFLOGK.LBGOMJFFEPP() != jDIPBIHBGPF)
 			{
 				JNPMCNMEOLE.RemoveAt(num);
-				ListSF.ELEBLBJKDBI().KINHMMGJEMP(jDIPBIHBGPF);
+				ListSF.GetInstance().KINHMMGJEMP(jDIPBIHBGPF);
 			}
 			else
 			{
@@ -671,10 +672,10 @@ public class Battle
 
 	public virtual void AJKBFMLOCOF(FightList KGKDKENMAOA, int index)
 	{
-		KGKDKENMAOA.CNAOMDMIGLJ = this;
+		KGKDKENMAOA.Battle = this;
 		KGKDKENMAOA.Index = index;
 		JNPMCNMEOLE.Add(KGKDKENMAOA);
-		ListSF.ELEBLBJKDBI().AJKBFMLOCOF(KGKDKENMAOA);
+		ListSF.GetInstance().AJKBFMLOCOF(KGKDKENMAOA);
 		LEGLFDDINKO++;
 		if (LEGLFDDINKO >= AIKIOPMGCEG)
 		{
@@ -689,7 +690,7 @@ public class Battle
 
 	protected void ParseTypeBattle(string LFLGCDNKNJI)
 	{
-		_type = ListSF.ELEBLBJKDBI().HIDKFHHJBDH(LFLGCDNKNJI);
+		_type = ListSF.GetInstance().HIDKFHHJBDH(LFLGCDNKNJI);
 	}
 
 	protected bool UseAllredyParsedFight(int index)
@@ -725,11 +726,11 @@ public class Battle
 
 	protected virtual FightList LNIDPNHGEHC(XmlNode node, int index)
 	{
-		ListSF.ELEBLBJKDBI().JGFGMICMBKL = false;
+		ListSF.GetInstance().JGFGMICMBKL = false;
 		FightList jDIPBIHBGPF = new FightList();
-		ListSF.ELEBLBJKDBI().FOKCPLOMLOK(jDIPBIHBGPF, node, _type, _location, OGIKEKHPFBN, this);
+		ListSF.GetInstance().FOKCPLOMLOK(jDIPBIHBGPF, node, _type, _location, OGIKEKHPFBN, this);
 		AJKBFMLOCOF(jDIPBIHBGPF, index);
-		ListSF.ELEBLBJKDBI().JGFGMICMBKL = true;
+		ListSF.GetInstance().JGFGMICMBKL = true;
 		return jDIPBIHBGPF;
 	}
 
@@ -738,7 +739,7 @@ public class Battle
 		uint num = 0u;
 		foreach (FightList item in JNPMCNMEOLE)
 		{
-			if (item.PGBKNLAEANJ == status)
+			if (item.Status == status)
 			{
 				num++;
 			}

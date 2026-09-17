@@ -111,7 +111,7 @@ public class RosterQuest
 		QuestParameters hHKLFIIBIFF = (QuestParameters)data;
 		get_Parameters().IBMNACPGMLL(ILNNINKHPOC);
 		get_Parameters().MNNPHOAEMII(AAKAPLGDGNM);
-		get_Parameters().ELKOGHKIDOG((hHKLFIIBIFF.LBGOMJFFEPP() == null) ? string.Empty : hHKLFIIBIFF.LBGOMJFFEPP().BCKFACGMOKC.ToString());
+		get_Parameters().ELKOGHKIDOG((hHKLFIIBIFF.LBGOMJFFEPP() == null) ? string.Empty : hHKLFIIBIFF.LBGOMJFFEPP().FightId.ToString());
 		get_Parameters().AJBMLOLOFAN(hHKLFIIBIFF.HEIADONEACH);
 		get_Parameters().CPONINMPIJL(hHKLFIIBIFF.AIEHNBBFNPF);
 		get_Parameters().EFIFIPKDMIN(hHKLFIIBIFF.BJIDALJIKNC);

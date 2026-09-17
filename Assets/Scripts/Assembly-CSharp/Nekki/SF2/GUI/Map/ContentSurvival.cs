@@ -29,7 +29,7 @@ namespace Nekki.SF2.GUI.Map
 
 		public void Init(Battle DPOOIONCEOA)
 		{
-			List<FightList> list = DPOOIONCEOA.ANNHMNIHKCC();
+			List<FightList> list = DPOOIONCEOA.GetFights();
 			_minLabel.gameObject.SetActive(list.Count > 0);
 			_maxLabel.gameObject.SetActive(list.Count > 0);
 			_survivalPrizeMin.gameObject.SetActive(list.Count > 0);

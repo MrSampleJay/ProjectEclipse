@@ -24,7 +24,7 @@ public class PerkConditionHealth : PerkConditionMatchMinMax
 			return false;
 		}
 		FMKBHHJDHDM.IBCPKBBAFNH();
-		float num = (ObscuredFloat)(fGCODGKLHED.KMMJCHDKBDO.KKMCHCNOHMB());
+		float num = (ObscuredFloat)(fGCODGKLHED.Parameters.KKMCHCNOHMB());
 		if (!FMKBHHJDHDM.KEMLMMPIPGJ() && FMKBHHJDHDM.PPCEOKCAEBD() > num)
 		{
 			return false;

@@ -290,9 +290,9 @@ namespace Nekki.SF2.GUI.Map
 
 		public void SelectFight(FightList fight, float _Duration = 0f)
 		{
-			if (fight != null && fight.CNAOMDMIGLJ != null)
+			if (fight != null && fight.Battle != null)
 			{
-				SelectBattle(fight.CNAOMDMIGLJ, _Duration);
+				SelectBattle(fight.Battle, _Duration);
 			}
 		}
 
@@ -435,7 +435,7 @@ namespace Nekki.SF2.GUI.Map
 			FightList currentFight = _infoBattle.GetCurrentFight();
 			if (currentFight != null)
 			{
-				string jFIIJBAOOIK = currentFight.BCKFACGMOKC.ToString();
+				string jFIIJBAOOIK = currentFight.FightId.ToString();
 				if (LDOJANLOFHI != NMFLNANKNOJ.RaidMode)
 				{
 					ListSF.CCDKHLAMKKO().NDFLHPGHKMP(jFIIJBAOOIK);
@@ -449,7 +449,7 @@ namespace Nekki.SF2.GUI.Map
 			FightList jDIPBIHBGPF = GameUtils.JGDLLEAGBBD(DPOOIONCEOA);
 			if (jDIPBIHBGPF != null)
 			{
-				string jFIIJBAOOIK2 = jDIPBIHBGPF.BCKFACGMOKC.ToString();
+				string jFIIJBAOOIK2 = jDIPBIHBGPF.FightId.ToString();
 				if (LDOJANLOFHI != NMFLNANKNOJ.RaidMode)
 				{
 					ListSF.CCDKHLAMKKO().NDFLHPGHKMP(jFIIJBAOOIK2);

@@ -53,7 +53,7 @@ namespace Nekki.SF2.GUI.Map
 			{
 				return false;
 			}
-			ItemInfo dJKEECEOCJB = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(cACJANFAJEC.Name);
+			ItemInfo dJKEECEOCJB = ListSF.GetItems().GetItemByName(cACJANFAJEC.Name);
 			return dJKEECEOCJB != null;
 		}
 

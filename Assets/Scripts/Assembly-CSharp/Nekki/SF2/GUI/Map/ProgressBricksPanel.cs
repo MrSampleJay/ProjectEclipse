@@ -42,7 +42,7 @@ namespace Nekki.SF2.GUI.Map
                 rect.sizeDelta = new Vector2(rect.sizeDelta.x, 0);
                 return;
             }
-			List<FightList> list = DPOOIONCEOA.ANNHMNIHKCC();
+			List<FightList> list = DPOOIONCEOA.GetFights();
 			int num = list.Count;
 			bool modeProgress = Eclipse.Modding.ModModeRuntime.TryProgress(KOMGFJOCEDN, out int completed, out int total);
 			if (modeProgress) num = total;
@@ -76,7 +76,7 @@ namespace Nekki.SF2.GUI.Map
 				for (int j = 0; j < num9; j++)
 				{
 					int index = i * num4 + j;
-					bool flag2 = modeProgress ? index < completed : list[index].PGBKNLAEANJ == ConditionStatus.StatusComplete;
+					bool flag2 = modeProgress ? index < completed : list[index].Status == ConditionStatus.StatusComplete;
 					bool cNNCIENODGE = modeProgress ? index > completed : list[index].CNNCIENODGE;
 					GameObject gameObject = Object.Instantiate(IndicatorFightPrefab);
 					IndicatorFight component2 = gameObject.GetComponent<IndicatorFight>();

@@ -13,7 +13,7 @@ public class QuestActionForceExecution : QuestAction
 	public override void DEJMHFMLKIC(QuestParameters GFIHPBCEEOB)
 	{
 		base.DEJMHFMLKIC(GFIHPBCEEOB);
-		ListSF.ELEBLBJKDBI().AddQuestToStek(Name, true);
+		ListSF.GetInstance().AddQuestToStek(Name, true);
 		OGIJONMKABB();
 	}
 }

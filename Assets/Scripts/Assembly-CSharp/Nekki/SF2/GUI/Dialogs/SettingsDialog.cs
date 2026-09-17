@@ -780,15 +780,15 @@ namespace Nekki.SF2.GUI.Dialogs
 				break;
 			case AHDEAELNGBD.BTN_FACEBOOK:
 			{
-				QuestParameters hHKLFIIBIFF = ListSF.ELEBLBJKDBI().BNMLDPNCMLB();
+				QuestParameters hHKLFIIBIFF = ListSF.GetInstance().BNMLDPNCMLB();
 				FightIDS jLGLBLDPAAF = hHKLFIIBIFF.JLGLBLDPAAF;
 				hHKLFIIBIFF.JLGLBLDPAAF = FightIDS.Empty();
 				hHKLFIIBIFF.HEIADONEACH = string.Empty;
 				hHKLFIIBIFF.AIEHNBBFNPF = string.Empty;
 				hHKLFIIBIFF.DLKPBAJDHBO = null;
-				if (ListSF.ELEBLBJKDBI().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_LOGIN_FB))
+				if (ListSF.GetInstance().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_LOGIN_FB))
 				{
-					ListSF.ELEBLBJKDBI().MHHNIPBJNAD();
+					ListSF.GetInstance().MHHNIPBJNAD();
 				}
 				hHKLFIIBIFF.JLGLBLDPAAF = jLGLBLDPAAF;
 				break;
@@ -857,7 +857,7 @@ namespace Nekki.SF2.GUI.Dialogs
 			if (CELFBNLILMA)
 			{
 				ELGPMKOMMKL();
-				ListSF.ELEBLBJKDBI().DKBINLMJIJG();
+				ListSF.GetInstance().DKBINLMJIJG();
 			}
 			else
 			{
@@ -915,11 +915,11 @@ namespace Nekki.SF2.GUI.Dialogs
 
 		protected void ILLEDELEEPC()
 		{
-			QuestParameters hHKLFIIBIFF = ListSF.ELEBLBJKDBI().BNMLDPNCMLB();
+			QuestParameters hHKLFIIBIFF = ListSF.GetInstance().BNMLDPNCMLB();
 			hHKLFIIBIFF.GMGMEEIKGLG = LFFLJJGJHIB;
-			if (ListSF.ELEBLBJKDBI().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_LANGUAGE_SWITCH))
+			if (ListSF.GetInstance().FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_LANGUAGE_SWITCH))
 			{
-				ListSF.ELEBLBJKDBI().MHHNIPBJNAD();
+				ListSF.GetInstance().MHHNIPBJNAD();
 				return;
 			}
 			LocalizationManager.BJPNKAGDKFL(LFFLJJGJHIB);

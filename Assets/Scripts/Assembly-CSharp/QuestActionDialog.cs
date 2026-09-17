@@ -386,24 +386,24 @@ public class QuestActionDialog : QuestAction
 		switch (text)
 		{
 		case "EnergyRefillTimer":
-			dKPAACCMAPO.Delegate = ListSF.ELEBLBJKDBI().BBDOJLNOHLO;
+			dKPAACCMAPO.Delegate = ListSF.GetInstance().BBDOJLNOHLO;
 			break;
 		case "DuelAccessibilityTimer":
-			dKPAACCMAPO.Delegate = ListSF.ELEBLBJKDBI().JNKBLMLEJGE;
+			dKPAACCMAPO.Delegate = ListSF.GetInstance().JNKBLMLEJGE;
 			break;
 		case "DeliveryTimer":
 		{
-			dKPAACCMAPO.Delegate = ListSF.ELEBLBJKDBI().ENMEBKHLCHF;
+			dKPAACCMAPO.Delegate = ListSF.GetInstance().ENMEBKHLCHF;
 			string gOHIIMFFFJI = node.Attributes["Item"].CIPOICEEIBK(string.Empty);
 			UserItem bAINMLLIKOL = ListSF.CMGOCLGHNLH(gOHIIMFFFJI);
 			dKPAACCMAPO.set_Data(bAINMLLIKOL);
 			break;
 		}
 		case "StarterPackTimer":
-			dKPAACCMAPO.Delegate = ListSF.ELEBLBJKDBI().OKNJMHBIIGJ;
+			dKPAACCMAPO.Delegate = ListSF.GetInstance().OKNJMHBIIGJ;
 			break;
 		default:
-			dKPAACCMAPO.Delegate = ListSF.ELEBLBJKDBI().IAKAPNOBAMJ;
+			dKPAACCMAPO.Delegate = ListSF.GetInstance().IAKAPNOBAMJ;
 			dKPAACCMAPO.set_Data(text);
 			break;
 		}

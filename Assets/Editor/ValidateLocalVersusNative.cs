@@ -74,7 +74,7 @@ public static class ValidateLocalVersusNative
                 lastReport = EditorApplication.timeSinceStartup;
                 File.AppendAllText(Path.Combine(Folder, "result.txt"), "Waiting at step " + step + "\n");
             }
-            var fight = Fight.OHNKFOHIAKG();
+            var fight = Fight.GetCurrentFight();
             switch (step)
             {
                 case 0:
@@ -93,9 +93,9 @@ public static class ValidateLocalVersusNative
                 case 1:
                     if (!LocalVersusSession.IsReady) return;
                     Check(LocalVersusSession.IsActive && LocalVersusMenu.Ensure().IsShowing, "Local boot reached lobby");
-                    Check(Fight.OHNKFOHIAKG() == null, "Local boot did not enter a campaign fight");
+                    Check(Fight.GetCurrentFight() == null, "Local boot did not enter a campaign fight");
                     CheckSaves("Local startup");
-                    localProfileOwner = ListSF.ELEBLBJKDBI();
+                    localProfileOwner = ListSF.GetInstance();
                     localProfileOwner.EJANJEEGOOE();
                     localProfileOwner.OnAuthenticate(true);
                     CheckSaves("Forced save during local play");
@@ -114,14 +114,14 @@ public static class ValidateLocalVersusNative
                 case 2:
                     if (!Ready(fight)) return;
                     firstFight = fight;
-                    firstPlayer = fight.BBGAFGNHFEA();
+                    firstPlayer = fight.GetPlayerModel();
                     CheckFighters(fight);
                     Check(UnityEngine.Object.FindObjectsByType<EventSystem>(FindObjectsSortMode.None).Length == 1,
                         "Exactly one fight EventSystem");
                     Check(ProfileXml() == baseline, "Constructing native local fighters preserves campaign XML");
                     ExerciseRouting(fight);
-                    firstX = fight.BBGAFGNHFEA().PLBNCDCFPML().GILCBJJPKBK();
-                    secondX = fight.FHHHIEPAKLP().PLBNCDCFPML().GILCBJJPKBK();
+                    firstX = fight.GetPlayerModel().PLBNCDCFPML().GILCBJJPKBK();
+                    secondX = fight.GetEnemyModel().PLBNCDCFPML().GILCBJJPKBK();
                     SendControl(0, FightCID.QuadrantForward, true);
                     SendControl(1, FightCID.QuadrantBack, true);
                     movementFrame = fight.get_FightTimeInFrames();
@@ -131,8 +131,8 @@ public static class ValidateLocalVersusNative
                     if (!Ready(fight) || fight.get_FightTimeInFrames() < movementFrame + 60) return;
                     SendControl(0, FightCID.QuadrantForward, false);
                     SendControl(1, FightCID.QuadrantBack, false);
-                    Check(fight.BBGAFGNHFEA().PLBNCDCFPML().GILCBJJPKBK() > firstX &&
-                        fight.FHHHIEPAKLP().PLBNCDCFPML().GILCBJJPKBK() < secondX,
+                    Check(fight.GetPlayerModel().PLBNCDCFPML().GILCBJJPKBK() > firstX &&
+                        fight.GetEnemyModel().PLBNCDCFPML().GILCBJJPKBK() < secondX,
                         "Both native fighters move toward each other from their own controls");
                     Capture("hud");
                     step = 12;
@@ -140,13 +140,13 @@ public static class ValidateLocalVersusNative
                 case 12:
                     if (Time.frameCount <= captureFrame + 2) return;
                     LocalVersusSession.Pause("Native validation pause");
-                    Check(fight.PDINEPNPDFI() && LocalVersusMenu.Ensure().IsShowing, "Native pause opens overlay");
+                    Check(fight.IsPaused() && LocalVersusMenu.Ensure().IsShowing, "Native pause opens overlay");
                     LocalVersusMenu.Ensure().ShowLobby();
                     LocalVersusMenu.Ensure().ShowPause("Native validation repeated overlay");
                     Check(LocalVersusMenu.Ensure().GetComponentsInChildren<UnityEngine.UI.Image>(true)
                         .All(image => image.GetComponents<UnityEngine.UI.Image>().Length == 1), "Repeated overlays keep one Image per object");
                     LocalVersusMenu.Ensure().Hide();
-                    fight.JOJIDODPDLA(false);
+                    fight.SetPaused(false);
                     round = fight.get_RoundNumber();
                     step = 3;
                     break;
@@ -157,15 +157,15 @@ public static class ValidateLocalVersusNative
                     break;
                 case 4:
                     if (!Ready(fight) || fight.get_RoundNumber() <= round) return;
-                    Check(fight.BBGAFGNHFEA().KMMJCHDKBDO.FCOALLOHJNP == 0 &&
-                        fight.FHHHIEPAKLP().KMMJCHDKBDO.FCOALLOHJNP == 1, "Player two wins a native knockout round");
+                    Check(fight.GetPlayerModel().Parameters.RoundsWon == 0 &&
+                        fight.GetEnemyModel().Parameters.RoundsWon == 1, "Player two wins a native knockout round");
                     CheckFighters(fight);
                     if (!Kill(fight, true)) return;
                     step = 5;
                     break;
                 case 5:
                     if (!LocalVersusSession.HasResult) return;
-                    Check(fight.FHHHIEPAKLP().KMMJCHDKBDO.FCOALLOHJNP == 2, "First-to-two match completes with player two winning");
+                    Check(fight.GetEnemyModel().Parameters.RoundsWon == 2, "First-to-two match completes with player two winning");
                     Check(LocalVersusMenu.Ensure().GetComponentsInChildren<UnityEngine.UI.Text>()
                         .Any(label => label.text == "PLAYER 2 WINS"), "Player two result text displayed");
                     Check(ProfileXml() == baseline, "Local result preserves campaign XML");
@@ -179,10 +179,10 @@ public static class ValidateLocalVersusNative
                     break;
                 case 6:
                     if (!Ready(fight) || fight == firstFight) return;
-                    Check(fight.BBGAFGNHFEA() != firstPlayer, "Rematch uses fresh native models");
-                    Check(fight.BBGAFGNHFEA().KMMJCHDKBDO.FCOALLOHJNP == 0 &&
-                        fight.FHHHIEPAKLP().KMMJCHDKBDO.FCOALLOHJNP == 0, "Rematch resets both scores");
-                    Check(fight.BBGAFGNHFEA().KMMJCHDKBDO.JGMLKIPCFII.Name == "WEAPON_KATANA", "Changed weapon applied on rematch");
+                    Check(fight.GetPlayerModel() != firstPlayer, "Rematch uses fresh native models");
+                    Check(fight.GetPlayerModel().Parameters.RoundsWon == 0 &&
+                        fight.GetEnemyModel().Parameters.RoundsWon == 0, "Rematch resets both scores");
+                    Check(fight.GetPlayerModel().Parameters.Weapon.Name == "WEAPON_KATANA", "Changed weapon applied on rematch");
                     CheckFighters(fight);
                     round = fight.get_RoundNumber();
                     // Force the real timer boundary with equal health, then let RenderRound decide.
@@ -191,16 +191,16 @@ public static class ValidateLocalVersusNative
                     break;
                 case 7:
                     if (!Ready(fight) || fight.get_RoundNumber() <= round) return;
-                    Check(!LocalVersusSession.HasResult && fight.BBGAFGNHFEA().KMMJCHDKBDO.FCOALLOHJNP == 0 &&
-                        fight.FHHHIEPAKLP().KMMJCHDKBDO.FCOALLOHJNP == 0, "Equal timeout replays with neither player awarded a round");
-                    fight.FHHHIEPAKLP().GFNCMLFKBGP(fight.FHHHIEPAKLP().KMMJCHDKBDO.CIDCNCDFONA * .5f);
+                    Check(!LocalVersusSession.HasResult && fight.GetPlayerModel().Parameters.RoundsWon == 0 &&
+                        fight.GetEnemyModel().Parameters.RoundsWon == 0, "Equal timeout replays with neither player awarded a round");
+                    fight.GetEnemyModel().GFNCMLFKBGP(fight.GetEnemyModel().Parameters.CIDCNCDFONA * .5f);
                     SetTimerExpired(fight);
                     step = 8;
                     break;
                 case 8:
                     if (!LocalVersusSession.HasResult) return;
-                    Check(fight.BBGAFGNHFEA().KMMJCHDKBDO.FCOALLOHJNP == 1 &&
-                        fight.FHHHIEPAKLP().KMMJCHDKBDO.FCOALLOHJNP == 0, "Higher-health player one wins native timeout");
+                    Check(fight.GetPlayerModel().Parameters.RoundsWon == 1 &&
+                        fight.GetEnemyModel().Parameters.RoundsWon == 0, "Higher-health player one wins native timeout");
                     Check(ProfileXml() == baseline, "Rounds and rematch preserve campaign XML");
                     Launch("Fists", "WEAPON_KNIVES", "bamboo_grove", 1);
                     step = 14;
@@ -213,17 +213,17 @@ public static class ValidateLocalVersusNative
                     break;
                 case 15:
                     if (!Ready(fight) || fight.get_RoundNumber() <= round) return;
-                    Check(fight.BBGAFGNHFEA().KMMJCHDKBDO.FCOALLOHJNP == 0 &&
-                        fight.FHHHIEPAKLP().KMMJCHDKBDO.FCOALLOHJNP == 0 && !LocalVersusSession.HasResult,
+                    Check(fight.GetPlayerModel().Parameters.RoundsWon == 0 &&
+                        fight.GetEnemyModel().Parameters.RoundsWon == 0 && !LocalVersusSession.HasResult,
                         "Double knockout replays without awarding a round");
-                    fight.BBGAFGNHFEA().GFNCMLFKBGP(fight.BBGAFGNHFEA().KMMJCHDKBDO.CIDCNCDFONA * .5f);
+                    fight.GetPlayerModel().GFNCMLFKBGP(fight.GetPlayerModel().Parameters.CIDCNCDFONA * .5f);
                     SetTimerExpired(fight);
                     step = 16;
                     break;
                 case 16:
                     if (!LocalVersusSession.HasResult) return;
-                    Check(fight.BBGAFGNHFEA().KMMJCHDKBDO.FCOALLOHJNP == 0 &&
-                        fight.FHHHIEPAKLP().KMMJCHDKBDO.FCOALLOHJNP == 1,
+                    Check(fight.GetPlayerModel().Parameters.RoundsWon == 0 &&
+                        fight.GetEnemyModel().Parameters.RoundsWon == 1,
                         "Higher-health player two wins native timeout in Bamboo grove");
                     Check(ProfileXml() == baseline, "All local match outcomes preserve campaign XML");
                     CheckSaves("All local match outcomes");
@@ -233,7 +233,7 @@ public static class ValidateLocalVersusNative
                     break;
                 case 9:
                     if (!Eclipse.UI.TitleScreen.IsOpen || LocalVersusSession.IsActive) return;
-                    Check(Fight.OHNKFOHIAKG() == null, "Return to title disposes native fight");
+                    Check(Fight.GetCurrentFight() == null, "Return to title disposes native fight");
                     Check(UnityEngine.Object.FindFirstObjectByType<LocalVersusSession>() == null, "Return to title clears local session host");
                     returnedAt = EditorApplication.timeSinceStartup;
                     step = 17;
@@ -270,29 +270,29 @@ public static class ValidateLocalVersusNative
         var match = new LocalVersusMatch(settings);
         typeof(LocalVersusSession).GetProperty("Settings").GetSetMethod(true).Invoke(null, new object[] { settings });
         LocalVersusMenu.Ensure().Hide();
-        typeof(Module).GetMethod("OpenLocalVersus", Hidden).Invoke(Module.ELEBLBJKDBI(), new object[] { match });
+        typeof(Module).GetMethod("OpenLocalVersus", Hidden).Invoke(Module.GetInstance(), new object[] { match });
     }
 
     static bool Ready(Fight fight) => fight != null && fight.IsLocalVersus && fight.CONGPMFCIJM() &&
-        !fight.PDINEPNPDFI() && fight.get_FightTimeInFrames() > 10;
+        !fight.IsPaused() && fight.get_FightTimeInFrames() > 10;
 
     static void CheckFighters(Fight fight)
     {
-        var one = fight.BBGAFGNHFEA();
-        var two = fight.FHHHIEPAKLP();
-        Check(one.KMMJCHDKBDO.IsPlayer && !two.KMMJCHDKBDO.IsPlayer, "Fighter sides retain native identities");
-        Check(one.KMMJCHDKBDO.ABAPAIEBNGK && two.KMMJCHDKBDO.ABAPAIEBNGK &&
-            !one.KMMJCHDKBDO.EEGMBGBLLIF && !two.KMMJCHDKBDO.EEGMBGBLLIF, "Both fighters are controlled without AI");
+        var one = fight.GetPlayerModel();
+        var two = fight.GetEnemyModel();
+        Check(one.Parameters.IsPlayer && !two.Parameters.IsPlayer, "Fighter sides retain native identities");
+        Check(one.Parameters.UserControlled && two.Parameters.UserControlled &&
+            !one.Parameters.AiControlled && !two.Parameters.AiControlled, "Both fighters are controlled without AI");
         Check(one.FHBLLPCEAHG() != null && two.FHBLLPCEAHG() != null, "Both native fighters have animations");
-        Check(!ReferenceEquals(one.KMMJCHDKBDO, two.KMMJCHDKBDO) &&
-            !ReferenceEquals(one.KMMJCHDKBDO.LKKFNMBCCDB, two.KMMJCHDKBDO.LKKFNMBCCDB), "Fighters own separate parameters and equipment");
+        Check(!ReferenceEquals(one.Parameters, two.Parameters) &&
+            !ReferenceEquals(one.Parameters.Armor, two.Parameters.Armor), "Fighters own separate parameters and equipment");
     }
 
     static void ExerciseRouting(Fight fight)
     {
         var controller = GameController.get_Current();
-        var one = fight.BBGAFGNHFEA().DEGJJOMLJGM();
-        var two = fight.FHHHIEPAKLP().DEGJJOMLJGM();
+        var one = fight.GetPlayerModel().DEGJJOMLJGM();
+        var two = fight.GetEnemyModel().DEGJJOMLJGM();
         one.Reset(); two.Reset();
         controller.CallEvent(0, new CBBEIGACPPD { Index = 1, KMOPCKPBHIA = FightCID.QuadrantDown });
         Check(two.FONEJOKEIEN.IGEEOAGOMEM.Contains((int)FightCID.QuadrantDown) && one.FONEJOKEIEN.IGEEOAGOMEM.Count == 0,

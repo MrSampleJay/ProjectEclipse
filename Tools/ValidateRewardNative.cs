@@ -21,11 +21,11 @@ public static class Scalars {
 public class ListSF {
  public static bool Eclipse; public static int Level=4;public static Inventory Inventory=new Inventory();public static ItemCatalog Catalog=new ItemCatalog();
  public static ListSF CCDKHLAMKKO()=>new ListSF();public bool JPMPIDFGCJL()=>Eclipse;
- public int PINDEKDNCNL()=>Level;public Inventory KHCNHPCPFII()=>Inventory;public static ItemCatalog DJBOFEEKJMP()=>Catalog;
+ public int PINDEKDNCNL()=>Level;public Inventory KHCNHPCPFII()=>Inventory;public static ItemCatalog GetItems()=>Catalog;
 }
 public class UserItem {}
 public class Inventory { public HashSet<string> Owned=new HashSet<string>(); public UserItem CMGOCLGHNLH(string name)=>Owned.Contains(name)?new UserItem():null; }
-public class ItemCatalog { public Dictionary<string,ItemInfo> Items=new Dictionary<string,ItemInfo>();public ItemInfo KCCDBEEKBCG(string name)=>Items.TryGetValue(name,out var item)?item:null; }
+public class ItemCatalog { public Dictionary<string,ItemInfo> Items=new Dictionary<string,ItemInfo>();public ItemInfo GetItemByName(string name)=>Items.TryGetValue(name,out var item)?item:null; }
 public class UpgradeData { public int Number; }
 public class ItemInfo {
  public string Name,Type="Weapon";public int MHGODOLNDLE=4;public int Upgrade;

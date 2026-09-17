@@ -233,7 +233,8 @@ public class Items
 		return DEEGAJNPJCI.FindAll((ItemInfo DHDMNHCIPEH) => DHDMNHCIPEH.Type.Equals(LFLGCDNKNJI) && DHDMNHCIPEH.DBHJGAGOLOB()).Count;
 	}
 
-	public ItemInfo KCCDBEEKBCG(string name)
+	// best guess for name
+	public ItemInfo GetItemByName(string name)
 	{
 		ItemInfo item = DEEGAJNPJCI.Find((ItemInfo DHDMNHCIPEH) => DHDMNHCIPEH.Name.Equals(name));
 		if (item != null) return item;
@@ -329,7 +330,7 @@ public class Items
 		{
 			throw new System.InvalidOperationException("External item requires a Name attribute.");
 		}
-		if (KCCDBEEKBCG(name) != null)
+		if (GetItemByName(name) != null)
 		{
 			throw new System.InvalidOperationException("Item already exists: " + name);
 		}
@@ -353,7 +354,7 @@ public class Items
 		{
 			return false;
 		}
-		ItemInfo item = KCCDBEEKBCG(name);
+		ItemInfo item = GetItemByName(name);
 		if (item == null)
 		{
 			return false;
@@ -374,7 +375,7 @@ public class Items
 
 	public bool RemoveExternalWeapon(string name)
 	{
-		ItemInfo item = KCCDBEEKBCG(name);
+		ItemInfo item = GetItemByName(name);
 		return item != null && item.Type == "Weapon" && RemoveExternalItem(name);
 	}
 
@@ -471,7 +472,7 @@ public class Items
 
 	public void SetNewAddItem(string OHCGEEEKEJH, bool value, int OMHDLKNHNMJ)
 	{
-		SetNewAddItem(KCCDBEEKBCG(OHCGEEEKEJH), value, OMHDLKNHNMJ);
+		SetNewAddItem(GetItemByName(OHCGEEEKEJH), value, OMHDLKNHNMJ);
 	}
 
 	public void SetNewAddItem(ItemInfo item, bool value, int OMHDLKNHNMJ)

@@ -17,8 +17,8 @@ using System.Collections.Generic;
 using Eclipse.Modding;
 public static class NativeProfileFixture {
  public class ItemMetadata {public string Type="Weapon",MDPPNGIEJGD="Nunchaku";public System.Xml.XmlNode NodeXML;}
- public class Catalog {public ItemMetadata Item=new ItemMetadata();public string Name;public ItemMetadata KCCDBEEKBCG(string name){Name=name;return Item;}}
- public static class ListSF {public static Catalog Items=new Catalog();public static Catalog DJBOFEEKJMP()=>Items;}
+ public class Catalog {public ItemMetadata Item=new ItemMetadata();public string Name;public ItemMetadata GetItemByName(string name){Name=name;return Item;}}
+ public static class ListSF {public static Catalog Items=new Catalog();public static Catalog GetItems()=>Items;}
 
  public class InventoryItem { public string Name="WEAPON_NUNCHAKU";public string get_Name()=>Name;public ItemMetadata Metadata=new ItemMetadata();public ItemMetadata BHKHOJPANHE()=>Metadata; public int Count=2; public bool EFMFGEPDAOP()=>true; public int DHNNCAEEMLL()=>3; }
  public class Inventory { public List<InventoryItem> Equipped=new List<InventoryItem>();public List<InventoryItem> JCMOHPFKPBO()=>Equipped; public InventoryItem Item=new InventoryItem(); public string Name; public InventoryItem CMGOCLGHNLH(string name){Name=name;return Item;} }

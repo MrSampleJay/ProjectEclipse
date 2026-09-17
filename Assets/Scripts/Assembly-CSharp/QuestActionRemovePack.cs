@@ -15,7 +15,7 @@ public class QuestActionRemovePack : QuestAction
 		if (GAFGMNPOEGE != string.Empty)
 		{
 			PacksController.ELEBLBJKDBI().DeletePack(GAFGMNPOEGE);
-			ListSF.ELEBLBJKDBI().EMJLEBDAALP();
+			ListSF.GetInstance().EMJLEBDAALP();
 		}
 		OGIJONMKABB();
 	}

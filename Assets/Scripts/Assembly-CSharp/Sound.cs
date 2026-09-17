@@ -479,7 +479,8 @@ public static class Sound
 		BEKCBIJGMPE.Clear();
 	}
 
-	public static void IBHIPOOHNFK()
+	// best guess for name
+	public static void StopLoopedSounds()
 	{
 		foreach (KeyValuePair<string, uint> item in HLLDPAAADKK)
 		{

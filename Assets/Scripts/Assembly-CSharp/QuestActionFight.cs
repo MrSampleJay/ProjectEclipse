@@ -13,7 +13,7 @@ public class QuestActionFight : QuestAction
 	public override void DEJMHFMLKIC(QuestParameters GFIHPBCEEOB)
 	{
 		base.DEJMHFMLKIC(GFIHPBCEEOB);
-		ListSF.ELEBLBJKDBI().ClearQuestsStack();
+		ListSF.GetInstance().ClearQuestsStack();
 		if (string.IsNullOrEmpty(_name))
 		{
 			// The newer quest graph deliberately uses <Fight /> in the error branch of

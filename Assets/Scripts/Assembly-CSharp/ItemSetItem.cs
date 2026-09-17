@@ -24,6 +24,6 @@ public class ItemSetItem
 		NPKMJMCLDAH = node.Attributes["X"].ParseFloat();
 		IHAHIEHHNCG = node.Attributes["Y"].ParseFloat();
 		IJEAEHOKLAF = node.Attributes["IconsY"].ParseFloat();
-		OFMCNLBFIDF = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(Name);
+		OFMCNLBFIDF = ListSF.GetItems().GetItemByName(Name);
 	}
 }

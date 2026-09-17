@@ -42,7 +42,7 @@ public class QuestActionForeach : QuestAction
 	public override void DEJMHFMLKIC(QuestParameters GFIHPBCEEOB)
 	{
 		base.DEJMHFMLKIC(GFIHPBCEEOB);
-		if (ListSF.ELEBLBJKDBI().IsEclipseQuestSuppressed(name))
+		if (ListSF.GetInstance().IsEclipseQuestSuppressed(name))
 		{
 			OGIJONMKABB();
 			return;
@@ -50,7 +50,7 @@ public class QuestActionForeach : QuestAction
 		index = -1;
 		PEEOEOMEBFG = 0;
 		NFIKJCJGMBB = GFIHPBCEEOB;
-		DOKAIKMLLDK = ListSF.ELEBLBJKDBI().PBGCEEBDBGG(name);
+		DOKAIKMLLDK = ListSF.GetInstance().PBGCEEBDBGG(name);
 		nodes.Clear();
 		switch (LFLGCDNKNJI)
 		{
@@ -168,7 +168,7 @@ public class QuestActionForeach : QuestAction
 
 	private void KINMIFFFGDA()
 	{
-		List<ItemInfo> list = ListSF.DJBOFEEKJMP().ONFMAJEAACM("RealMoneyItem");
+		List<ItemInfo> list = ListSF.GetItems().ONFMAJEAACM("RealMoneyItem");
 		if (list == null)
 		{
 			return;
@@ -192,7 +192,7 @@ public class QuestActionForeach : QuestAction
 
 	private void AKFLMFMBPKD()
 	{
-		List<Battle> list = ListSF.ELEBLBJKDBI().MMCHMBIKIEP();
+		List<Battle> list = ListSF.GetInstance().MMCHMBIKIEP();
 		foreach (Battle item in list)
 		{
 			nodes.Add(item.OJDNDADJBID());

@@ -23,7 +23,7 @@ public class LoginModule : LoadingModule
 			GameUtils.CGFHDKDJCPL();
 			NetworkController fDJHFPIFMIK = NetworkController.ELEBLBJKDBI();
 			fDJHFPIFMIK.OnLoginComplete = (Action<object>)Delegate.Combine(fDJHFPIFMIK.OnLoginComplete, new Action<object>(OnLoginComplete));
-			ListSF.ELEBLBJKDBI().IAAELKAKHPN();
+			ListSF.GetInstance().IAAELKAKHPN();
 			IADDNBMPDGL = true;
 		}
 	}

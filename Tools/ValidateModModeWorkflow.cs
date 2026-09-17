@@ -34,7 +34,7 @@ static class Program
             {
                 catalog.TryGetFight(id,out var definition); catalog.TryGetBattle(definition.Battle,out var battle);
                 string runtime=catalog.RuntimeFightId(id);
-                ListSF.Fights[runtime]=new FightList { BCKFACGMOKC=new FightIDS(runtime),CNAOMDMIGLJ=new Battle {Name=battle.LegacyName} };
+                ListSF.Fights[runtime]=new FightList { FightId=new FightIDS(runtime),Battle=new Battle {Name=battle.LegacyName} };
             }
             Action ready=null,cancel=null; ModModeRequest request=null;
             ModModeRuntime.SchedulePreparation=(r,onReady,onCancel)=>{ request=r; ready=onReady; cancel=onCancel; };

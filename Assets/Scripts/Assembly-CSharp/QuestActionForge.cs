@@ -7,7 +7,7 @@ public class QuestActionForge : QuestAction
 		if (roster != null)
 		{
 			roster.PLBEEGGFKDH(true);
-			ListSF.ELEBLBJKDBI().EJANJEEGOOE();
+			ListSF.GetInstance().EJANJEEGOOE();
 		}
 		OGIJONMKABB();
 	}

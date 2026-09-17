@@ -58,7 +58,7 @@ class EventModelDelayed { public EventAnimation.EECEJKADLCK Type; public object 
 class IntervalAnimation { }
 class ItemInfo { public string MDPPNGIEJGD; }
 class ModelParameters {
-    public bool IsPlayer,EEGMBGBLLIF=true,KMNLACDHAFE;
+    public bool IsPlayer,AiControlled=true,KMNLACDHAFE;
     public float CIDCNCDFONA=100;
     public float KKMCHCNOHMB()=>100;
     public ItemInfo KDABEFBJMOD(string type)=>null;
@@ -137,7 +137,7 @@ class Statistics {
 }
 class Model {
     DELAY_METHODS
-    public readonly ModelParameters KMMJCHDKBDO=new ModelParameters();
+    public readonly ModelParameters Parameters=new ModelParameters();
     public readonly ModelConditions Conditions=new ModelConditions();
     public readonly AnimationCandidates CEOOLFLLIMC=new AnimationCandidates();
     public readonly ModelAnimation _Animation=new ModelAnimation();
@@ -155,7 +155,7 @@ class Model {
     public Model NJDJHGDMCIJ()=>Owner;
     public Model NMGNPBMFJKP(ModelType.KEIDBIOIFGA kind)=>null;
     public bool EDJFLMILEBA()=>false;
-    public bool FGKAFKFBFEM()=>KMMJCHDKBDO.EEGMBGBLLIF;
+    public bool FGKAFKFBFEM()=>Parameters.AiControlled;
     public Statistics FGACEEPJBIF()=>Stats;
     public int GLEKCPCMINJ()=>0;
     public int LPOJKGLFMAL()=>0;
@@ -182,7 +182,7 @@ class ModelAi {
     public InfoAnimation COKFBIJAFLH;
     public int Randomizations,FactorCalls,ResponseChecks,EBEHPENMJLK;
     public bool Ignore;public readonly InfoAnimation Result=new InfoAnimation{Name="fixture decision"};
-    public ModelAi(Model model){_Model=model;_ModelAnimation=model._Animation;NHDAJBADMND=model.KMMJCHDKBDO;}
+    public ModelAi(Model model){_Model=model;_ModelAnimation=model._Animation;NHDAJBADMND=model.Parameters;}
     static bool get_AiOn()=>AiData.Enabled;
     void RandomizeBehavior(Model enemy){Randomizations++;}
     bool IsIgnoredEnemyAnimation(InfoAnimation animation)=>Ignore;
@@ -203,7 +203,7 @@ class SelectAnimation {
     public int Updates;
     void UpdateConditions(){
         Updates++;_ModelsConditions.Clear();
-        foreach(var model in BPIFJBJBKHA){model.Conditions.Epoch=Updates;model.Conditions.IsPlayer=model.KMMJCHDKBDO.IsPlayer;_ModelsConditions.Add(model.Conditions);}
+        foreach(var model in BPIFJBJBKHA){model.Conditions.Epoch=Updates;model.Conditions.IsPlayer=model.Parameters.IsPlayer;_ModelsConditions.Add(model.Conditions);}
     }
     void PlayAnimationRandom(Model model,List<SelectInfo> selections){throw new Exception("entry unexpectedly used AI random choice");}
     static bool KLAJPEHFFAP(EventAnimation value,StageType.FDBBPEGEGMK stage)=>false;
@@ -225,7 +225,7 @@ static class ValidateFormAnimationEntry {
     }
     static void Selection(){
         foreach(bool player in new[]{false,true})foreach(int sign in new[]{-1,1}){
-            var form=new Model();form.KMMJCHDKBDO.IsPlayer=player;
+            var form=new Model();form.Parameters.IsPlayer=player;
             var other=new Model();var previous=Move("ongoing opponent",0);other._Animation.Current=previous;
             form.Enemy=other;other.Enemy=form;
             var selector=new SelectAnimation();selector.BPIFJBJBKHA.AddRange(player?new[]{form,other}:new[]{other,form});
@@ -291,11 +291,11 @@ static class ValidateFormAnimationEntry {
         var next=Move("next opponent motion",0);enemy._Animation.Current=next;ai.StartAnimationEnemy(enemy);
         Check(ai.COKFBIJAFLH==next&&ai.Randomizations==2,"ordinary later native observation still updates cache");
         foreach(bool global in new[]{false,true})foreach(bool bot in new[]{false,true}){
-            AiData.Enabled=global;owner=new Model();owner.KMMJCHDKBDO.EEGMBGBLLIF=bot;owner._Animation.Current=Move("own",0);ai=new ModelAi(owner);
+            AiData.Enabled=global;owner=new Model();owner.Parameters.AiControlled=bot;owner._Animation.Current=Move("own",0);ai=new ModelAi(owner);
             var result=ai.Render(enemy,186);
             Check((result!=null)==(global&&bot),"original global and per-fighter AI eligibility remains effective");
         }
-        AiData.Enabled=true;AiData.Both=true;owner=new Model();owner.KMMJCHDKBDO.EEGMBGBLLIF=false;owner._Animation.Current=Move("player",0);ai=new ModelAi(owner);
+        AiData.Enabled=true;AiData.Both=true;owner=new Model();owner.Parameters.AiControlled=false;owner._Animation.Current=Move("player",0);ai=new ModelAi(owner);
         Check(ai.Render(enemy,187)==ai.Result,"both-bot native override still initializes observation");AiData.Both=false;
     }
     public static void Main(){

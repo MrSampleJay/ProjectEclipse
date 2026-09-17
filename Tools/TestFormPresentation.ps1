@@ -12,7 +12,7 @@ $fixture=Join-Path $root ('Temp/FormPresentation-'+[Guid]::NewGuid().ToString('N
 New-Item -ItemType Directory -Path $fixture | Out-Null
 $code=@'
 using System;
-class Model{public object KMMJCHDKBDO=new object();public bool Listening;}
+class Model{public object Parameters=new object();public bool Listening;}
 class Panel{public object Parameters;public bool FailOnce;public int Refreshes;public bool RefreshForm(object old,object next){if(Parameters!=old)return false;Parameters=next;Refreshes++;if(FailOnce){FailOnce=false;throw new Exception("render failure");}return true;}}
 class Viewer{public Panel Left=new Panel(),Right=new Panel();public Panel get_LeftModel()=>Left;public Panel get_RightModel()=>Right;}
 class PreFight{public Viewer Viewer=new Viewer();public Viewer get_ViewerFight()=>Viewer;}
@@ -25,11 +25,11 @@ static void Check(bool value,string message){if(!value)throw new Exception(messa
 static void Main(){
  foreach(bool player in new[]{true,false}){
   var f=new Fight();var old=new Model{Listening=true};var next=new Model();var panel=player?f.preFight.Viewer.Left:f.preFight.Viewer.Right;
-  panel.Parameters=old.KMMJCHDKBDO;var undo=f.BindFormPresentation(old,next,player);
-  Check(!old.Listening&&next.Listening&&panel.Parameters==next.KMMJCHDKBDO,"HUD and listeners transferred");
-  undo();undo();Check(old.Listening&&!next.Listening&&panel.Parameters==old.KMMJCHDKBDO&&panel.Refreshes==2,"idempotent presentation rollback");
+  panel.Parameters=old.Parameters;var undo=f.BindFormPresentation(old,next,player);
+  Check(!old.Listening&&next.Listening&&panel.Parameters==next.Parameters,"HUD and listeners transferred");
+  undo();undo();Check(old.Listening&&!next.Listening&&panel.Parameters==old.Parameters&&panel.Refreshes==2,"idempotent presentation rollback");
   panel.FailOnce=true;bool failed=false;try{f.BindFormPresentation(old,next,player);}catch(Exception){failed=true;}
-  Check(failed&&old.Listening&&!next.Listening&&panel.Parameters==old.KMMJCHDKBDO,"render failure after parameter assignment restores both systems");
+  Check(failed&&old.Listening&&!next.Listening&&panel.Parameters==old.Parameters,"render failure after parameter assignment restores both systems");
   var unrelated=new object();panel.Parameters=unrelated;failed=false;try{f.BindFormPresentation(old,next,player);}catch(InvalidOperationException){failed=true;}
   Check(failed&&panel.Parameters==unrelated&&old.Listening&&!next.Listening,"stale HUD precondition preserves unrelated panel");
  }

@@ -682,9 +682,9 @@ public class PerkInfoItem
 
 	private void BKLKFLGMIBD(Model ACENLMONNPA, FunctionExtension.GLBAFLLMOOH KJFKPMCPIBH, PerkObject INCAIGLKDIE, FunctionResult DCJLKCFKCOM)
 	{
-		if (Fight.OHNKFOHIAKG() != null && KJFKPMCPIBH.HBDLDIKHFEG.Equals("isRaid"))
+		if (Fight.GetCurrentFight() != null && KJFKPMCPIBH.HBDLDIKHFEG.Equals("isRaid"))
 		{
-			bool flag = Fight.OHNKFOHIAKG().OGNINOBBHIG().get_Type() == BattleType.FightRaid;
+			bool flag = Fight.GetCurrentFight().OGNINOBBHIG().get_Type() == BattleType.FightRaid;
 			DCJLKCFKCOM.DCJLKCFKCOM = ((!flag) ? "0" : "1");
 		}
 	}
@@ -729,7 +729,7 @@ public class PerkInfoItem
 	{
 		if (ACENLMONNPA != null)
 		{
-			ModelParameters kMMJCHDKBDO = ACENLMONNPA.KMMJCHDKBDO;
+			ModelParameters kMMJCHDKBDO = ACENLMONNPA.Parameters;
 			if (kMMJCHDKBDO != null)
 			{
 				int OEMALIFPGPO = 0;
@@ -773,20 +773,20 @@ public class PerkInfoItem
 				DCJLKCFKCOM.DCJLKCFKCOM = ACENLMONNPA.EKAFGLHNMCN().ToString();
 				break;
 			case "Magic":
-				DCJLKCFKCOM.DCJLKCFKCOM = (ACENLMONNPA.KMMJCHDKBDO.ADBKGIBBNHJ == null) ?
-					string.Empty : ACENLMONNPA.KMMJCHDKBDO.ADBKGIBBNHJ.Name;
+				DCJLKCFKCOM.DCJLKCFKCOM = (ACENLMONNPA.Parameters.Magic == null) ?
+					string.Empty : ACENLMONNPA.Parameters.Magic.Name;
 				break;
 			case "Ranged":
-				DCJLKCFKCOM.DCJLKCFKCOM = (ACENLMONNPA.KMMJCHDKBDO.LGHMILECPLA == null) ?
-					string.Empty : ACENLMONNPA.KMMJCHDKBDO.LGHMILECPLA.Name;
+				DCJLKCFKCOM.DCJLKCFKCOM = (ACENLMONNPA.Parameters.Ranged == null) ?
+					string.Empty : ACENLMONNPA.Parameters.Ranged.Name;
 				break;
 			case "Weapon":
-				DCJLKCFKCOM.DCJLKCFKCOM = (ACENLMONNPA.KMMJCHDKBDO.JGMLKIPCFII == null) ?
-					string.Empty : ACENLMONNPA.KMMJCHDKBDO.JGMLKIPCFII.Name;
+				DCJLKCFKCOM.DCJLKCFKCOM = (ACENLMONNPA.Parameters.Weapon == null) ?
+					string.Empty : ACENLMONNPA.Parameters.Weapon.Name;
 				break;
 			case "Skeleton":
-				DCJLKCFKCOM.DCJLKCFKCOM = (ACENLMONNPA.KMMJCHDKBDO.PILJCAOFAED == null) ?
-					string.Empty : ACENLMONNPA.KMMJCHDKBDO.PILJCAOFAED.Name;
+				DCJLKCFKCOM.DCJLKCFKCOM = (ACENLMONNPA.Parameters.Skeleton == null) ?
+					string.Empty : ACENLMONNPA.Parameters.Skeleton.Name;
 				break;
 			case "RaidChargeBullet":
 				break;
@@ -805,21 +805,21 @@ public class PerkInfoItem
 
 	private void CJPELOMKFOO(Model ACENLMONNPA, FunctionExtension.GLBAFLLMOOH KJFKPMCPIBH, PerkObject INCAIGLKDIE, FunctionResult DCJLKCFKCOM)
 	{
-		if (Fight.OHNKFOHIAKG() != null)
+		if (Fight.GetCurrentFight() != null)
 		{
 			switch (KJFKPMCPIBH.HBDLDIKHFEG)
 			{
 			case "Number":
-				DCJLKCFKCOM.DCJLKCFKCOM = Fight.OHNKFOHIAKG().get_RoundNumber().ToString();
+				DCJLKCFKCOM.DCJLKCFKCOM = Fight.GetCurrentFight().get_RoundNumber().ToString();
 				break;
 			case "TimeLeft":
-				DCJLKCFKCOM.DCJLKCFKCOM = Fight.OHNKFOHIAKG().get_RoundTimeLeftFrames().ToString();
+				DCJLKCFKCOM.DCJLKCFKCOM = Fight.GetCurrentFight().get_RoundTimeLeftFrames().ToString();
 				break;
 			case "TimePassed":
-				DCJLKCFKCOM.DCJLKCFKCOM = Fight.OHNKFOHIAKG().get_RoundTimePassedFrames().ToString();
+				DCJLKCFKCOM.DCJLKCFKCOM = Fight.GetCurrentFight().get_RoundTimePassedFrames().ToString();
 				break;
 			case "RoundTime":
-				DCJLKCFKCOM.DCJLKCFKCOM = Fight.OHNKFOHIAKG().get_RoundTimeTotalFrames().ToString();
+				DCJLKCFKCOM.DCJLKCFKCOM = Fight.GetCurrentFight().get_RoundTimeTotalFrames().ToString();
 				break;
 			}
 		}
@@ -1089,11 +1089,11 @@ public class PerkInfoItem
 
 	private void EDDGIAMBDKA(Model ACENLMONNPA, FunctionExtension.GLBAFLLMOOH KJFKPMCPIBH, PerkObject INCAIGLKDIE, FunctionResult DCJLKCFKCOM)
 	{
-		if (Fight.OHNKFOHIAKG() == null)
+		if (Fight.GetCurrentFight() == null)
 		{
 			return;
 		}
-		Model.StrikeResult fKGAAFNNCNE = Fight.OHNKFOHIAKG().FKGAAFNNCNE;
+		Model.StrikeResult fKGAAFNNCNE = Fight.GetCurrentFight().FKGAAFNNCNE;
 		if (fKGAAFNNCNE == null)
 		{
 			return;
@@ -1142,7 +1142,7 @@ public class PerkInfoItem
 			{
 				int OEMALIFPGPO = 0;
 				string nJFGLOECJEK = GameUtils.DAMKDJINILI().Attribute;
-				fKGAAFNNCNE.KJDFJPBIGJC.KMMJCHDKBDO.IBLHIAHECLK.Get(nJFGLOECJEK, ref OEMALIFPGPO);
+				fKGAAFNNCNE.KJDFJPBIGJC.Parameters.IBLHIAHECLK.Get(nJFGLOECJEK, ref OEMALIFPGPO);
 				float aMKPAGCFMIN = GameUtils.DAMKDJINILI().Base;
 				num = Mathf.Pow(2f, (float)OEMALIFPGPO * aMKPAGCFMIN);
 			}
@@ -1151,7 +1151,7 @@ public class PerkInfoItem
 			{
 				int OEMALIFPGPO2 = 0;
 				string nJFGLOECJEK2 = GameUtils.IOGOPCABLON().Attribute;
-				fKGAAFNNCNE.GAIBPAGPEGK.KMMJCHDKBDO.IBLHIAHECLK.Get(nJFGLOECJEK2, ref OEMALIFPGPO2);
+				fKGAAFNNCNE.GAIBPAGPEGK.Parameters.IBLHIAHECLK.Get(nJFGLOECJEK2, ref OEMALIFPGPO2);
 				float aMKPAGCFMIN2 = GameUtils.IOGOPCABLON().Base;
 				num2 = Mathf.Pow(2f, (float)OEMALIFPGPO2 * aMKPAGCFMIN2);
 			}
@@ -1179,7 +1179,7 @@ public class PerkInfoItem
 		}
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.Append(PMDPPGNJAFE);
-		QuestParameters jCICKLIMBEF = ListSF.ELEBLBJKDBI().BNMLDPNCMLB();
+		QuestParameters jCICKLIMBEF = ListSF.GetInstance().BNMLDPNCMLB();
 		ConditionExtension.CompareResult lNIDLHOIHIM = new ConditionExtension.CompareResult();
 		QuestCondition kKDGLNECFHA = new QuestCondition();
 		kKDGLNECFHA.LIMHBJBEEIA(jCICKLIMBEF);

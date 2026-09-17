@@ -19,7 +19,7 @@ public class PerkConditionPerkStart : PerkCondition
 		{
 			return true;
 		}
-		KAOPLEPILDH kAOPLEPILDH = JMDLAMHAJLN().ELPJBGIPEIB().KMMJCHDKBDO as KAOPLEPILDH;
+		KAOPLEPILDH kAOPLEPILDH = JMDLAMHAJLN().ELPJBGIPEIB().Parameters as KAOPLEPILDH;
 		if (kAOPLEPILDH == null)
 		{
 			return true;

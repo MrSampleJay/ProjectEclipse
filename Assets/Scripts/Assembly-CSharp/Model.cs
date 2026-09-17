@@ -535,7 +535,8 @@ public class Model : global::EventDispatcher<object>
 
 	private float DOEPGPAMEEA;
 
-	public ModelParameters KMMJCHDKBDO;
+	// best guess for name
+	public ModelParameters Parameters;
 
 	public int HIGBAPPOOKJ;
 
@@ -1432,7 +1433,7 @@ public class Model : global::EventDispatcher<object>
 		LELOFPFOBGO = false;
 		GDGHBKAENHK = false;
 		APOHBENDEKO = -1;
-		KMMJCHDKBDO = data;
+		Parameters = data;
         _ModelConditions.EclipseCharacterId = data.EclipseCharacterId;
 		ODLJHBDMEIJ = null;
 		FJGNHALJJFF = -1;
@@ -2037,22 +2038,22 @@ public class Model : global::EventDispatcher<object>
 		_IsShock = false;
 		FLKMDFDEJPP = true;
 		HIHFKKGBGPC();
-		FCPIDGIFNKE(KMMJCHDKBDO.MNPAALCFAKL);
+		FCPIDGIFNKE(Parameters.ModelDocuments);
 		OHAMEHHMEAL.Clear();
-		GCIMAADHICB(KMMJCHDKBDO);
-		MBOCCLOLEFH(KMMJCHDKBDO);
+		GCIMAADHICB(Parameters);
+		MBOCCLOLEFH(Parameters);
 		CEOOLFLLIMC.IDIHFINEDMI(OHAMEHHMEAL);
 		NCGEHCHIBBH.HGPNHBMHIKH(NMILPLHGCMA);
 		SetCurrentNode();
 		_Animation.Init();
 		KDAHHIMLJGG.KJDFJPBIGJC = this;
-		SetModelPosition(KMMJCHDKBDO.JJCKADKCDIF);
+		SetModelPosition(Parameters.JJCKADKCDIF);
 	}
 
 	public void MKAEDALPGDI()
 	{
 		Reset();
-		SetModelPosition(KMMJCHDKBDO.JJCKADKCDIF);
+		SetModelPosition(Parameters.JJCKADKCDIF);
 	}
 
 	public void Reset()
@@ -2130,7 +2131,7 @@ public class Model : global::EventDispatcher<object>
 
 	public bool RenderCollision(bool FHPKEJMDFLK)
 	{
-		if (!_perkCollisionDisabled && HIPJNBEFGHN() && !KMMJCHDKBDO.BHHLEBHLBLH && _Animation.NNMAFFCCMHC() != null && !NLHFJIEHKMM())
+		if (!_perkCollisionDisabled && HIPJNBEFGHN() && !Parameters.BHHLEBHLBLH && _Animation.NNMAFFCCMHC() != null && !NLHFJIEHKMM())
 		{
 			return CheckCollision(EGGEACCDAEK(), FHPKEJMDFLK);
 		}
@@ -2139,14 +2140,14 @@ public class Model : global::EventDispatcher<object>
 
 	public void RenderAi()
 	{
-		var fight = Fight.OHNKFOHIAKG();
+		var fight = Fight.GetCurrentFight();
 		if (fight != null && fight.IsLocalVersus &&
-			(this == fight.BBGAFGNHFEA() || this == fight.FHHHIEPAKLP())) return;
+			(this == fight.GetPlayerModel() || this == fight.GetEnemyModel())) return;
 		if ((!FGKAFKFBFEM() && !AiData.get_BothBotEnabled()) || JMHJDHLBHLK != 2)
 		{
 			return;
 		}
-		Tactic hBFMBOHLKPJ = KMMJCHDKBDO.HBFMBOHLKPJ;
+		Tactic hBFMBOHLKPJ = Parameters.HBFMBOHLKPJ;
 		if (hBFMBOHLKPJ != null)
 		{
 			if (hBFMBOHLKPJ.get_Type() == Tactic.GKJKJFJALCA.TacticRandom)
@@ -2216,9 +2217,9 @@ public class Model : global::EventDispatcher<object>
 			GDGHBKAENHK = false;
 		}
 		KDAHHIMLJGG.Data = null;
-		if (Fight.OHNKFOHIAKG() != null)
+		if (Fight.GetCurrentFight() != null)
 		{
-			Fight.OHNKFOHIAKG().GPABGFNBALE(KDAHHIMLJGG);
+			Fight.GetCurrentFight().GPABGFNBALE(KDAHHIMLJGG);
 		}
 	}
 
@@ -2255,7 +2256,7 @@ public class Model : global::EventDispatcher<object>
 		{
 			InfoAnimation current = FHBLLPCEAHG();
 			Debug.Log("[MagicTrace] request actor=" + get_Name() +
-				" player=" + KMMJCHDKBDO.IsPlayer +
+				" player=" + Parameters.IsPlayer +
 				" accepted=" + inputAccepted +
 				" charge=" + MJEJFBHOJKB +
 				" currentAnimation=" + ((current != null) ? current.Name : "<none>") +
@@ -2308,9 +2309,9 @@ public class Model : global::EventDispatcher<object>
 		List<ItemInfo> oJIAKDDCGLB = MPBIEICCBMM.OJIAKDDCGLB;
 		List<PerkInfoItem> mAFPBEFKNGE = MPBIEICCBMM.JBIOECDAAKP();
 		List<PerkInfoItem> cFKCGBEONAM = null;
-		if (EGGEACCDAEK() != null && EGGEACCDAEK().KMMJCHDKBDO != null)
+		if (EGGEACCDAEK() != null && EGGEACCDAEK().Parameters != null)
 		{
-			cFKCGBEONAM = EGGEACCDAEK().KMMJCHDKBDO.JBIOECDAAKP();
+			cFKCGBEONAM = EGGEACCDAEK().Parameters.JBIOECDAAKP();
 		}
 		GMFOJPHEHHI(oJIAKDDCGLB, mAFPBEFKNGE, cFKCGBEONAM);
 	}
@@ -2318,36 +2319,36 @@ public class Model : global::EventDispatcher<object>
 	public void GMFOJPHEHHI(List<ItemInfo> HELFDCAIJNE, List<PerkInfoItem> MAFPBEFKNGE = null, List<PerkInfoItem> CFKCGBEONAM = null)
 	{
 		OHAMEHHMEAL.Clear();
-		AnimationData.AKJLPGMEFFD(OHAMEHHMEAL, HELFDCAIJNE, false, KMMJCHDKBDO.DANNKMJOOOH, KMMJCHDKBDO.IBBALIJOJMC, MAFPBEFKNGE, CFKCGBEONAM);
+		AnimationData.AKJLPGMEFFD(OHAMEHHMEAL, HELFDCAIJNE, false, Parameters.DANNKMJOOOH, Parameters.IBBALIJOJMC, MAFPBEFKNGE, CFKCGBEONAM);
 		CEOOLFLLIMC.JIKDAIELFBF();
 		CEOOLFLLIMC.IDIHFINEDMI(OHAMEHHMEAL);
 		SetCurrentNode();
 		NIKPBGPPFEP = true;
-		KMMJCHDKBDO.EAJHPCJJCDI = true;
-		if (Fight.OHNKFOHIAKG() != null)
+		Parameters.EAJHPCJJCDI = true;
+		if (Fight.GetCurrentFight() != null)
 		{
-			Fight.OHNKFOHIAKG().BPLPMLGJENF(this);
+			Fight.GetCurrentFight().BPLPMLGJENF(this);
 		}
 	}
 
 	public bool FGKAFKFBFEM()
 	{
-		return KMMJCHDKBDO.EEGMBGBLLIF;
+		return Parameters.AiControlled;
 	}
 
 	public bool BCKKCJONNHG()
 	{
-		return KMMJCHDKBDO.ABAPAIEBNGK;
+		return Parameters.UserControlled;
 	}
 
 	public bool HPCNJFPOONE()
 	{
-		return KMMJCHDKBDO.LKKFNMBCCDB.Type == "Dummy";
+		return Parameters.Armor.Type == "Dummy";
 	}
 
 	public bool JGAOCNLLDFG()
 	{
-		return KMMJCHDKBDO.HKJFJHBHMND;
+		return Parameters.HKJFJHBHMND;
 	}
 
 	public bool HIPJNBEFGHN()
@@ -2357,7 +2358,7 @@ public class Model : global::EventDispatcher<object>
 
 	public bool EPCNJLEHJCB()
 	{
-		return KMMJCHDKBDO.IsPlayer;
+		return Parameters.IsPlayer;
 	}
 
 	public virtual bool KIAFPPHPEEK()
@@ -2432,7 +2433,7 @@ public class Model : global::EventDispatcher<object>
             if (nearest == expected)
             {
                 PNNMOKIBOPP = replacement;
-                HJOGNGDMAKJ.SetWeaponEnemy(replacement.KMMJCHDKBDO.JGMLKIPCFII?.EffectiveTacticSubtype);
+                HJOGNGDMAKJ.SetWeaponEnemy(replacement.Parameters.Weapon?.EffectiveTacticSubtype);
             }
             if (KDAHHIMLJGG != null && eventTarget == expected)
                 KDAHHIMLJGG.GAIBPAGPEGK = replacement;
@@ -2505,7 +2506,7 @@ public class Model : global::EventDispatcher<object>
 		_Strike = new ModelStrike(_ModelObject);
 		_Animation = new ModelAnimation(_ModelObject);
 		_Collision = new ModelCollision(_ModelObject);
-		HJOGNGDMAKJ = new ModelAi(_Animation, _Physics, (KMMJCHDKBDO.JGMLKIPCFII == null) ? string.Empty : KMMJCHDKBDO.JGMLKIPCFII.EffectiveTacticSubtype, KMMJCHDKBDO);
+		HJOGNGDMAKJ = new ModelAi(_Animation, _Physics, (Parameters.Weapon == null) ? string.Empty : Parameters.Weapon.EffectiveTacticSubtype, Parameters);
 		HJOGNGDMAKJ.set_Model(this);
 		KDAHHIMLJGG = new EventModel();
 		FEHOHLMIEBP.AddEventListener(0, LONHMEJHOOO);
@@ -2551,9 +2552,9 @@ public class Model : global::EventDispatcher<object>
 			_Enemies.Add(item);
 		}
 		_Animation.NFEGCGJIICB(HFGPAELCNMF._Animation);
-		if (HFGPAELCNMF.KMMJCHDKBDO.JGMLKIPCFII != null)
+		if (HFGPAELCNMF.Parameters.Weapon != null)
 		{
-			HJOGNGDMAKJ.SetWeaponEnemy(HFGPAELCNMF.KMMJCHDKBDO.JGMLKIPCFII.EffectiveTacticSubtype);
+			HJOGNGDMAKJ.SetWeaponEnemy(HFGPAELCNMF.Parameters.Weapon.EffectiveTacticSubtype);
 		}
 		SetNearestEnemy();
 	}
@@ -2593,7 +2594,7 @@ public class Model : global::EventDispatcher<object>
 	{
 		if (KHAKOJKLDHO != null)
 		{
-			KMMJCHDKBDO.HBFMBOHLKPJ = KHAKOJKLDHO;
+			Parameters.HBFMBOHLKPJ = KHAKOJKLDHO;
 			CIFKBIPDCHK(KHAKOJKLDHO);
 		}
 	}
@@ -2646,7 +2647,7 @@ public class Model : global::EventDispatcher<object>
 
 	public int GLEKCPCMINJ()
 	{
-		if (KMMJCHDKBDO.LGHMILECPLA != null && KMMJCHDKBDO.LGHMILECPLA.MDPPNGIEJGD == "NoRanged")
+		if (Parameters.Ranged != null && Parameters.Ranged.MDPPNGIEJGD == "NoRanged")
 		{
 			return 1;
 		}
@@ -2910,15 +2911,15 @@ public class Model : global::EventDispatcher<object>
 		{
 			HFGPAELCNMF.HJOGNGDMAKJ.OnHitEnemy();
 		}
-		KMMJCHDKBDO.DKAHKGBFJMG = false;
-		if (Fight.OHNKFOHIAKG() != null)
+		Parameters.DKAHKGBFJMG = false;
+		if (Fight.GetCurrentFight() != null)
 		{
-			Fight.OHNKFOHIAKG().FKGAAFNNCNE = GHHCDAFIKJE;
+			Fight.GetCurrentFight().FKGAAFNNCNE = GHHCDAFIKJE;
 		}
 		GHHCDAFIKJE.ProcedPerks.Clear();
 		GHHCDAFIKJE.KJDFJPBIGJC = this;
 		GHHCDAFIKJE.GAIBPAGPEGK = HFGPAELCNMF;
-		GHHCDAFIKJE.Target = ((!KMMJCHDKBDO.IsPlayer) ? 1 : 0);
+		GHHCDAFIKJE.Target = ((!Parameters.IsPlayer) ? 1 : 0);
 		GHHCDAFIKJE.CMGLHHEJEBN = GCFJNDJBBOI;
 		GHHCDAFIKJE.IIIDIKABLOJ.Set(KKIKIDNALOL);
 		GHHCDAFIKJE.ALIHGFIJEDN = AOBJMMHGMPG;
@@ -2937,18 +2938,18 @@ public class Model : global::EventDispatcher<object>
 			HFGPAELCNMF.KDJPMHGEPAF();
 		}
 		GHHCDAFIKJE.IICJEIHBABC = AAEFMEJBMLH;
-		if (Fight.OHNKFOHIAKG() != null)
+		if (Fight.GetCurrentFight() != null)
 		{
-			Fight.OHNKFOHIAKG().OnModelPreCrit(KDAHHIMLJGG);
+			Fight.GetCurrentFight().OnModelPreCrit(KDAHHIMLJGG);
 		}
 		bool flag = hFIIPNLCIEE.HPLOFLKCLHG();
 		GHHCDAFIKJE.DNGKOMPMPCD = !GHHCDAFIKJE.DFOHNJEBDED && !flag && GameUtils.IsProbality(HFLFIKJPGCJ());
-		if (Fight.OHNKFOHIAKG() != null)
+		if (Fight.GetCurrentFight() != null)
 		{
-			Fight.OHNKFOHIAKG().OnModelPostCrit(KDAHHIMLJGG);
+			Fight.GetCurrentFight().OnModelPostCrit(KDAHHIMLJGG);
 		}
 		GHHCDAFIKJE.NPDHOJEHPDM = GetTotalDamage(hFIIPNLCIEE, GHHCDAFIKJE.DFOHNJEBDED, GHHCDAFIKJE.DNGKOMPMPCD, GCFJNDJBBOI);
-		GHHCDAFIKJE.EEDJBBOCFNL = KMMJCHDKBDO.ResolveStrikeDamage(
+		GHHCDAFIKJE.EEDJBBOCFNL = Parameters.ResolveStrikeDamage(
 			GHHCDAFIKJE.NPDHOJEHPDM, out GHHCDAFIKJE.HOJPKPDBPEJ);
 		string text = "Head";
 		string text2 = string.Empty;
@@ -2971,14 +2972,14 @@ public class Model : global::EventDispatcher<object>
 		KDAHHIMLJGG.GAIBPAGPEGK = HFGPAELCNMF;
 		if (!GHHCDAFIKJE.DFOHNJEBDED)
 		{
-			KMMJCHDKBDO.ABLMGLAKJBL = false;
+			Parameters.ABLMGLAKJBL = false;
 		}
 		CAJANPOIPFC = GHHCDAFIKJE.DFOHNJEBDED;
 		HEJMFGFBLDK = GHHCDAFIKJE.DNGKOMPMPCD;
 		KDAHHIMLJGG.Data = hFIIPNLCIEE;
-		if (Fight.OHNKFOHIAKG() != null)
+		if (Fight.GetCurrentFight() != null)
 		{
-			Fight.OHNKFOHIAKG().OnModelHit(KDAHHIMLJGG);
+			Fight.GetCurrentFight().OnModelHit(KDAHHIMLJGG);
 		}
 		KDAHHIMLJGG.GAIBPAGPEGK = EGGEACCDAEK();
 		HEEHFLHNPOH(HFGPAELCNMF, GHHCDAFIKJE.PBPDKJNKFCJ, GHHCDAFIKJE.EEDJBBOCFNL, GHHCDAFIKJE);
@@ -2988,9 +2989,9 @@ public class Model : global::EventDispatcher<object>
 	{
 		_Animation.DeleteAnimation();
 		_Physics.Start(NIKHAICFGNM);
-		if (Fight.OHNKFOHIAKG() != null)
+		if (Fight.GetCurrentFight() != null)
 		{
-			Fight.OHNKFOHIAKG().PIJPBDGHHGE(KDAHHIMLJGG);
+			Fight.GetCurrentFight().PIJPBDGHHGE(KDAHHIMLJGG);
 		}
 		ApplyStrike(PPIAOBPLGOK);
 	}
@@ -3072,7 +3073,7 @@ public class Model : global::EventDispatcher<object>
 
 	public bool CDMBCHOJKPH()
 	{
-		return PKFJFFGDOLB || !KMMJCHDKBDO.HKJFJHBHMND;
+		return PKFJFFGDOLB || !Parameters.HKJFJHBHMND;
 	}
 
 	public bool NLHFJIEHKMM()
@@ -3090,7 +3091,7 @@ public class Model : global::EventDispatcher<object>
 		if (KHOKDADOJCG)
 		{
 			int OEMALIFPGPO = 0;
-			KMMJCHDKBDO.IBLHIAHECLK.Get(FFLFOELEKIG, ref OEMALIFPGPO);
+			Parameters.IBLHIAHECLK.Get(FFLFOELEKIG, ref OEMALIFPGPO);
 			return Mathf.Pow(2f, (float)OEMALIFPGPO * Base);
 		}
 		return 1f;
@@ -3125,7 +3126,7 @@ public class Model : global::EventDispatcher<object>
 			if (item.First == "RaidChargeDamage")
 			{
 				int OEMALIFPGPO = 0;
-				fGCODGKLHED.KMMJCHDKBDO.IBLHIAHECLK.Get(item.First, ref OEMALIFPGPO);
+				fGCODGKLHED.Parameters.IBLHIAHECLK.Get(item.First, ref OEMALIFPGPO);
 				return OEMALIFPGPO;
 			}
 		}
@@ -3133,13 +3134,13 @@ public class Model : global::EventDispatcher<object>
 		float num = GameUtils.MGPIOCMLCLF();
 		string kGBGENDIMBC = GameUtils.CJMOJMKCLMJ();
 		int OEMALIFPGPO2 = 0;
-		fGCODGKLHED.KMMJCHDKBDO.IBLHIAHECLK.Get(kGBGENDIMBC, ref OEMALIFPGPO2);
+		fGCODGKLHED.Parameters.IBLHIAHECLK.Get(kGBGENDIMBC, ref OEMALIFPGPO2);
 		OEMALIFPGPO2 = Mathf.Min(OEMALIFPGPO2, (int)GameUtils.PCDIBMDDAEF());
 		float num2 = Mathf.Pow(2f, num * (float)OEMALIFPGPO2);
 		float num3 = GetBlock(OOCLHFGEPML);
 		float num4 = fGCODGKLHED.GetCritical(OOGIBOBMGJA);
 		float num5 = 0f;
-		float num6 = GameUtils.GetAttributesHitMultiplier(fGCODGKLHED.EPCNJLEHJCB(), fGCODGKLHED.KMMJCHDKBDO, KMMJCHDKBDO, list, kLIIDDMHNOL);
+		float num6 = GameUtils.GetAttributesHitMultiplier(fGCODGKLHED.EPCNJLEHJCB(), fGCODGKLHED.Parameters, Parameters, list, kLIIDDMHNOL);
 		float num7 = CHCGJBLDPML.GHGGNMBCMNM();
 		float num8 = fGCODGKLHED.JKEKBCJHANF();
 		float a = (num7 + num8) * num6 * num3 * num4 * num2;
@@ -3246,7 +3247,7 @@ public class Model : global::EventDispatcher<object>
 		foreach (global::Pair<string, int> item in IBLHIAHECLK)
 		{
 			int OEMALIFPGPO = 0;
-			if (KMMJCHDKBDO.IBLHIAHECLK.Get(item.First, ref OEMALIFPGPO))
+			if (Parameters.IBLHIAHECLK.Get(item.First, ref OEMALIFPGPO))
 			{
 				OEMALIFPGPO += item.Second;
 				if (num < OEMALIFPGPO)
@@ -3385,7 +3386,7 @@ public class Model : global::EventDispatcher<object>
 
 	public void OPPIKLBKMPN(ActionSound IBODMPMJELJ)
 	{
-		if (IBODMPMJELJ.SameGender(KMMJCHDKBDO.OLPCELPEDKD))
+		if (IBODMPMJELJ.SameGender(Parameters.OLPCELPEDKD))
 		{
 			Sound.IFKCCDAIADF(IBODMPMJELJ.get_Name(), IBODMPMJELJ.DBIOMDEIIKI(), IBODMPMJELJ.AFKMLMCCJLI());
 		}
@@ -3398,7 +3399,7 @@ public class Model : global::EventDispatcher<object>
 
 	public void OPPIKLBKMPN(ActionRandomSound IBODMPMJELJ)
 	{
-		if (IBODMPMJELJ.SameGender(KMMJCHDKBDO.OLPCELPEDKD))
+		if (IBODMPMJELJ.SameGender(Parameters.OLPCELPEDKD))
 		{
 			Sound.IFKCCDAIADF(IBODMPMJELJ.get_Name());
 		}
@@ -3429,7 +3430,7 @@ public class Model : global::EventDispatcher<object>
 			InfoAnimation currentMagicAnimation = FHBLLPCEAHG();
 			IPGBFKOCOCK(fOIPKLDNGDL2);
 			Debug.Log("[MagicTrace] cast actor=" + get_Name() +
-				" player=" + KMMJCHDKBDO.IsPlayer +
+				" player=" + Parameters.IsPlayer +
 				" animation=" + ((currentMagicAnimation != null) ? currentMagicAnimation.Name : "<none>") +
 				" animationFile=" + ((currentMagicAnimation != null) ? currentMagicAnimation.FileName : "<none>") +
 				" items=" + GetMagicTraceItems() +
@@ -3470,9 +3471,9 @@ public class Model : global::EventDispatcher<object>
 
 	public void OPPIKLBKMPN(ActionHitEffect IBODMPMJELJ)
 	{
-		if (NPACOADCOPJ.DataReady && Fight.OHNKFOHIAKG() != null)
+		if (NPACOADCOPJ.DataReady && Fight.GetCurrentFight() != null)
 		{
-			Fight.OHNKFOHIAKG().PHGNIPMBJEH(NPACOADCOPJ.Point, NPACOADCOPJ.IIIDIKABLOJ, NPACOADCOPJ.Time, IBODMPMJELJ.PCLGDBGPEKM(), HNILMKEAMAE);
+			Fight.GetCurrentFight().PHGNIPMBJEH(NPACOADCOPJ.Point, NPACOADCOPJ.IIIDIKABLOJ, NPACOADCOPJ.Time, IBODMPMJELJ.PCLGDBGPEKM(), HNILMKEAMAE);
 		}
 	}
 
@@ -3491,7 +3492,7 @@ public class Model : global::EventDispatcher<object>
 		if (eCHINOPKGGI == FightCID.RaidChargeButton)
 		{
 			flag = false;
-			KAOPLEPILDH kAOPLEPILDH = KMMJCHDKBDO as KAOPLEPILDH;
+			KAOPLEPILDH kAOPLEPILDH = Parameters as KAOPLEPILDH;
 			if (kAOPLEPILDH != null && kAOPLEPILDH.LMIBBJIKLNO != null)
 			{
 				NoAnimationMove.JNMKPGHOFIF jNMKPGHOFIF = QuestUtils.BKBHIHMEMEH().HLINMMJEANJ(kAOPLEPILDH.LMIBBJIKLNO.Name);
@@ -3555,7 +3556,7 @@ public class Model : global::EventDispatcher<object>
 		gKIANLDJFCH.set_Name(JLHDJLHLGND);
 		gKIANLDJFCH.SetExplicitBirthAnimation(startAnimation);
 		gKIANLDJFCH.MABELGMBHEA(HOOKPFLBFPD);
-		gKIANLDJFCH.KMMJCHDKBDO.IBBALIJOJMC = SceneTypes.SceneFight;
+		gKIANLDJFCH.Parameters.IBBALIJOJMC = SceneTypes.SceneFight;
 		gKIANLDJFCH.CGEKLPLKIDC(this);
 		gKIANLDJFCH.CJNGMIMHFCC(EGGEACCDAEK());
 		gKIANLDJFCH.SetImpulseFactor(ODCOKJKEDOJ);
@@ -3611,11 +3612,11 @@ public class Model : global::EventDispatcher<object>
 
 	public bool IsControlKeys(int KGBGENDIMBC)
 	{
-		if (KMMJCHDKBDO.JCMFKLGCEOG.Count == 0)
+		if (Parameters.JCMFKLGCEOG.Count == 0)
 		{
 			return true;
 		}
-		foreach (int item in KMMJCHDKBDO.JCMFKLGCEOG)
+		foreach (int item in Parameters.JCMFKLGCEOG)
 		{
 			int num = item;
 			if (num == KGBGENDIMBC)
@@ -3737,17 +3738,17 @@ public class Model : global::EventDispatcher<object>
 
 	public void CKCCBJKIGIO(PerksStage.ActionPerk IBODMPMJELJ, bool CCBEDPIHKAD)
 	{
-		if (Fight.OHNKFOHIAKG() != null)
+		if (Fight.GetCurrentFight() != null)
 		{
-			Fight.OHNKFOHIAKG().CKCCBJKIGIO(this, IBODMPMJELJ, CCBEDPIHKAD);
+			Fight.GetCurrentFight().CKCCBJKIGIO(this, IBODMPMJELJ, CCBEDPIHKAD);
 		}
 	}
 
 	public void GICAFBABMGA(PerksStage.ActionPerk CKOEFOCPMGK, PerksStage.ActionPerk IBODMPMJELJ)
 	{
-		if (Fight.OHNKFOHIAKG() != null)
+		if (Fight.GetCurrentFight() != null)
 		{
-			Fight.OHNKFOHIAKG().GICAFBABMGA(this, CKOEFOCPMGK, IBODMPMJELJ);
+			Fight.GetCurrentFight().GICAFBABMGA(this, CKOEFOCPMGK, IBODMPMJELJ);
 		}
 	}
 
@@ -3790,22 +3791,22 @@ public class Model : global::EventDispatcher<object>
 
 	public void GFNCMLFKBGP(float DLEDDPFNPOH)
 	{
-		KMMJCHDKBDO.GFNCMLFKBGP(DLEDDPFNPOH);
+		Parameters.GFNCMLFKBGP(DLEDDPFNPOH);
 	}
 
 	public float KKMCHCNOHMB()
 	{
-		return (ObscuredFloat)(KMMJCHDKBDO.KKMCHCNOHMB());
+		return (ObscuredFloat)(Parameters.KKMCHCNOHMB());
 	}
 
 	public void GEACPINOAAN(float AACBFABMADJ)
 	{
-		KMMJCHDKBDO.GEACPINOAAN(AACBFABMADJ);
+		Parameters.GEACPINOAAN(AACBFABMADJ);
 	}
 
 	public bool PDFCAFIMALN()
 	{
-		return !KMMJCHDKBDO.OJMIFOAHKBK();
+		return !Parameters.OJMIFOAHKBK();
 	}
 
 	public static string GetDefenseAttribute(IntervalAttack CHCGJBLDPML, bool OOCLHFGEPML, ModelEdge GCFJNDJBBOI)
@@ -3904,10 +3905,10 @@ public class Model : global::EventDispatcher<object>
 
 	private List<ItemInfo> GetModelConditionItems()
 	{
-		List<ItemInfo> items = KMMJCHDKBDO.PJNJIJIODHE();
-		if (KMMJCHDKBDO.OJIAKDDCGLB != null)
+		List<ItemInfo> items = Parameters.PJNJIJIODHE();
+		if (Parameters.OJIAKDDCGLB != null)
 		{
-			foreach (ItemInfo item in KMMJCHDKBDO.OJIAKDDCGLB)
+			foreach (ItemInfo item in Parameters.OJIAKDDCGLB)
 			{
 				if (item != null && !items.Contains(item))
 					items.Add(item);
@@ -4001,7 +4002,7 @@ public class Model : global::EventDispatcher<object>
 
 	public void GLKOLOBIHLP()
 	{
-		MBOCCLOLEFH(KMMJCHDKBDO);
+		MBOCCLOLEFH(Parameters);
 		NCGEHCHIBBH.NKKOAAKHINN();
 		NCGEHCHIBBH.HGPNHBMHIKH(NMILPLHGCMA);
 	}
@@ -4073,19 +4074,19 @@ public class Model : global::EventDispatcher<object>
 
 	protected virtual void GCIMAADHICB(ModelParameters data)
 	{
-		List<PerkInfoItem> mAFPBEFKNGE = KMMJCHDKBDO.JBIOECDAAKP();
+		List<PerkInfoItem> mAFPBEFKNGE = Parameters.JBIOECDAAKP();
 		List<PerkInfoItem> cFKCGBEONAM = null;
-		if (EGGEACCDAEK() != null && EGGEACCDAEK().KMMJCHDKBDO != null)
+		if (EGGEACCDAEK() != null && EGGEACCDAEK().Parameters != null)
 		{
-			cFKCGBEONAM = EGGEACCDAEK().KMMJCHDKBDO.JBIOECDAAKP();
+			cFKCGBEONAM = EGGEACCDAEK().Parameters.JBIOECDAAKP();
 		}
-		List<ItemInfo> fJKCMJNAFJD = KMMJCHDKBDO.PJNJIJIODHE();
-		BJLLJHDFMOO(fJKCMJNAFJD, false, KMMJCHDKBDO.DANNKMJOOOH, KMMJCHDKBDO.IBBALIJOJMC, mAFPBEFKNGE, cFKCGBEONAM);
+		List<ItemInfo> fJKCMJNAFJD = Parameters.PJNJIJIODHE();
+		BJLLJHDFMOO(fJKCMJNAFJD, false, Parameters.DANNKMJOOOH, Parameters.IBBALIJOJMC, mAFPBEFKNGE, cFKCGBEONAM);
 	}
 
 	protected virtual void MBOCCLOLEFH(ModelParameters data)
 	{
-		List<PerkInfoItem> mAFPBEFKNGE = KMMJCHDKBDO.JBIOECDAAKP();
+		List<PerkInfoItem> mAFPBEFKNGE = Parameters.JBIOECDAAKP();
 		// Equipped items and action-created items live in separate collections.
 		// Newer move actions test the equipped Magic/Weapon subtype directly, so
 		// using only OJIAKDDCGLB left shop previews with an empty condition context
@@ -4093,11 +4094,11 @@ public class Model : global::EventDispatcher<object>
 		List<ItemInfo> oJIAKDDCGLB = GetModelConditionItems();
 		_ModelConditions.OJIAKDDCGLB = oJIAKDDCGLB;
 		List<PerkInfoItem> cFKCGBEONAM = null;
-		if (EGGEACCDAEK() != null && EGGEACCDAEK().KMMJCHDKBDO != null)
+		if (EGGEACCDAEK() != null && EGGEACCDAEK().Parameters != null)
 		{
-			cFKCGBEONAM = EGGEACCDAEK().KMMJCHDKBDO.JBIOECDAAKP();
+			cFKCGBEONAM = EGGEACCDAEK().Parameters.JBIOECDAAKP();
 		}
-		LBEFFCACPJL(oJIAKDDCGLB, false, KMMJCHDKBDO.IBBALIJOJMC, mAFPBEFKNGE, cFKCGBEONAM);
+		LBEFFCACPJL(oJIAKDDCGLB, false, Parameters.IBBALIJOJMC, mAFPBEFKNGE, cFKCGBEONAM);
 	}
 
 	protected void DIIIIDDKHNG()
@@ -4180,25 +4181,25 @@ public class Model : global::EventDispatcher<object>
 		{
 			return;
 		}
-		ItemInfo dJKEECEOCJB = KMMJCHDKBDO.KDABEFBJMOD(item.Type);
+		ItemInfo dJKEECEOCJB = Parameters.KDABEFBJMOD(item.Type);
 		if (dJKEECEOCJB == null || !(dJKEECEOCJB.Name != item.Name))
 		{
 			return;
 		}
 		ODLJHBDMEIJ = ((!EPKEEMFHHFM) ? null : dJKEECEOCJB);
-		KMMJCHDKBDO.OLLNIKFPMKE(item.Type, item);
+		Parameters.OLLNIKFPMKE(item.Type, item);
 		string aPJJEFJHJGK = GameUtils.APCAKCCOMLO.APJJEFJHJGK;
 		int OEMALIFPGPO = 0;
 		item.IBLHIAHECLK.Get(aPJJEFJHJGK, ref OEMALIFPGPO);
-		KMMJCHDKBDO.IBLHIAHECLK.Set(aPJJEFJHJGK, (!DDMEACNNLJN) ? GameUtils.APCAKCCOMLO.OMPDIOBDAKB : OEMALIFPGPO);
+		Parameters.IBLHIAHECLK.Set(aPJJEFJHJGK, (!DDMEACNNLJN) ? GameUtils.APCAKCCOMLO.OMPDIOBDAKB : OEMALIFPGPO);
 		if (BNDJNLALHKL)
 		{
-			List<ItemInfo> hELFDCAIJNE = KMMJCHDKBDO.PJNJIJIODHE();
-			List<PerkInfoItem> mAFPBEFKNGE = KMMJCHDKBDO.JBIOECDAAKP();
+			List<ItemInfo> hELFDCAIJNE = Parameters.PJNJIJIODHE();
+			List<PerkInfoItem> mAFPBEFKNGE = Parameters.JBIOECDAAKP();
 			List<PerkInfoItem> cFKCGBEONAM = null;
-			if (EGGEACCDAEK() != null && EGGEACCDAEK().KMMJCHDKBDO != null)
+			if (EGGEACCDAEK() != null && EGGEACCDAEK().Parameters != null)
 			{
-				cFKCGBEONAM = EGGEACCDAEK().KMMJCHDKBDO.JBIOECDAAKP();
+				cFKCGBEONAM = EGGEACCDAEK().Parameters.JBIOECDAAKP();
 			}
 			GMFOJPHEHHI(hELFDCAIJNE, mAFPBEFKNGE, cFKCGBEONAM);
 		}
@@ -4215,15 +4216,15 @@ public class Model : global::EventDispatcher<object>
 		{
 			return;
 		}
-		ItemInfo jGMLKIPCFII = KMMJCHDKBDO.JGMLKIPCFII;
-		ItemInfo dJKEECEOCJB = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(GameUtils.APCAKCCOMLO.JIIFFJAJNNN);
+		ItemInfo jGMLKIPCFII = Parameters.Weapon;
+		ItemInfo dJKEECEOCJB = ListSF.GetItems().GetItemByName(GameUtils.APCAKCCOMLO.JIIFFJAJNNN);
 		if (dJKEECEOCJB == null)
 		{
 			return;
 		}
 		EEDJEDBMIMI(dJKEECEOCJB, true, true, false);
 		_ModelObject.set_IsShock(true);
-		KMMJCHDKBDO.AHMMOKMGICA();
+		Parameters.AHMMOKMGICA();
 		List<ModelNode> list = _ModelObject.NAMKCLGOPDD();
 		foreach (ModelNode item in list)
 		{
@@ -4242,7 +4243,7 @@ public class Model : global::EventDispatcher<object>
 			fGCODGKLHED2.HJOGNGDMAKJ.SetWeaponEnemy(dJKEECEOCJB.EffectiveTacticSubtype);
 		}
 		HJOGNGDMAKJ.SetWeaponBot(dJKEECEOCJB.EffectiveTacticSubtype);
-		DisarmData eHCLMBADLKH = new DisarmData(this, jGMLKIPCFII.NHBIJEEKALC);
+		DisarmData eHCLMBADLKH = new DisarmData(this, jGMLKIPCFII.InnatePerks);
 		CallEvent(16, eHCLMBADLKH);
 	}
 
@@ -4273,21 +4274,21 @@ public class Model : global::EventDispatcher<object>
 		kAOPLEPILDH.BMFLPBLAFLK = string.Empty;
 		kAOPLEPILDH.FMOKLKFCCKF = string.Empty;
 		kAOPLEPILDH.HNKFHGOOKEG = GameUtils.BGGMLFLFONJ();
-		kAOPLEPILDH.EEGMBGBLLIF = false;
+		kAOPLEPILDH.AiControlled = false;
 		kAOPLEPILDH.HKJFJHBHMND = true;
 		kAOPLEPILDH.IsPlayer = false;
-		kAOPLEPILDH.ABAPAIEBNGK = false;
+		kAOPLEPILDH.UserControlled = false;
 		kAOPLEPILDH.IsWinner = false;
 		kAOPLEPILDH.BHHLEBHLBLH = false;
 		kAOPLEPILDH.PCALDKCJGCK = false;
-		kAOPLEPILDH.FCOALLOHJNP = 0;
+		kAOPLEPILDH.RoundsWon = 0;
 		kAOPLEPILDH.CIDCNCDFONA = 0f;
-		kAOPLEPILDH.PILJCAOFAED = null;
-		kAOPLEPILDH.LKKFNMBCCDB = null;
-		kAOPLEPILDH.FKMOLBBLKDA = null;
-		kAOPLEPILDH.JGMLKIPCFII = null;
-		kAOPLEPILDH.LGHMILECPLA = null;
-		kAOPLEPILDH.ADBKGIBBNHJ = null;
+		kAOPLEPILDH.Skeleton = null;
+		kAOPLEPILDH.Armor = null;
+		kAOPLEPILDH.Helm = null;
+		kAOPLEPILDH.Weapon = null;
+		kAOPLEPILDH.Ranged = null;
+		kAOPLEPILDH.Magic = null;
 		kAOPLEPILDH.LMIBBJIKLNO = null;
 		if (HELFDCAIJNE.Count != 0)
 		{
@@ -4352,7 +4353,7 @@ public class Model : global::EventDispatcher<object>
 			return 100f;
 		}
 		Model fGCODGKLHED = EGGEACCDAEK();
-		if (Fight.OHNKFOHIAKG().MBEJJCKIIHK() != BattleType.FightRaid || !fGCODGKLHED.EPCNJLEHJCB() || fGCODGKLHED.DKFGOHCNIKL.FMGDKLFNKGM())
+		if (Fight.GetCurrentFight().MBEJJCKIIHK() != BattleType.FightRaid || !fGCODGKLHED.EPCNJLEHJCB() || fGCODGKLHED.DKFGOHCNIKL.FMGDKLFNKGM())
 		{
 			return GameUtils.HHCEIEOOHCJ.JJNCDHOKEIA(fGCODGKLHED);
 		}
@@ -4361,13 +4362,13 @@ public class Model : global::EventDispatcher<object>
 
 	protected void GPMGEJKBAJG()
 	{
-		Fight gDBOMJODDEA = Fight.OHNKFOHIAKG();
+		Fight gDBOMJODDEA = Fight.GetCurrentFight();
 		if (gDBOMJODDEA == null)
 		{
 			return;
 		}
 		int OEMALIFPGPO = 0;
-		if (KMMJCHDKBDO.IBLHIAHECLK.Get(GameUtils.DMLPOANHHFI().Attribute, ref OEMALIFPGPO) && EGGEACCDAEK() != null)
+		if (Parameters.IBLHIAHECLK.Get(GameUtils.DMLPOANHHFI().Attribute, ref OEMALIFPGPO) && EGGEACCDAEK() != null)
 		{
 			float num = (float)OEMALIFPGPO * GameUtils.DMLPOANHHFI().Base * EGGEACCDAEK().LJCFIOPBNKD();
 			if (num != 0f && (num > 0f || !HOOKPFLBFPD))
@@ -4385,7 +4386,7 @@ public class Model : global::EventDispatcher<object>
 
 	protected void BJLLJHDFMOO(List<ItemInfo> FJKCMJNAFJD, bool ILMJFHCNLHC, List<string> DANNKMJOOOH = null, SceneTypes NFNJJIGAKNN = SceneTypes.SceneFight, List<PerkInfoItem> MAFPBEFKNGE = null, List<PerkInfoItem> CFKCGBEONAM = null)
 	{
-		AnimationData.AKJLPGMEFFD(OHAMEHHMEAL, FJKCMJNAFJD, ILMJFHCNLHC, KMMJCHDKBDO.DANNKMJOOOH, NFNJJIGAKNN, MAFPBEFKNGE, CFKCGBEONAM);
+		AnimationData.AKJLPGMEFFD(OHAMEHHMEAL, FJKCMJNAFJD, ILMJFHCNLHC, Parameters.DANNKMJOOOH, NFNJJIGAKNN, MAFPBEFKNGE, CFKCGBEONAM);
 		EKOGDEOEHLI();
 	}
 
@@ -4418,17 +4419,17 @@ public class Model : global::EventDispatcher<object>
 		ItemInfo dJKEECEOCJB = null;
 		if (!string.IsNullOrEmpty(item.Name))
 		{
-			dJKEECEOCJB = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(item.Name).Clone();
+			dJKEECEOCJB = ListSF.GetItems().GetItemByName(item.Name).Clone();
 		}
-		else if (!string.IsNullOrEmpty(item.BLIKNEDFOFG) && KMMJCHDKBDO.KDABEFBJMOD(item.BLIKNEDFOFG) != null)
+		else if (!string.IsNullOrEmpty(item.BLIKNEDFOFG) && Parameters.KDABEFBJMOD(item.BLIKNEDFOFG) != null)
 		{
-			dJKEECEOCJB = KMMJCHDKBDO.KDABEFBJMOD(item.BLIKNEDFOFG).Clone();
+			dJKEECEOCJB = Parameters.KDABEFBJMOD(item.BLIKNEDFOFG).Clone();
 		}
 		if (dJKEECEOCJB != null)
 		{
 			dJKEECEOCJB.MergeWithItem(item);
 			IHEFAMAFBIA.OLLNIKFPMKE(dJKEECEOCJB.Type, dJKEECEOCJB);
-			ListSF.ELEBLBJKDBI().JLCGOODFKAK(dJKEECEOCJB);
+			ListSF.GetInstance().JLCGOODFKAK(dJKEECEOCJB);
 		}
 	}
 
@@ -4482,7 +4483,7 @@ public class Model : global::EventDispatcher<object>
 		}
 		float num = GHHCDAFIKJE.EEDJBBOCFNL / HFGPAELCNMF.LJCFIOPBNKD();
 		bool flag = SetPain((!HOOKPFLBFPD) ? num : 0f);
-		ModelParameters kMMJCHDKBDO = HFGPAELCNMF.KMMJCHDKBDO;
+		ModelParameters kMMJCHDKBDO = HFGPAELCNMF.Parameters;
 		float nIPKAAEFMNG = GameUtils.APCAKCCOMLO.NIPKAAEFMNG;
 		string aDAOLENDOME = GameUtils.APCAKCCOMLO.ADAOLENDOME;
 		int OEMALIFPGPO = 0;

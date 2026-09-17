@@ -23,13 +23,13 @@ namespace Eclipse.Modding
         public static bool ShowRaidResult()
         {
             if (_raidResult == null || _raidResultShown) return false;
-            var fight = Fight.OHNKFOHIAKG();
+            var fight = Fight.GetCurrentFight();
             if (fight == null) return false;
             _raidResultShown = true; fight.BCFBHJOLGNL(_raidResult); return true;
         }
         public static void Raise(QuestEvent.PMDPDMFLCIJ kind)
         {
-            var list = ListSF.ELEBLBJKDBI();
+            var list = ListSF.GetInstance();
             if (list != null && list.FFBAJNGHGGD(kind)) list.MHHNIPBJNAD();
         }
         public static void Bind(XmlNode warrior) { if (_warrior != warrior) Clear(); _warrior = warrior; }
@@ -42,9 +42,9 @@ namespace Eclipse.Modding
                     if (content.RuntimeFightId(id) == runtimeId) { mode = candidate; return true; }
             mode = null; return false;
         }
-        public static bool IsRaid(FightList fight) => fight != null && TryFind(fight.BCKFACGMOKC.ToString(), out var mode) && mode.Raid;
+        public static bool IsRaid(FightList fight) => fight != null && TryFind(fight.FightId.ToString(), out var mode) && mode.Raid;
         public static bool IsRaid(string runtimeId) => TryFind(runtimeId, out var mode) && mode.Raid;
-        public static bool HasCustomRouting(FightList fight) => fight != null && TryFind(fight.BCKFACGMOKC.ToString(),out var mode) && mode.UsesResultCallback;
+        public static bool HasCustomRouting(FightList fight) => fight != null && TryFind(fight.FightId.ToString(),out var mode) && mode.UsesResultCallback;
 
         public static bool OwnsBattle(Battle battle)
         {
@@ -81,7 +81,7 @@ namespace Eclipse.Modding
 
         public static string EntryStatus(FightList fight)
         {
-            if (fight == null || !TryFind(fight.BCKFACGMOKC.ToString(), out var mode)) return "Unavailable";
+            if (fight == null || !TryFind(fight.FightId.ToString(), out var mode)) return "Unavailable";
             try
             {
                 var state = new ModModeProgress(_warrior, mode);
@@ -103,7 +103,7 @@ namespace Eclipse.Modding
         public static string ProgressLabel(FightList fight)
         {
             if (HasCustomRouting(fight)) return "";
-            if (fight == null || !TryFind(fight.BCKFACGMOKC.ToString(), out var mode)) return "";
+            if (fight == null || !TryFind(fight.FightId.ToString(), out var mode)) return "";
             var progress = new ModModeProgress(_warrior, mode);
             return " (" + (progress.Step + 1) + "/" + mode.Fights.Count + ")";
         }
@@ -111,7 +111,7 @@ namespace Eclipse.Modding
         public static bool TryProgress(FightList fight, out int completed, out int total)
         {
             completed = 0; total = 0;
-            if (fight == null || !TryFind(fight.BCKFACGMOKC.ToString(), out var mode)) return false;
+            if (fight == null || !TryFind(fight.FightId.ToString(), out var mode)) return false;
             var progress = new ModModeProgress(_warrior, mode);
             completed = progress.Step; total = mode.Fights.Count;
             return true;
@@ -120,7 +120,7 @@ namespace Eclipse.Modding
         // Every owned map battle is a semantic entry point into the mode's current step.
         public static bool PrepareEntry(FightList fight, Action resume)
         {
-            if (fight == null || !TryFind(fight.BCKFACGMOKC.ToString(),out var mode) || !mode.UsesPrepareCallback) return true;
+            if (fight == null || !TryFind(fight.FightId.ToString(),out var mode) || !mode.UsesPrepareCallback) return true;
             try
             {
                 if (_pending != null) return false;
@@ -154,7 +154,7 @@ namespace Eclipse.Modding
 
         public static bool ResolveEntry(ref FightList fight)
         {
-            if (fight == null || !TryFind(fight.BCKFACGMOKC.ToString(), out var mode)) return true;
+            if (fight == null || !TryFind(fight.FightId.ToString(), out var mode)) return true;
             try
             {
                 var progress = new ModModeProgress(_warrior, mode);
@@ -176,14 +176,14 @@ namespace Eclipse.Modding
         }
         public static bool Begin(FightList fight)
         {
-            if (fight == null || !TryFind(fight.BCKFACGMOKC.ToString(), out var mode)) return true;
+            if (fight == null || !TryFind(fight.FightId.ToString(), out var mode)) return true;
             try
             {
                 var progress = new ModModeProgress(_warrior, mode);
                 if (!mode.IsAvailable(ListSF.CCDKHLAMKKO().PINDEKDNCNL(), DateTimeOffset.UtcNow.ToUnixTimeSeconds())) return false;
-                if (_activeFight != null && _activeFight != fight.BCKFACGMOKC.ToString()) return false;
-                _newReservation = _activeFight == fight.BCKFACGMOKC.ToString() ? _newReservation : !progress.Entered;
-                if (progress.Step >= mode.Fights.Count || ModPolicies.Content.RuntimeFightId(mode.Fights[progress.Step]) != fight.BCKFACGMOKC.ToString()) return false;
+                if (_activeFight != null && _activeFight != fight.FightId.ToString()) return false;
+                _newReservation = _activeFight == fight.FightId.ToString() ? _newReservation : !progress.Entered;
+                if (progress.Step >= mode.Fights.Count || ModPolicies.Content.RuntimeFightId(mode.Fights[progress.Step]) != fight.FightId.ToString()) return false;
                 if (!progress.Entered)
                 {
                     if (mode.HasEntryItem)
@@ -195,13 +195,13 @@ namespace Eclipse.Modding
                     progress.Enter();
                     ListSF.CCDKHLAMKKO().GGGEHAGCLGC(true);
                 }
-                _activeFight = fight.BCKFACGMOKC.ToString(); return true;
+                _activeFight = fight.FightId.ToString(); return true;
             }
             catch (Exception exception) { return Reject(exception.Message); }
         }
         public static void CancelLaunch(FightList fight)
         {
-            if (fight == null || !TryFind(fight.BCKFACGMOKC.ToString(), out var mode)) return;
+            if (fight == null || !TryFind(fight.FightId.ToString(), out var mode)) return;
             if (_newReservation)
             {
                 var progress = new ModModeProgress(_warrior, mode);
@@ -224,17 +224,17 @@ namespace Eclipse.Modding
         }
         public static void NotifyResult(FightList fight)
         {
-            if (fight == null || !TryFind(fight.BCKFACGMOKC.ToString(), out var mode)) return;
-            var list = ListSF.ELEBLBJKDBI();
+            if (fight == null || !TryFind(fight.FightId.ToString(), out var mode)) return;
+            var list = ListSF.GetInstance();
             if (_completedMode && mode.Raid) list.FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_RAID_END);
             if (_resetMode) list.FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_RESET_ASCENSION);
             if (mode.Raid) list.FFBAJNGHGGD(QuestEvent.PMDPDMFLCIJ.QUEST_EVENT_SHOW_RAID_LOOT);
             _completedMode = false; _resetMode = false;
         }
-        public static bool CanResolve(FightList fight) => fight == null || !TryFind(fight.BCKFACGMOKC.ToString(), out var ignored) || _activeFight == fight.BCKFACGMOKC.ToString();
+        public static bool CanResolve(FightList fight) => fight == null || !TryFind(fight.FightId.ToString(), out var ignored) || _activeFight == fight.FightId.ToString();
         public static void Complete(FightList fight, bool won)
         {
-            if (fight == null || _activeFight != fight.BCKFACGMOKC.ToString() || !TryFind(_activeFight, out var mode)) return;
+            if (fight == null || _activeFight != fight.FightId.ToString() || !TryFind(_activeFight, out var mode)) return;
             _activeFight = null;
             try
             {

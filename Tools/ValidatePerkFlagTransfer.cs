@@ -82,7 +82,7 @@ class PerkData
     public bool Enabled = true;
     public PerkData(PerkInfoItem definition) { MBDDKGIOOGD = definition; }
 }
-public class ModelParameters { public List<PerkInfoItem> NHBIJEEKALC = new List<PerkInfoItem>(); }
+public class ModelParameters { public List<PerkInfoItem> Perks = new List<PerkInfoItem>(); }
 public class Conditions
 {
     public Dictionary<string, float> PerkVariables = new Dictionary<string, float>();
@@ -91,7 +91,7 @@ public class Conditions
 public class Model
 {
     public readonly string Name;
-    public ModelParameters KMMJCHDKBDO = new ModelParameters();
+    public ModelParameters Parameters = new ModelParameters();
     public Conditions Conditions = new Conditions();
     public int Modifier;
     public Model(string name) { Name = name; }
@@ -163,7 +163,7 @@ class Fight
     public static Fight Current;
     readonly PerksStage stage;
     public Fight(PerksStage value) { stage = value; }
-    public static Fight OHNKFOHIAKG() => Current;
+    public static Fight GetCurrentFight() => Current;
     public PerksStage IEEGPNLEKHH() => stage;
 }
 
@@ -237,7 +237,7 @@ static class ValidatePerkFlagTransfer
     static InfoPerk Register(PerksStage stage, Model owner)
     {
         var definition = new PerkInfoItem();
-        owner.KMMJCHDKBDO.NHBIJEEKALC.Add(definition);
+        owner.Parameters.Perks.Add(definition);
         var registration = stage.PrepareModelRegistration(owner);
         var perk = new InfoPerk { DCMHONAFOGI = new PerkData(definition) };
         registration.HIPOGANEPMI().Add(perk);
@@ -288,7 +288,7 @@ static class ValidatePerkFlagTransfer
         Model current = old;
         if (transfer)
         {
-            next.KMMJCHDKBDO.NHBIJEEKALC.Add(perk.DCMHONAFOGI.MBDDKGIOOGD);
+            next.Parameters.Perks.Add(perk.DCMHONAFOGI.MBDDKGIOOGD);
             stage.TransferFormEffects(old, next);
             stage.ReplaceFormRegistration(old, next);
             stage.RequireFormReferencesTransferred(new HashSet<Model> { old });
@@ -304,7 +304,7 @@ static class ValidatePerkFlagTransfer
             if (variable) Check(((PerkActionVariable)action.AMKJNPOCODK).OEAKCOHMIHH().Reads == 1, "Variable expression is not evaluated again.");
             Check(Exists(next, perk, name, false) && Exists(next, perk, name, true), "Transferred state remains discoverable.");
             // Repeated changes are still one logical effect with one expiry.
-            final.KMMJCHDKBDO.NHBIJEEKALC.Add(perk.DCMHONAFOGI.MBDDKGIOOGD);
+            final.Parameters.Perks.Add(perk.DCMHONAFOGI.MBDDKGIOOGD);
             stage.TransferFormEffects(next, final);
             stage.ReplaceFormRegistration(next, final);
             stage.RequireFormReferencesTransferred(new HashSet<Model> { old, next });
@@ -347,7 +347,7 @@ static class ValidatePerkFlagTransfer
         Check(both.KGNDJOLBBJF == 3 && both.PLNNKKBPDJK && owned.HIPOGANEPMI().Count == 3 && owned.MNLNLKOJPHO().Single() == both,
             "Duplicate aliases, queued membership and pending removal are preserved without replay.");
         var originalRegistration = stage.MPJMCCGKEOD[0];
-        next.KMMJCHDKBDO.NHBIJEEKALC.Add(owned.DCMHONAFOGI.MBDDKGIOOGD);
+        next.Parameters.Perks.Add(owned.DCMHONAFOGI.MBDDKGIOOGD);
         var undoRegistration = stage.ReplaceFormRegistration(old, next);
         undoRegistration(); undo(); undoQueued();
         Check(stage.MPJMCCGKEOD[0] == originalRegistration && both.KJDFJPBIGJC == old && both.BIKLKJMNGKP == old && next.Modifier == 0,

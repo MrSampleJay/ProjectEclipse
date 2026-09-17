@@ -35,7 +35,7 @@ public class QuestActionBuyItem : QuestAction
 		kKDGLNECFHA.LIMHBJBEEIA(GFIHPBCEEOB);
 		kKDGLNECFHA.MCPIOGALBMK(_name, lNIDLHOIHIM);
 		string gOHIIMFFFJI = lNIDLHOIHIM.ToString();
-		ItemInfo dJKEECEOCJB = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(gOHIIMFFFJI);
+		ItemInfo dJKEECEOCJB = ListSF.GetItems().GetItemByName(gOHIIMFFFJI);
 		if (dJKEECEOCJB != null)
 		{
 			GameUtils.KBHDKPAMOJN(dJKEECEOCJB, _itemAction);

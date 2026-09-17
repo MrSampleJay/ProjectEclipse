@@ -108,7 +108,7 @@ namespace Nekki.SF2.GUI.Fight
 
 		public void PreInit(FightList KGKDKENMAOA)
 		{
-			maxRounds = KGKDKENMAOA.BDBBNECNMBP * KGKDKENMAOA.PNHLGCBPFIG();
+			maxRounds = KGKDKENMAOA.RoundsToWin * KGKDKENMAOA.PNHLGCBPFIG();
 			ruleDesc = KGKDKENMAOA.GJOAJAIJHOE();
 			set_Pause(false);
 		}

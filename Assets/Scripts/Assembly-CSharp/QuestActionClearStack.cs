@@ -16,7 +16,7 @@ public class QuestActionClearStack : QuestAction
 	public override void DEJMHFMLKIC(QuestParameters GFIHPBCEEOB)
 	{
 		base.DEJMHFMLKIC(GFIHPBCEEOB);
-		ListSF.ELEBLBJKDBI().ClearQuestsStack(NIKHAICFGNM);
+		ListSF.GetInstance().ClearQuestsStack(NIKHAICFGNM);
 		OGIJONMKABB();
 	}
 }

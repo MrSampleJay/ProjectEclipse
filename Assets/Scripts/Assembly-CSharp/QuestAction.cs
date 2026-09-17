@@ -581,7 +581,7 @@ public class QuestAction : global::EventDispatcher<object>
 	{
 		if (JKIPOGOLAAI != KHLLOOHAMLC.LOCK_NONE)
 		{
-			Module.ELEBLBJKDBI().DIDFMBMPEAF(false);
+			Module.GetInstance().DIDFMBMPEAF(false);
 		}
 		if (LogRules.ELEBLBJKDBI().PIAKPGMPGMN())
 		{
@@ -616,7 +616,7 @@ public class QuestAction : global::EventDispatcher<object>
 		QuestsManager.get_Instance().CurrentActionName = EFJMDEMAGIM;
 		if (JKIPOGOLAAI != KHLLOOHAMLC.LOCK_NONE)
 		{
-			Module.ELEBLBJKDBI().DIDFMBMPEAF(true, JKIPOGOLAAI == KHLLOOHAMLC.LOCK_VISIBLE);
+			Module.GetInstance().DIDFMBMPEAF(true, JKIPOGOLAAI == KHLLOOHAMLC.LOCK_VISIBLE);
 		}
 		if (!DPBKBKDCIOI.Equals(string.Empty))
 		{
@@ -635,7 +635,7 @@ public class QuestAction : global::EventDispatcher<object>
 
 	public virtual void PJGEOIKPGFH()
 	{
-		QuestStage mLLKDGBEGJI = ListSF.ELEBLBJKDBI().PBGCEEBDBGG(ONGHPGEIJEN);
+		QuestStage mLLKDGBEGJI = ListSF.GetInstance().PBGCEEBDBGG(ONGHPGEIJEN);
 		if (mLLKDGBEGJI != null)
 		{
 			mLLKDGBEGJI.MFGLIALECAM();
@@ -668,7 +668,7 @@ public class QuestAction : global::EventDispatcher<object>
 	{
 		if (JKIPOGOLAAI != KHLLOOHAMLC.LOCK_NONE)
 		{
-			Module.ELEBLBJKDBI().DIDFMBMPEAF(false);
+			Module.GetInstance().DIDFMBMPEAF(false);
 		}
 	}
 
@@ -795,12 +795,12 @@ public class QuestActionRun : QuestAction
 	public override void DEJMHFMLKIC(QuestParameters parameters)
 	{
 		base.DEJMHFMLKIC(parameters);
-		if (ListSF.ELEBLBJKDBI().IsEclipseQuestSuppressed(_name))
+		if (ListSF.GetInstance().IsEclipseQuestSuppressed(_name))
 		{
 			OGIJONMKABB();
 			return;
 		}
-		_runningQuest = ListSF.ELEBLBJKDBI().PBGCEEBDBGG(_name);
+		_runningQuest = ListSF.GetInstance().PBGCEEBDBGG(_name);
 		if (_runningQuest == null)
 		{
 			Debug.LogWarning("[DevXml] Run action could not find quest: " + _name);
@@ -850,7 +850,7 @@ public class QuestActionUpdateEclipseBattles : QuestAction
 	{
 		base.DEJMHFMLKIC(parameters);
 		Roster roster = ListSF.CCDKHLAMKKO();
-		ListSF listSF = ListSF.ELEBLBJKDBI();
+		ListSF listSF = ListSF.GetInstance();
 		if (roster == null || listSF == null)
 		{
 			OGIJONMKABB();

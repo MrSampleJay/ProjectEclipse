@@ -142,7 +142,7 @@ public class Zone
 			for (int count2 = list.Count; j < count2; j++)
 			{
 				num++;
-				ConditionStatus pGBKNLAEANJ = list[j].PGBKNLAEANJ;
+				ConditionStatus pGBKNLAEANJ = list[j].Status;
 				if (pGBKNLAEANJ == ConditionStatus.StatusOpen || pGBKNLAEANJ == ConditionStatus.StatusComplete)
 				{
 					PGBKNLAEANJ = ConditionStatus.StatusOpen;

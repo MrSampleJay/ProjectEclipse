@@ -89,7 +89,7 @@ public class QuestActionDiscount : QuestAction
 		lNIDLHOIHIM.Clear();
 		kKDGLNECFHA.MCPIOGALBMK(JGPCLKNPCLG, lNIDLHOIHIM);
 		GEPBMEMMLEA = lNIDLHOIHIM.resultNumber > 0.0;
-		item = ListSF.DJBOFEEKJMP().KCCDBEEKBCG(text);
+		item = ListSF.GetItems().GetItemByName(text);
 		if (item == null)
 		{
 			LLLOJBFMONN.Error("QuestActionDiscount - cant find item \"%s\" from name \"%s\"", text, ABKKEDPPPCI);

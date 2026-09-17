@@ -37,16 +37,16 @@ function New-BattleFixture([System.Xml.XmlElement]$definition, [int]$wins = 0, [
         $fight = [Runtime.Serialization.FormatterServices]::GetUninitializedObject([FightList])
         $fight.Name = $node.GetAttribute('Name')
         $fight.Index = $fights.Count
-        $fight.CNAOMDMIGLJ = $battle
+        $fight.Battle = $battle
         $fight.EJGGHHEOGPG = [int]$node.GetAttribute('Replays')
         $fight.set_Type($type)
         [xml]$fightSave = '<Fight CompletedCount="0" EclipseCompletedCount="0" LossCount="3" EclipseLossCount="2" StoryCount="4" RandomGroupSeed="123" RandomRuleSeed="456" />'
         $rosterFight = New-Object RosterFight -ArgumentList $fightSave.DocumentElement
         $rosterFight.OBFNFKPHJIN($wins * $fight.EJGGHHEOGPG)
         $rosterFight.BIINCAKDHLP($wins * $fight.EJGGHHEOGPG)
-        $fight.HOCFLEMFFKC($rosterFight)
+        $fight.SetRosterFight($rosterFight)
         if ($battle -is [BattleReplayable]) { $battle.MJJFFAOLCCK($fight) }
-        else { $fight.PGBKNLAEANJ = [ConditionStatus]::StatusComplete }
+        else { $fight.Status = [ConditionStatus]::StatusComplete }
         $fights.Add($fight)
     }
     Set-BattleField $battle 'JNPMCNMEOLE' $fights
@@ -111,7 +111,7 @@ foreach ($definition in $definitions) {
     $battle = New-BattleFixture $definition
     Assert-True (!$battle.TryStartNextReplay()) ($battle.get_Name() + ': untouched battle advanced')
     for ($cycle = 1; $cycle -le 3; $cycle++) {
-        $fights = $battle.ANNHMNIHKCC()
+        $fights = $battle.GetFights()
         foreach ($fight in $fights) {
             for ($win = 0; $win -lt $fight.EJGGHHEOGPG; $win++) {
                 $fight.FLKFFDLLBKA().GICDABHEMML()
@@ -142,8 +142,8 @@ $reloaded = New-Object RosterBattle -ArgumentList $rosterNode.CloneNode($true)
 Assert-True ($reloaded.ODCFKCJJDKN() -eq 4) 'ReplayCount was not serialized'
 $battle.FOMHAGJJCLJ($reloaded)
 Assert-True (!$battle.TryStartNextReplay()) 'Reload advanced the cycle again'
-$battle.ANNHMNIHKCC()[0].FLKFFDLLBKA().GICDABHEMML()
-$battle.MJJFFAOLCCK($battle.ANNHMNIHKCC()[0])
+$battle.GetFights()[0].FLKFFDLLBKA().GICDABHEMML()
+$battle.MJJFFAOLCCK($battle.GetFights()[0])
 Assert-True (!$battle.TryStartNextReplay()) 'Partially replayed bodyguards reset'
 Assert-True ($battle.FBFHBKPFLJC().Index -eq 1) 'Partial replay lost its next opponent'
 $battle = New-BattleFixture $hermit 1
@@ -153,10 +153,10 @@ $battle = New-BattleFixture $hermit 1
 Set-BattleField $battle 'MEOMPEEPCJJ' $null
 Assert-True (!$battle.TryStartNextReplay()) 'Missing roster was reopened'
 $battle = New-BattleFixture $hermit 1
-[FightList].GetField('ECHMHCODAFA', $flags).SetValue($battle.ANNHMNIHKCC()[0], $null)
+[FightList].GetField('ECHMHCODAFA', $flags).SetValue($battle.GetFights()[0], $null)
 Assert-True (!$battle.TryStartNextReplay()) 'Missing fight progress was treated as complete'
 $battle = New-BattleFixture $hermit 1
-$battle.ANNHMNIHKCC()[0].EJGGHHEOGPG = 0
+$battle.GetFights()[0].EJGGHHEOGPG = 0
 Assert-True (!$battle.TryStartNextReplay()) 'Unlimited fight was treated as a finite segment'
 
 # Run the production Eclipse action with actual Battle/RosterFight objects.
@@ -193,7 +193,7 @@ namespace EclipseRuntimeTest {
         public static Roster Roster = new Roster();
         public List<Battle> Battles = new List<Battle>();
         public int Saves;
-        public static ListSF ELEBLBJKDBI() { return Instance; }
+        public static ListSF GetInstance() { return Instance; }
         public static Roster CCDKHLAMKKO() { return Roster; }
         public List<Battle> MMCHMBIKIEP() { return Battles; }
         public void EJANJEEGOOE() { Saves++; }
@@ -245,8 +245,8 @@ Assert-True ($map.Reselections -eq 1) 'Progress-only change did not rebuild sele
 Assert-True ($normal.MNHLGELMOEJ() -eq [ConditionStatus]::StatusComplete) 'Normal story completion changed'
 $update.DEJMHFMLKIC($null)
 Assert-True ([EclipseRuntimeTest.ListSF]::Instance.Saves -eq 1) 'Repeated update rewrote progress'
-$eclipse.ANNHMNIHKCC()[0].FLKFFDLLBKA().GICDABHEMML()
-$eclipse.MJJFFAOLCCK($eclipse.ANNHMNIHKCC()[0])
+$eclipse.GetFights()[0].FLKFFDLLBKA().GICDABHEMML()
+$eclipse.MJJFFAOLCCK($eclipse.GetFights()[0])
 foreach ($mode in @($false, $true, $false, $true)) {
     [EclipseRuntimeTest.ListSF]::Roster.EclipseMode = $mode
     $update.DEJMHFMLKIC($null)

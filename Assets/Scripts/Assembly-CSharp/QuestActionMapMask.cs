@@ -19,7 +19,7 @@ public class QuestActionMapMask : QuestAction
 	public override void DEJMHFMLKIC(QuestParameters GFIHPBCEEOB)
 	{
 		base.DEJMHFMLKIC(GFIHPBCEEOB);
-		if (Module.ELEBLBJKDBI().NMCNDOPKFJD() == ScreenType.ModuleMap)
+		if (Module.GetInstance().NMCNDOPKFJD() == ScreenType.ModuleMap)
 		{
 			MapScene current = Scene<MapScene>.get_Current();
 			if (current != null)

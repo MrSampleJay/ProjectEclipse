@@ -59,8 +59,8 @@ class PerkInfoItem
 class ItemInfo
 {
     public string Type;
-    public bool GNDLEFFMJDJ = true;
-    public readonly List<PerkInfoItem> NHBIJEEKALC = new List<PerkInfoItem>();
+    public bool IgnoreInventoryEnchantments = true;
+    public readonly List<PerkInfoItem> InnatePerks = new List<PerkInfoItem>();
 }
 class UserItem { }
 class Inventory { public UserItem CMGOCLGHNLH(ItemInfo item) => throw new Exception("unexpected save lookup"); }
@@ -140,15 +140,15 @@ class ValidateFormParameterCopy
         var blocked = new PerkInfoItem { Name = "BlockedPerk" };
         var allowed = new PerkInfoItem { Name = "AllowedPerk" };
         var source = new ModelParameters {
-            IsPlayer = player, ABAPAIEBNGK = player, EEGMBGBLLIF = !player,
+            IsPlayer = player, UserControlled = player, AiControlled = !player,
             IBBALIJOJMC = SceneTypes.SceneFight, CIDCNCDFONA = 40,
             EclipseCharacterId = "sample:restricted-form",
             EclipseSkinModels = new[] { "sample:skin.xml" },
-            JGMLKIPCFII = new ItemInfo { Type = "Weapon" } };
-        source.NHBIJEEKALC.Add(blocked);
-        source.JGMLKIPCFII.NHBIJEEKALC.AddRange(new[] { blocked, allowed });
+            Weapon = new ItemInfo { Type = "Weapon" } };
+        source.Perks.Add(blocked);
+        source.Weapon.InnatePerks.AddRange(new[] { blocked, allowed });
         source.IBLHIAHECLK.Values.Add("WeaponDamage", 23);
-        source.MNPAALCFAKL.Add("sample:body.xml");
+        source.ModelDocuments.Add("sample:body.xml");
         var rules = new RulesInspector();
         rules._noAnimationRules.Add(new NoAnimationRule { Name = "RestrictedKick", Active = true });
         rules._noAnimationRules.Add(new NoAnimationRule { Name = "Stance", Active = false });
@@ -157,7 +157,7 @@ class ValidateFormParameterCopy
         Check(Moves(source).SequenceEqual(new[] { "Stance" }), "native active animation restriction applies before copying");
         Check(source.JBIOECDAAKP().SequenceEqual(new[] { allowed }), "native perk exclusion covers equipment after innate filtering");
         var copy = new ModelParameters(source);
-        Check(copy.IsPlayer == player && copy.ABAPAIEBNGK == player && copy.EEGMBGBLLIF == !player &&
+        Check(copy.IsPlayer == player && copy.UserControlled == player && copy.AiControlled == !player &&
             copy.CIDCNCDFONA == 40 && copy.EclipseCharacterId == source.EclipseCharacterId,
             "copy preserves participant role, prepared health pool and destination character");
         Check(Moves(copy).SequenceEqual(Moves(source)), "copy must not re-enable RestrictedKick in the native animation filter");
@@ -171,8 +171,8 @@ class ValidateFormParameterCopy
         Check(Moves(source).SequenceEqual(new[] { "Stance" }) && source.JBIOECDAAKP().SequenceEqual(new[] { allowed }),
             "clearing a detached copy cannot weaken original restrictions");
         copy.IBLHIAHECLK.Values["WeaponDamage"] = 99;
-        copy.MNPAALCFAKL.Clear(); copy.EclipseSkinModels[0] = "changed";
-        Check(source.IBLHIAHECLK.Values["WeaponDamage"] == 23 && source.MNPAALCFAKL.Count == 1 &&
+        copy.ModelDocuments.Clear(); copy.EclipseSkinModels[0] = "changed";
+        Check(source.IBLHIAHECLK.Values["WeaponDamage"] == 23 && source.ModelDocuments.Count == 1 &&
             source.EclipseSkinModels[0] == "sample:skin.xml", "existing attribute/model/skin copy isolation remains intact");
     }
     public static int Main()

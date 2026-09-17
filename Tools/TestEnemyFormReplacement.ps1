@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 class WeaponInfo{public string EffectiveTacticSubtype;}
-class Parameters{public WeaponInfo JGMLKIPCFII;}
+class Parameters{public WeaponInfo Weapon;}
 class Event{public Model GAIBPAGPEGK;}
 class Animation{public Animation Enemy;public Animation OJKLPPNCONP()=>Enemy;public void NFEGCGJIICB(Animation value){Enemy=value;}}
 class Ai{public string HCJOIHLKOKJ;public bool Fail;public void SetWeaponEnemy(string weapon){HCJOIHLKOKJ=weapon;if(Fail)throw new Exception("AI binding");}
@@ -22,13 +22,13 @@ class WeaponModel:Model{}
 class Model{
  public List<Model> _Enemies=new List<Model>();public List<WeaponModel> Weapons=new List<WeaponModel>();
  public List<WeaponModel> KGGIDBLBMDJ()=>Weapons;
- public Animation _Animation=new Animation();public Model PNNMOKIBOPP;public Event KDAHHIMLJGG=new Event();public Ai HJOGNGDMAKJ=new Ai();public Parameters KMMJCHDKBDO=new Parameters();
+ public Animation _Animation=new Animation();public Model PNNMOKIBOPP;public Event KDAHHIMLJGG=new Event();public Ai HJOGNGDMAKJ=new Ai();public Parameters Parameters=new Parameters();
 $method
  static void Check(bool x,string why){if(!x)throw new Exception(why);}
  static void Main(){
  var observer=new Model();var old=new Model();var next=new Model();var other=new Model();
  var oldWeapon=new WeaponModel();var newWeapon=new WeaponModel();old.Weapons.Add(oldWeapon);next.Weapons.Add(newWeapon);
- next.KMMJCHDKBDO.JGMLKIPCFII=new WeaponInfo{EffectiveTacticSubtype="Spear"};
+ next.Parameters.Weapon=new WeaponInfo{EffectiveTacticSubtype="Spear"};
  observer._Enemies.AddRange(new Model[]{old,oldWeapon,other,oldWeapon});
  observer.PNNMOKIBOPP=old;observer._Animation.Enemy=old._Animation;observer.KDAHHIMLJGG.GAIBPAGPEGK=old;observer.HJOGNGDMAKJ.HCJOIHLKOKJ="Claws";
  var original=observer._Enemies.ToArray();var restore=observer.ReplaceEnemyForm(old,next);
@@ -37,7 +37,7 @@ $method
  restore();Check(observer._Enemies.SequenceEqual(original)&&observer.PNNMOKIBOPP==old&&observer._Animation.Enemy==old._Animation&&observer.KDAHHIMLJGG.GAIBPAGPEGK==old&&observer.HJOGNGDMAKJ.HCJOIHLKOKJ=="Claws","exact original targeting state restored");
  observer.HJOGNGDMAKJ.Fail=true;bool failed=false;try{observer.ReplaceEnemyForm(old,next);}catch(Exception){failed=true;}
  Check(failed&&observer._Enemies.SequenceEqual(original)&&observer._Animation.Enemy==old._Animation&&observer.PNNMOKIBOPP==old&&observer.HJOGNGDMAKJ.HCJOIHLKOKJ=="Claws","partial failure rolls back category and targeting");observer.HJOGNGDMAKJ.Fail=false;
- next.KMMJCHDKBDO.JGMLKIPCFII=null;restore=observer.ReplaceEnemyForm(old,next);Check(observer.HJOGNGDMAKJ.HCJOIHLKOKJ==null,"unarmed form clears old category");restore();
+ next.Parameters.Weapon=null;restore=observer.ReplaceEnemyForm(old,next);Check(observer.HJOGNGDMAKJ.HCJOIHLKOKJ==null,"unarmed form clears old category");restore();
  observer.PNNMOKIBOPP=other;observer._Animation.Enemy=other._Animation;observer.KDAHHIMLJGG.GAIBPAGPEGK=other;
  restore=observer.ReplaceEnemyForm(old,next);Check(observer.PNNMOKIBOPP==other&&observer._Animation.Enemy==other._Animation&&observer.KDAHHIMLJGG.GAIBPAGPEGK==other&&observer.HJOGNGDMAKJ.HCJOIHLKOKJ=="Claws","unrelated current target preserved");restore();
  failed=false;try{observer.ReplaceEnemyForm(next,old);}catch(InvalidOperationException){failed=true;}Check(failed&&observer._Enemies.SequenceEqual(original),"stale identity rejects before mutation");

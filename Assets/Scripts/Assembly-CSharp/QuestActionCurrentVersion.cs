@@ -41,7 +41,7 @@ public class QuestActionCurrentVersion : QuestAction
 		empty += ".";
 		empty += lNIDLHOIHIM4.ToString();
 		SystemProperties.DFJEJKJECBI().SetVersion(empty);
-		ListSF.ELEBLBJKDBI().DLAJNCEILEH(empty);
+		ListSF.GetInstance().DLAJNCEILEH(empty);
 		OGIJONMKABB();
 	}
 }

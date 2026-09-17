@@ -34,6 +34,41 @@ unknown types. Most are fields, methods, parameters, and local variables. Local
 variable names are not present in the cross-build metadata and often cannot be
 recovered authoritatively.
 
+## Descriptive guesses used by Eclipse code
+
+The project also permits descriptive guesses for obfuscated symbols referenced
+by newly authored Eclipse code. Each inferred declaration carries the exact
+comment `// best guess for name`. These names describe observed behavior; they
+are not claimed to be recovered original names.
+
+`best_guess_members.json` records the selected owning assembly/type, old and new
+member names, the authored caller that needs the name, and source evidence.
+Its initial source line references use commit `14c7028f`. The initial selection
+covers local-versus setup/session code and its integration with recovered code.
+Necessary existing callers use the same renamed symbols. Other members with
+the same obfuscated spelling retain their own identity, including equipment
+struct fields and unrelated singleton accessors.
+
+The controller names used by Eclipse input/UI code were also inferred from
+`Assets/Plugins/Assembly-CSharp-firstpass/GamePad.cs`:
+
+| Owning type | Previous name | Descriptive name | Evidence |
+| --- | --- | --- | --- |
+| `GamePad` | `PFENLAPGKFM` | `Button` | Button enum values and key mapping. |
+| `GamePad` | `HKKPDLMCPIF` | `Trigger` | Left/right trigger axes. |
+| `GamePad` | `LCNPGEANNDP` | `Stick` | Left/right stick and D-pad axis pairs. |
+| `GamePad` | `GGAKHLLMPMM` | `Player` | Any/One/Two/Three/Four joystick slots. |
+| `GamePad` | `JAHEECFCLHN` | `GetButtonDown` | Calls `Input.GetKeyDown`. |
+| `GamePad` | `MGGDMBHADIP` | `GetButtonUp` | Calls `Input.GetKeyUp`. |
+| `GamePad` | `NFCGBMHPKMA` | `GetButton` | Calls `Input.GetKey`. |
+| `GamePad` | `CNNMBBLLGNE` | `GetStick` | Reads a pair of axes into `Vector2`. |
+| `GamePad` | `MAJINGINCHM` | `GetTrigger` | Reads one trigger axis. |
+
+Apply guesses by resolved C# symbol, including their required callers, and
+check name collisions, reflection and serialization first. The confirmed
+recovery scripts below do not consume these guesses. Their historical
+confidence rules and recovery reports remain separate.
+
 ## Evidence used
 
 The principal comparison data lives outside this exported project under
@@ -158,4 +193,3 @@ source map under `/home/czapla/RE`.
 - Run structural checks and the strongest practical compile check after the
   final mapping pass. An AssetRipper export may still have unrelated Unity
   version/decompiler build errors.
-

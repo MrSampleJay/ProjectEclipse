@@ -277,7 +277,7 @@ public class UserPerks
 		GBMLFKHHLCC.Clear();
 		GIAEMMLABDL.JOGBKOJCINM.Clear();
 		PerkTree.GBPBIPFIOJH().LJHPGKAOIAE();
-		HEGIABHIPHA.JGCNPHDGHAK.Clear();
+		HEGIABHIPHA.LearnedPerks.Clear();
 		GameUtils.FDEJIIDIPBI.BPBLIPKOJOP().Clear();
 	}
 
@@ -350,7 +350,7 @@ public class UserPerks
 	{
 		if (HEGIABHIPHA != null)
 		{
-			HEGIABHIPHA.JGCNPHDGHAK.Add(value);
+			HEGIABHIPHA.LearnedPerks.Add(value);
 		}
 	}
 
@@ -358,10 +358,10 @@ public class UserPerks
 	{
 		if (HEGIABHIPHA != null && value != null)
 		{
-			PerkInfoItem aCONCDFDNJH = HEGIABHIPHA.JGCNPHDGHAK.Find((PerkInfoItem DHDMNHCIPEH) => DHDMNHCIPEH.Name.Equals(value.Name));
+			PerkInfoItem aCONCDFDNJH = HEGIABHIPHA.LearnedPerks.Find((PerkInfoItem DHDMNHCIPEH) => DHDMNHCIPEH.Name.Equals(value.Name));
 			if (aCONCDFDNJH != null)
 			{
-				HEGIABHIPHA.JGCNPHDGHAK.Remove(aCONCDFDNJH);
+				HEGIABHIPHA.LearnedPerks.Remove(aCONCDFDNJH);
 			}
 		}
 	}

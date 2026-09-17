@@ -266,7 +266,7 @@ namespace Nekki.SF2.GUI.Dialogs
 
 		private bool HDLDBIJDEIL()
 		{
-			switch (Module.ELEBLBJKDBI().NMCNDOPKFJD())
+			switch (Module.GetInstance().NMCNDOPKFJD())
 			{
 			case ScreenType.ModulePreloader:
 			case ScreenType.ModuleCreditsScreen:

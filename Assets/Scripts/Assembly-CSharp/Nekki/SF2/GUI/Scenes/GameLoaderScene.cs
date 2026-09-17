@@ -116,7 +116,7 @@ namespace Nekki.SF2.GUI.Scenes
 					catch (HackDetectedException ex)
 					{
 						GameUtils.LJOJHDOIFLN = true;
-						ListSF.ELEBLBJKDBI().LCFENEAGDDG(ex.Message);
+						ListSF.GetInstance().LCFENEAGDDG(ex.Message);
 					}
 				}
 			}

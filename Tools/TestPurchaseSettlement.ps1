@@ -22,7 +22,7 @@ static class Program {
  static class StoryEvents { public static int ProfileGeneration; public static void RunDeferred(Action action)=>action(); }
  sealed class Roster { public void GGGEHAGCLGC(bool force){} }
  sealed class ListSF {
-  public static ListSF ELEBLBJKDBI()=>new ListSF();
+  public static ListSF GetInstance()=>new ListSF();
   public void OnAuthenticate(bool force){if(DeferProfileSave())return; if(failSave)throw new Exception("disk failure"); saved=_lotteryProfileNode.OuterXml; writes++;}
  }
  static readonly DefinitionId item=DefinitionId.Parse("example.purchase:items/token");
@@ -36,7 +36,7 @@ __ROUTE__
   Reset(); string before=saved;
   Check(SettlePurchase(item,3,1,3,()=>{
    ((XmlElement)_lotteryProfileNode).SetAttribute("Balance","70");((XmlElement)_lotteryProfileNode).SetAttribute("Count","3");
-   ListSF.ELEBLBJKDBI().OnAuthenticate(true);
+   ListSF.GetInstance().OnAuthenticate(true);
    Check(saved==before && writes==0,"Intermediate native save escaped deferral");
    Check(!SettlePurchase(item,1,null,null,()=>throw new Exception("reentered")),"Nested purchase accepted");
    return true;
@@ -54,7 +54,7 @@ __ROUTE__
    }));
    Check(saved==before && writes==0,"Failed mutation saved partial changes");
    Check(new ModPurchaseLedger((XmlElement)_lotteryProfileNode).Read(item).Units==0,"Failed grant recorded receipt");
-   Reject(()=>ListSF.ELEBLBJKDBI().OnAuthenticate(true));
+   Reject(()=>ListSF.GetInstance().OnAuthenticate(true));
    Check(!SettlePurchase(item,1,null,null,()=>true),"Failed live profile allowed retry");
   }
   Reset(); before=saved;failSave=true;

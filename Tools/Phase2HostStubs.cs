@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml;
 public sealed class FightIDS { private readonly string _id; public FightIDS(string id) { _id=id; } public override string ToString()=>_id; }
-public sealed class FightList { public FightIDS BCKFACGMOKC; public Battle CNAOMDMIGLJ; }
+public sealed class FightList { public FightIDS FightId; public Battle Battle; }
 public sealed class Battle { public string Name; public string get_Name()=>Name; }
 public sealed class Zone { public string Name; public string get_Name()=>Name; }
 public sealed class UserItem { public int Count; }
@@ -29,14 +29,14 @@ public sealed class QuestManager {
 public static class ListSF {
     public static Roster Roster=new Roster(); public static QuestManager Quests=new QuestManager();
     public static readonly Dictionary<string,FightList> Fights=new Dictionary<string,FightList>();
-    public static Roster CCDKHLAMKKO()=>Roster; public static QuestManager ELEBLBJKDBI()=>Quests;
+    public static Roster CCDKHLAMKKO()=>Roster; public static QuestManager GetInstance()=>Quests;
     public static FightList CHMCKGCDGCM(FightIDS id)=>Fights.TryGetValue(id.ToString(),out var fight)?fight:null;
     public static List<Zone> FHAIJEAPFEA()=>new List<Zone>();
 }
 public sealed class FightResult {}
 public sealed class Fight {
     public static Fight Instance=new Fight(); public int Presented;
-    public static Fight OHNKFOHIAKG()=>Instance; public void BCFBHJOLGNL(FightResult result) { Presented++; }
+    public static Fight GetCurrentFight()=>Instance; public void BCFBHJOLGNL(FightResult result) { Presented++; }
 }
 public static class LocalizationManager { public static string GetString(string value)=>value; }
 namespace Nekki.SF2.GUI {
